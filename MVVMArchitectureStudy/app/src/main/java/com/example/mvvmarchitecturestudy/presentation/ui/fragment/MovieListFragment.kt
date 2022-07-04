@@ -21,6 +21,7 @@ import com.example.mvvmarchitecturestudy.presentation.ui.activity.MainActivity.C
 import com.example.mvvmarchitecturestudy.presentation.viewmodel.MainViewModel
 import android.content.Intent
 import android.os.Build
+import android.widget.Toast
 import androidx.activity.result.ActivityResult
 
 import androidx.activity.result.ActivityResultLauncher
@@ -110,6 +111,14 @@ class MovieListFragment : Fragment() {
             }
 
             hideProgressBar()
+        })
+
+        mainViewModel.singleLiveEvent.observe(viewLifecycleOwner, Observer {
+            Toast.makeText(requireContext(), "Check your network", Toast.LENGTH_SHORT).show()
+            hideProgressBar()
+            if(page > 1) {
+                page--
+            }
         })
     }
 

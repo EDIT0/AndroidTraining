@@ -5,6 +5,8 @@ import android.util.Log
 import androidx.lifecycle.*
 import com.example.mvvmarchitecturestudy.data.model.MovieModel
 import com.example.mvvmarchitecturestudy.data.model.MovieModelResult
+import com.example.mvvmarchitecturestudy.data.util.NetworkManager
+import com.example.mvvmarchitecturestudy.data.util.SingleLiveEvent
 import com.example.mvvmarchitecturestudy.domain.usecase.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -14,6 +16,7 @@ import retrofit2.Response
 
 class MainViewModel(
     private val app : Application,
+    private val networkManager: NetworkManager,
     private val getPopularMoviesUseCase: GetPopularMoviesUseCase,
     private val getSearchMoviesUseCase: GetSearchMoviesUseCase,
     private val getSavedMoviesUseCase: GetSavedMoviesUseCase,
@@ -22,19 +25,30 @@ class MainViewModel(
     private val getSearchSavedMoviesUseCase: GetSearchSavedMoviesUseCase
 ) : AndroidViewModel(app) {
 
+    private val _singleLiveEvent = SingleLiveEvent<Any>()
+    val singleLiveEvent: LiveData<Any> get() = _singleLiveEvent
+
     val popularMovies : MutableLiveData<Response<MovieModel>> = MutableLiveData()
     fun getPopularMovies(language : String, page : Int){
-        viewModelScope.launch(Dispatchers.IO) {
-            val apiResult = getPopularMoviesUseCase.execute(language, page)
-            popularMovies.postValue(apiResult)
+        if(networkManager.checkNetworkState()) {
+            viewModelScope.launch(Dispatchers.IO) {
+                val apiResult = getPopularMoviesUseCase.execute(language, page)
+                popularMovies.postValue(apiResult)
+            }
+        } else {
+            _singleLiveEvent.call()
         }
     }
 
     val searchedMovies : MutableLiveData<Response<MovieModel>> = MutableLiveData()
     fun getSearchMovies(query : String, language: String, page: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
-            val apiResult = getSearchMoviesUseCase.execute(query, language, page)
-            searchedMovies.postValue(apiResult)
+        if(networkManager.checkNetworkState()) {
+            viewModelScope.launch(Dispatchers.IO) {
+                val apiResult = getSearchMoviesUseCase.execute(query, language, page)
+                searchedMovies.postValue(apiResult)
+            }
+        } else {
+            _singleLiveEvent.call()
         }
     }
 

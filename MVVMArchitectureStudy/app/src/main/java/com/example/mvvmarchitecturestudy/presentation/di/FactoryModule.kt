@@ -1,6 +1,7 @@
 package com.example.mvvmarchitecturestudy.presentation.di
 
 import android.app.Application
+import com.example.mvvmarchitecturestudy.data.util.NetworkManager
 import com.example.mvvmarchitecturestudy.domain.usecase.*
 import com.example.mvvmarchitecturestudy.presentation.viewmodel.MainViewModelFactory
 import com.example.mvvmarchitecturestudy.presentation.viewmodel.MovieInfoViewModelFactory
@@ -19,6 +20,7 @@ object FactoryModule {
     @Singleton
     fun provideMainViewModelFactory(
         application: Application,
+        networkManager: NetworkManager,
         getPopularMoviesUseCase: GetPopularMoviesUseCase,
         searchMoviesUseCase: GetSearchMoviesUseCase,
         getSavedMoviesUseCase: GetSavedMoviesUseCase,
@@ -27,7 +29,7 @@ object FactoryModule {
         getSearchSavedMoviesUseCase : GetSearchSavedMoviesUseCase
     ) : MainViewModelFactory {
         return MainViewModelFactory(
-            application, getPopularMoviesUseCase, searchMoviesUseCase, getSavedMoviesUseCase, deleteSavedMovieUseCase, saveMovieUseCase, getSearchSavedMoviesUseCase
+            application, networkManager, getPopularMoviesUseCase, searchMoviesUseCase, getSavedMoviesUseCase, deleteSavedMovieUseCase, saveMovieUseCase, getSearchSavedMoviesUseCase
         )
     }
 
