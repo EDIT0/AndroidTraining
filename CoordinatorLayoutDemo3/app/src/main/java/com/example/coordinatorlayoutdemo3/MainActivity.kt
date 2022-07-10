@@ -95,11 +95,11 @@ class MainActivity : AppCompatActivity() {
 
         binding.vpMain.adapter = viewPagerAdapter
 
-        val tab_mainFragment = binding.tablayout.newTab().setText("홈")
+        val tab_mainFragment = binding.tablayout.newTab().setText("1번 탭")
         binding.tablayout.addTab(tab_mainFragment)
-        val tab_mainSounddoodleListFragment = binding.tablayout.newTab().setText("사운드두들")
+        val tab_mainSounddoodleListFragment = binding.tablayout.newTab().setText("2번 탭")
         binding.tablayout.addTab(tab_mainSounddoodleListFragment)
-        val tab_mainDoodleListFragment = binding.tablayout.newTab().setText("두들창고")
+        val tab_mainDoodleListFragment = binding.tablayout.newTab().setText("3번 탭")
         binding.tablayout.addTab(tab_mainDoodleListFragment)
 
         // 탭 가리기
