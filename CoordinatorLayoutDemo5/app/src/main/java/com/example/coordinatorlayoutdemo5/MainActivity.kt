@@ -49,7 +49,7 @@ class MainActivity : AppCompatActivity() {
             override fun onScrollChange(p0: View?, p1: Int, scrollY: Int, p3: Int, p4: Int) {
                 when {
                     scrollY == 0 -> {
-
+                        binding.tablayout.setScrollPosition(0, 0f, true)
                     }
                     scrollY == binding.nestedScrollview.computeDistanceToView(binding.ivImg) -> {
 
