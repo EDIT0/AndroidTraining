@@ -18,5 +18,9 @@ class MainActivity : AppCompatActivity() {
         binding.btn1.setOnClickListener {
             startActivity(Intent(this, AsynchronousAndSequentialExecutionActivity::class.java))
         }
+
+        binding.btn2.setOnClickListener {
+            startActivity(Intent(this, CoroutineFlowActivity::class.java))
+        }
     }
 }

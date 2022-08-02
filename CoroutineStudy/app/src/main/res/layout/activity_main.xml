@@ -11,6 +11,12 @@
         android:id="@+id/btn_1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="비동기/순차실행"/>
+        android:text="비동기/순차실행" />
+
+    <Button
+        android:id="@+id/btn_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="코루틴 Flow" />
 
 </LinearLayout>
