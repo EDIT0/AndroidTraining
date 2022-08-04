@@ -185,17 +185,167 @@ class CoroutineFlowActivity : AppCompatActivity() {
         // conflate() -> collectLatest()
         // Ex) emit1 (100L) !collect1 (500L)! emit2 (100L) emit3 (100L) -> emit1,2,3까지 300L 정도 걸림 그러나 emit1이 소비되는 시간을 기다리지 않고(중단 후) 캔슬 후 emit3으로 바로 collect
         lifecycleScope.launch {
-            val time = measureTimeMillis {
-                simple14()
-                    .collectLatest {
-                        Log.i("MYTAG", "Collecting: ${it} / ${Thread.currentThread().name}")
-                        delay(500L)
-                        Log.i("MYTAG", "Done: ${it} / ${Thread.currentThread().name}")
-                    }
-            }
-            Log.i("MYTAG", "Collected in ${time} ms / ${Thread.currentThread().name}")
+//            val time = measureTimeMillis {
+//                simple14()
+//                    .collectLatest {
+//                        Log.i("MYTAG", "Collecting: ${it} / ${Thread.currentThread().name}")
+//                        delay(500L)
+//                        Log.i("MYTAG", "Done: ${it} / ${Thread.currentThread().name}")
+//                    }
+//            }
+//            Log.i("MYTAG", "Collected in ${time} ms / ${Thread.currentThread().name}")
         }
 
+        /**
+         * Composing multiple flows
+         * */
+        // zip()은 두 flow를 합쳐서 출력 가능
+        // 두 flow의 emit을 합쳐서 소비하기 때문에 값이 일정하게 1, one -> 2, two -> 3, three 가 출력된다.
+        lifecycleScope.launch {
+//            val nums = (1..3)
+//                .asFlow()
+//            val strs = flowOf("one", "two", "three")
+//            val zipFlow = nums.zip(strs) { numsValue, strsValue ->
+//                "nums: ${numsValue}, strs: ${strsValue}"
+//            }
+//            zipFlow.collect {
+//                Log.i("MYTAG", "${it}")
+//            }
+        }
+
+        // Combine()은 합쳐진 flows 중 한 flow가 emit되면 그 시기의 emit 값을 바로바로 출력함
+        // 예시 https://dev-repository.tistory.com/55
+        // zip은 생각대로
+        lifecycleScope.launch {
+//            val nums = (1..3)
+//                .asFlow()
+//                .onEach {
+//                    delay(300L)
+//                }
+//            val strs = flow<String> {
+//                emit("one")
+//                delay(400L)
+//                emit("two")
+//                delay(400L)
+//                emit("three")
+//            }
+//            val startTime = System.currentTimeMillis() // 시작 시간
+//            nums.zip(strs) { numsValue, strsValue ->
+//                "nums: ${numsValue}, strs: ${strsValue}"
+//            }.collect {
+//                Log.i("MYTAG", "${it} at ${System.currentTimeMillis() - startTime} ms from start")
+//            }
+        }
+
+        lifecycleScope.launch {
+//            val nums = (1..3)
+//                .asFlow()
+//                .onEach {
+//                    delay(1000L)
+//                }
+//            val strs = flow<String> {
+//                delay(2000L)
+//                emit("one")
+//                delay(2000L)
+//                emit("two")
+//                delay(2000L)
+//                emit("three")
+//            }
+//            val startTime = System.currentTimeMillis() // 시작 시간
+//            nums.combine(strs) { numsValue, strsValue ->
+//                "nums: ${numsValue}, strs: ${strsValue}"
+//            }.collect {
+//                Log.i("MYTAG", "${it} at ${System.currentTimeMillis() - startTime} ms from start")
+//            }
+        }
+
+
+        /**
+         * flattening flows
+         * */
+        // 이 코드 값은 requestFLow(it) 부분에서 flow<String>을 반환한다. (새로운 flow를 생성했다)
+        // 그럼 상위context(.asFlow())에 대한 collect(소비)는 flow를 반환한다. (flatMapConcat을 사용하지 않았기 때문에 flow들을 연결 할 수 없다. 고로 가장 아래 collect에서 flow<String>을 그대로 소비한다.)
+        lifecycleScope.launch {
+//            (1..3)
+//                .asFlow()
+//                .map {
+//                    requestFlow(it)
+////                        .collect {
+////                            Log.i("MYTAG", "${it}")
+////                        }
+//                }
+//                .collect {
+//                    Log.i("MYTAG", "${it}")
+//                }
+        }
+
+        // flatMapConcat은 여러 flow들을 연결하는 연산자이다.
+        // 또한, 순차적으로 데이터가 처리된다.
+        // 참고 https://kotlinworld.com/261
+        lifecycleScope.launch {
+//            val startTime = System.currentTimeMillis() // remember the start time
+//            (1..3)
+//                .asFlow()
+//                .onEach {
+//                    delay(100)
+//                } // a number every 100 ms
+//                .flatMapConcat {
+//                    // flow로부터 emit되는 데이터를 다시 상위context(asFlow())에서 받아서 다시 emit
+//                    flow {
+//                        emit("$it: First")
+//                        delay(500) // wait 500 ms
+//                        emit("$it: Second")
+//                        emit("$it: Third")
+//                    }
+//                }
+//                .collect {
+//                    Log.i("MYTAG", "$it at ${System.currentTimeMillis() - startTime} ms from start")
+//                }
+        }
+
+        // flatMapMerge는 변환이 병렬로 수행된다.
+        // 참고 https://kotlinworld.com/263
+        lifecycleScope.launch {
+//            val startTime = System.currentTimeMillis() // remember the start time
+//            (1..3)
+//                .asFlow()
+//                .onEach {
+//                    delay(100)
+//                } // a number every 100 ms
+//                .flatMapMerge {
+//                    flow {
+//                        emit("$it: First")
+//                        delay(500) // wait 500 ms
+//                        emit("$it: Second")
+//                        emit("$it: Third")
+//                    }
+//                }
+//                .collect {
+//                    Log.i("MYTAG", "$it at ${System.currentTimeMillis() - startTime} ms from start")
+//                }
+        }
+
+        // flatMapLatest는 이전 데이터가 방출되기 전에 새로운 데이터가 들어오면 이전 데이터에 대한 변환을 취소한다.
+        // 참고 https://kotlinworld.com/262
+        lifecycleScope.launch {
+            val startTime = System.currentTimeMillis() // remember the start time
+            (1..3)
+                .asFlow()
+                .onEach {
+                    delay(100)
+                } // a number every 100 ms
+                .flatMapLatest {
+                    flow {
+                        emit("$it: First")
+                        delay(500) // wait 500 ms
+                        emit("$it: Second")
+                        emit("$it: Third")
+                    }
+                }
+                .collect {
+                    Log.i("MYTAG", "$it at ${System.currentTimeMillis() - startTime} ms from start")
+                }
+        }
     }
 
     private fun simple1(): Flow<Int> = flow {
@@ -343,6 +493,12 @@ class CoroutineFlowActivity : AppCompatActivity() {
             emit(i) // emit next value
             Log.i("MYTAG", "emit: ${i}")
         }
+    }
+
+    private suspend fun requestFlow(i: Int): Flow<String> = flow {
+        emit("$i: First")
+        delay(500) // wait 500 ms
+        emit("$i: Second")
     }
 
 }
