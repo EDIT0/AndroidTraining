@@ -49,16 +49,16 @@
 <br />}
 
 ## 메시지 처리는 어디에서 진행되는지? 
- 
+https://firebase.google.com/docs/cloud-messaging/android/receive?hl=ko#handling_messages
 
 ## 토큰이 갱신되는 시기
- * 1. 새 기기에서 앱 복원
- * 2. 사용자가 앱 제거/재설치
- * 3. 사용자가 앱 데이터 소거
+1. 새 기기에서 앱 복원
+2. 사용자가 앱 제거/재설치
+3. 사용자가 앱 데이터 소거
 
 ## 안드로이드 8.0부터는 알림 채널을 꼭 만들어 줘야한다.
 https://developer.android.com/training/notify-user/build-notification
 
 ## 알림 우선순위
- 
+https://developer.android.com/training/notify-user/channels?hl=ko#importance
 
