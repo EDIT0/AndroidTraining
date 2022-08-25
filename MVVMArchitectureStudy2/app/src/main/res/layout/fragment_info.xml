@@ -11,9 +11,12 @@
             type="com.example.mvvmarchitecturestudy2.data.model.MovieDetailModel" />
     </data>
 
-    <ScrollView
+    <com.example.mvvmarchitecturestudy2.data.util.BottomFadingEdgeScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:fadingEdgeLength="80dp"
+        android:overScrollMode="never"
+        android:requiresFadingEdge="vertical"
         android:fillViewport="true">
 
         <LinearLayout
@@ -33,8 +36,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="20dp"
                 android:layout_marginBottom="5dp"
-                android:text="@{movieDetail.title}"
+                android:text="안녕하세요\nHello\n안녕하세요\nHello\n안녕하세요\nHello\n안녕하세요\nHello\n안녕하세요\nHello\n안녕하세요\nHello\n안녕하세요\nHello\n안녕하세요\nHello\n안녕하세요\nHello\n안녕하세요\nHello\n안녕하세요\nHello\n안녕하세요\nHello\n"
                 android:textSize="20sp" />
+
+<!--            android:text="@{movieDetail.title}"-->
 
             <TextView
                 android:layout_width="wrap_content"
@@ -62,7 +67,7 @@
 
         </LinearLayout>
 
-    </ScrollView>
+    </com.example.mvvmarchitecturestudy2.data.util.BottomFadingEdgeScrollView>
 
 
 </layout>
