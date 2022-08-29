@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.concatadapterstudy.R
 import com.example.concatadapterstudy.model.MovieModel
 import com.example.concatadapterstudy.databinding.BodyListItemBinding
 
@@ -44,6 +45,10 @@ class BodyAdapter : ListAdapter<MovieModel.MovieModelResult, BodyAdapter.ViewHol
 
     fun setOnItemClickListener(listener : (Int, MovieModel.MovieModelResult) -> Unit) {
         onItemClickListener = listener
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        return R.layout.body_list_item
     }
 
     companion object {

@@ -12,4 +12,13 @@ interface TmdbAPIService {
         @Query("language") language: String,
         @Query("page") page: Int
     ): Response<MovieModel>
+
+    @GET("search/movie")
+    suspend fun getSearchMovies(
+        @Query("api_key") api_key : String,
+        @Query("query") query: String,
+        @Query("language") language : String,
+        @Query("page") page : Int,
+        @Query("include_adult") include_adult : Boolean = false
+    ) : Response<MovieModel>
 }

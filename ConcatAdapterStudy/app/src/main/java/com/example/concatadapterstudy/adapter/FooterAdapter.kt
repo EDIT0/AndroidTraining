@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.example.concatadapterstudy.R
 import com.example.concatadapterstudy.databinding.FooterListItemBinding
 import com.example.concatadapterstudy.databinding.HeaderListItemBinding
 import com.example.concatadapterstudy.model.FooterModel
@@ -25,6 +26,10 @@ class FooterAdapter : ListAdapter<FooterModel, FooterAdapter.ViewHolder>(diffUti
         fun bind(data: FooterModel) {
 
         }
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        return R.layout.footer_list_item
     }
 
     companion object {

@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.example.concatadapterstudy.R
 import com.example.concatadapterstudy.databinding.HeaderListItemBinding
 import com.example.concatadapterstudy.model.HeaderModel
 
@@ -36,6 +37,10 @@ class HeaderAdapter : ListAdapter<HeaderModel, HeaderAdapter.ViewHolder>(diffUti
 
     fun setOnItemClickListener(listener : (Int, HeaderModel) -> String) {
         onItemClickListener = listener
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        return R.layout.header_list_item
     }
 
     companion object {

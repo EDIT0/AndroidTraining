@@ -37,7 +37,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var tmdbAPIService: TmdbAPIService
 
     val BASE_URL = "https://api.themoviedb.org/3/"
-    val API_KEY = "6db59bbd7b6f0437a11a5d733f5889fb"
+    val API_KEY = ""
 
     private lateinit var concatAdapter: ConcatAdapter
 
@@ -63,15 +63,21 @@ class MainActivity : AppCompatActivity() {
         settingRetrofit()
 
         // 헤더, 바디, 푸터 어댑터 생성
-        headerAdapter = HeaderAdapter()
+        headerAdapter = HeaderAdapter().apply {
+            setHasStableIds(true)
+        }
         val headerList = listOf<HeaderModel>(
             HeaderModel("첫 번째 박스"),
             HeaderModel("두 번째 박스"),
             HeaderModel("마지막 박스")
         )
         headerAdapter.submitList(headerList.toMutableList())
-        bodyAdapter = BodyAdapter()
-        footerAdapter = FooterAdapter()
+        bodyAdapter = BodyAdapter().apply {
+            setHasStableIds(true)
+        }
+        footerAdapter = FooterAdapter().apply {
+            setHasStableIds(true)
+        }
 
         // ConcatAdapter 설정
         initRecyclerView()
@@ -79,7 +85,10 @@ class MainActivity : AppCompatActivity() {
         // Data ObserveListener
         observeListener()
 
-        showProgressBar()
+        // 맨 하단에 로딩바 넣기
+        if(footerAdapter.currentList.size == 0) {
+            footerAdapter.submitList(listOf<FooterModel>(FooterModel("")).toMutableList())
+        }
         getBodyData(page)
     }
 
@@ -102,8 +111,9 @@ class MainActivity : AppCompatActivity() {
 
     private fun initRecyclerView() {
         val config = ConcatAdapter.Config.Builder()
+            .setStableIdMode(ConcatAdapter.Config.StableIdMode.NO_STABLE_IDS)
+//            .setStableIdMode(ConcatAdapter.Config.StableIdMode.ISOLATED_STABLE_IDS)
             .setIsolateViewTypes(true)
-//            .setStableIdMode(ConcatAdapter.Config.StableIdMode.NO_STABLE_IDS)
             .build()
 
         concatAdapter = ConcatAdapter(config, headerAdapter, bodyAdapter, footerAdapter)
@@ -121,20 +131,10 @@ class MainActivity : AppCompatActivity() {
 
     private fun showProgressBar() {
         isLoading = true
-
-        // 맨 하단에 로딩바 넣기
-        if(footerAdapter.currentList.size == 0) {
-            footerAdapter.submitList(listOf<FooterModel>(FooterModel("")).toMutableList())
-        }
     }
 
     private fun hideProgressBar() {
         isLoading = false
-        lifecycleScope.launch(Dispatchers.Main) {
-            delay(500L)
-            footerAdapter.submitList(emptyList())
-        }
-
     }
 
     private val onScrollListener = object : RecyclerView.OnScrollListener() {
@@ -145,7 +145,7 @@ class MainActivity : AppCompatActivity() {
             val itemTotalCount = recyclerView.adapter!!.itemCount - 1 // 어댑터에 등록된 아이템의 총 개수 -1
 
             // 스크롤이 끝에 도달했는지 확인
-            val b = itemTotalCount - 10
+            val b = itemTotalCount - 5
             Log.i(TAG, "lastVisibleItemPosition: ${lastVisibleItemPosition} b: ${b}")
             if (lastVisibleItemPosition > b) {
                 Log.i(TAG, "a==b!!")
@@ -156,6 +156,9 @@ class MainActivity : AppCompatActivity() {
                         page++
                         showProgressBar()
                         getBodyData(page)
+                    } else {
+                        // 마지막 불러올 데이터 없음
+                        footerAdapter.submitList(emptyList())
                     }
                 }
             }
@@ -174,24 +177,31 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun getBodyData(page: Int) {
+        Log.i(TAG, "데이터 호출!")
         lifecycleScope.launch(Dispatchers.IO) {
             delay(2000L)
             bodyList.postValue(tmdbAPIService.getPopularMovies(API_KEY, language, page))
+//            bodyList.postValue(tmdbAPIService.getSearchMovies(API_KEY, "aaa", language, page))
         }
     }
 
     private fun observeListener() {
         bodyList.observe(this@MainActivity as LifecycleOwner, {
-            Log.i(TAG, "받아온 데이터 : ${it.body()}")
+            Log.i(TAG, "전체 페이지: ${it.body()?.totalPages} / 받아온 데이터 : ${it.body()}")
             totalPages = it.body()?.totalPages?:0
 
             if(it.isSuccessful && it.body()?.movieModelResults != null) {
                 val currentList : List<MovieModel.MovieModelResult> = bodyAdapter.currentList
                 val newList : List<MovieModel.MovieModelResult> = it.body()?.movieModelResults!!
                 val updateList = currentList + newList
-                bodyAdapter.submitList(updateList.toMutableList())
-            } else {
-
+                bodyAdapter.submitList(updateList.toMutableList()) {
+                    footerAdapter.submitList(emptyList()) {
+                        // 맨 하단에 로딩바 넣기
+                        if(footerAdapter.currentList.size == 0) {
+                            footerAdapter.submitList(listOf<FooterModel>(FooterModel("")).toMutableList())
+                        }
+                    }
+                }
             }
 
             hideProgressBar()
