@@ -10,6 +10,7 @@ import com.example.concatadapterstudy.R
 import com.example.concatadapterstudy.databinding.FooterListItemBinding
 import com.example.concatadapterstudy.databinding.HeaderListItemBinding
 import com.example.concatadapterstudy.model.FooterModel
+import com.example.concatadapterstudy.model.HeaderModel
 
 class FooterAdapter : ListAdapter<FooterModel, FooterAdapter.ViewHolder>(diffUtil) {
 
@@ -24,8 +25,18 @@ class FooterAdapter : ListAdapter<FooterModel, FooterAdapter.ViewHolder>(diffUti
     inner class ViewHolder(val binding: FooterListItemBinding) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(data: FooterModel) {
-
+            binding.root.setOnClickListener {
+                onItemClickListener?.let {
+                    it(adapterPosition, data)
+                }
+            }
         }
+    }
+
+    private var onItemClickListener : ((Int, FooterModel) -> Unit) ?= null
+
+    fun setOnItemClickListener(listener : (Int, FooterModel) -> Unit) {
+        onItemClickListener = listener
     }
 
     override fun getItemViewType(position: Int): Int {

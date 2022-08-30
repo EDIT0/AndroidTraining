@@ -25,17 +25,17 @@ class HeaderAdapter : ListAdapter<HeaderModel, HeaderAdapter.ViewHolder>(diffUti
 
             binding.tvHeaderTitle.text = "HeaderAdapter " + data.headerText
 
-//            binding.root.setOnClickListener {
-//                onItemClickListener?.let {
-//                    it(adapterPosition, popularMovieModelResult)
-//                }
-//            }
+            binding.root.setOnClickListener {
+                onItemClickListener?.let {
+                    it(adapterPosition, data)
+                }
+            }
         }
     }
 
-    private var onItemClickListener : ((Int, HeaderModel) -> String) ?= null
+    private var onItemClickListener : ((Int, HeaderModel) -> Unit) ?= null
 
-    fun setOnItemClickListener(listener : (Int, HeaderModel) -> String) {
+    fun setOnItemClickListener(listener : (Int, HeaderModel) -> Unit) {
         onItemClickListener = listener
     }
 

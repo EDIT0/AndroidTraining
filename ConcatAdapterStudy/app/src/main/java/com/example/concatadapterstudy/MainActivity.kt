@@ -1,23 +1,21 @@
 package com.example.concatadapterstudy
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import android.widget.Toast
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ConcatAdapter
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.concatadapterstudy.adapter.BodyAdapter
-import com.example.concatadapterstudy.adapter.FooterAdapter
-import com.example.concatadapterstudy.adapter.HeaderAdapter
+import com.example.concatadapterstudy.adapter.*
 import com.example.concatadapterstudy.databinding.ActivityMainBinding
 import com.example.concatadapterstudy.model.FooterModel
 import com.example.concatadapterstudy.model.HeaderModel
+import com.example.concatadapterstudy.model.HorizontalModel
 import com.example.concatadapterstudy.model.MovieModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -44,6 +42,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var headerAdapter: HeaderAdapter
     private lateinit var bodyAdapter: BodyAdapter
     private lateinit var footerAdapter: FooterAdapter
+    private lateinit var horizontalAdapter: HorizontalAdapter
 
     private var language = "en-US"
     private var isLoading = false
@@ -62,7 +61,21 @@ class MainActivity : AppCompatActivity() {
         // 통신 연결
         settingRetrofit()
 
-        // 헤더, 바디, 푸터 어댑터 생성
+        // 호리젠탈, 헤더, 바디, 푸터 어댑터 생성
+        horizontalAdapter = HorizontalAdapter()
+        val horizontalList = listOf<HorizontalModel>(
+            HorizontalModel("1"),
+            HorizontalModel("2"),
+            HorizontalModel("3"),
+            HorizontalModel("4"),
+            HorizontalModel("5"),
+            HorizontalModel("6"),
+            HorizontalModel("7"),
+            HorizontalModel("8"),
+
+        )
+        horizontalAdapter.submitList(horizontalList.toMutableList())
+
         headerAdapter = HeaderAdapter().apply {
             setHasStableIds(true)
         }
@@ -87,7 +100,7 @@ class MainActivity : AppCompatActivity() {
 
         // 맨 하단에 로딩바 넣기
         if(footerAdapter.currentList.size == 0) {
-            footerAdapter.submitList(listOf<FooterModel>(FooterModel("")).toMutableList())
+            footerAdapter.submitList(listOf<FooterModel>(FooterModel("로딩 중...")).toMutableList())
         }
         getBodyData(page)
     }
@@ -111,21 +124,48 @@ class MainActivity : AppCompatActivity() {
 
     private fun initRecyclerView() {
         val config = ConcatAdapter.Config.Builder()
-            .setStableIdMode(ConcatAdapter.Config.StableIdMode.NO_STABLE_IDS)
+//            .setStableIdMode(ConcatAdapter.Config.StableIdMode.NO_STABLE_IDS)
 //            .setStableIdMode(ConcatAdapter.Config.StableIdMode.ISOLATED_STABLE_IDS)
-            .setIsolateViewTypes(true)
+//            .setIsolateViewTypes(true)
+            .setIsolateViewTypes(false)
             .build()
 
-        concatAdapter = ConcatAdapter(config, headerAdapter, bodyAdapter, footerAdapter)
+        concatAdapter = ConcatAdapter(config, headerAdapter, BaseHorizontalConcatAdapter(this, horizontalAdapter), bodyAdapter, footerAdapter)
 
         binding.rvConcat.apply {
             adapter = concatAdapter
-            layoutManager = LinearLayoutManager(this@MainActivity)
+//            layoutManager = LinearLayoutManager(this@MainActivity)
             addOnScrollListener(this@MainActivity.onScrollListener)
+        }
+
+        // 지정 SpanCount에 따라 칸 나뉨
+        binding.rvConcat.layoutManager = GridLayoutManager(this, 3).apply {
+            spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
+                override fun getSpanSize(position: Int): Int {
+                    return when(concatAdapter.getItemViewType(position)) {
+                        // 몇 칸을 차지 할 것 인지 지정
+                        R.layout.horizontal_list_item, R.layout.body_list_item, R.layout.footer_list_item -> 3
+                        R.layout.header_list_item -> 2
+                        else -> 1
+                    }
+                }
+            }
+        }
+
+        headerAdapter.setOnItemClickListener { adapterPosition, it ->
+            Toast.makeText(this@MainActivity, "${adapterPosition}번째 데이터\n${it.headerText}",Toast.LENGTH_SHORT).show()
+        }
+
+        horizontalAdapter.setOnItemClickListener { adapterPosition, it ->
+            Toast.makeText(this@MainActivity, "${adapterPosition}번째 데이터\n${it.horizontalText}",Toast.LENGTH_SHORT).show()
         }
 
         bodyAdapter.setOnItemClickListener { adapterPosition, it ->
             Toast.makeText(this@MainActivity, "${adapterPosition}번째 데이터\n${it.title}",Toast.LENGTH_SHORT).show()
+        }
+
+        footerAdapter.setOnItemClickListener { adapterPosition, it ->
+            Toast.makeText(this@MainActivity, "${adapterPosition}번째 데이터\n${it.state}",Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -198,7 +238,7 @@ class MainActivity : AppCompatActivity() {
                     footerAdapter.submitList(emptyList()) {
                         // 맨 하단에 로딩바 넣기
                         if(footerAdapter.currentList.size == 0) {
-                            footerAdapter.submitList(listOf<FooterModel>(FooterModel("")).toMutableList())
+                            footerAdapter.submitList(listOf<FooterModel>(FooterModel("로딩 중...")).toMutableList())
                         }
                     }
                 }
