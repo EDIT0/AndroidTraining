@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/oneFragment"
+        android:enabled="true"
+        android:title="1첫번째" />
+
+    <item
+        android:id="@+id/twoFragment"
+        android:enabled="true"
+        android:title="2두번째" />
+    <item
+        android:id="@+id/threeFragment"
+        android:enabled="true"
+        android:title="3세번째" />
+</menu>
