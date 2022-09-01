@@ -76,6 +76,8 @@ class MainActivity : AppCompatActivity() {
         initFragment()
         mainViewPagerAndTabLayoutSetting()
 
+
+
     }
 
 
@@ -125,7 +127,7 @@ class MainActivity : AppCompatActivity() {
 
     inner class viewPagerAdapter(
         fragmentManager: FragmentManager
-    ) : FragmentStatePagerAdapter(fragmentManager) {
+    ) : FragmentStatePagerAdapter(fragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
 
         var items: ArrayList<Fragment> = ArrayList<Fragment>() //프래그먼트 화면을 담아둘 배열
 

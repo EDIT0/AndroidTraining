@@ -1,6 +1,7 @@
 package com.example.coordinatorlayoutdemo3
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -9,9 +10,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.coordinatorlayoutdemo3.databinding.FragmentTwoBinding
 
 class TwoFragment : Fragment() {
+    private val TAG = TwoFragment::class.java.simpleName
+
     private lateinit var fragmentTwoBinding: FragmentTwoBinding
 
     private lateinit var adapter : Adapter
+
+    private var isFirstStart = true
 
     val itemList = listOf<Item>(
         Item("Mango"),
@@ -71,6 +76,29 @@ class TwoFragment : Fragment() {
         fragmentTwoBinding.recyclerView.layoutManager = LinearLayoutManager(fragmentTwoBinding.root.context)
         fragmentTwoBinding.recyclerView.adapter = adapter
 
-        adapter.updateList(itemList)
+        Log.i(TAG, "onViewCreated()")
+    }
+
+    override fun setUserVisibleHint(isVisibleToUser: Boolean) {
+        super.setUserVisibleHint(isVisibleToUser)
+    }
+
+    // Fragment 보여질 때
+    override fun onResume() {
+        super.onResume()
+        Log.i(TAG, "onResume()")
+
+        if(isFirstStart) {
+            Log.i(TAG, "Load Data!!")
+            isFirstStart = false
+            adapter.updateList(itemList)
+        }
+    }
+
+    // Fragment 가려질 때
+    override fun onPause() {
+        super.onPause()
+
+        Log.i(TAG, "onPause()")
     }
 }

@@ -1,6 +1,7 @@
 package com.example.coordinatorlayoutdemo3
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -10,9 +11,13 @@ import com.example.coordinatorlayoutdemo3.databinding.FragmentOneBinding
 import com.example.coordinatorlayoutdemo3.databinding.FragmentThreeBinding
 
 class ThreeFragment : Fragment() {
+    private val TAG = ThreeFragment::class.java.simpleName
+
     private lateinit var fragmentThreeBinding: FragmentThreeBinding
 
     private lateinit var adapter : Adapter
+
+    private var isFirstStart = true
 
     val itemList = listOf<Item>(
         Item("Mango"),
@@ -72,6 +77,30 @@ class ThreeFragment : Fragment() {
         fragmentThreeBinding.recyclerView.layoutManager = LinearLayoutManager(fragmentThreeBinding.root.context)
         fragmentThreeBinding.recyclerView.adapter = adapter
 
-        adapter.updateList(itemList)
+        Log.i(TAG, "onViewCreated()")
     }
+
+    override fun setUserVisibleHint(isVisibleToUser: Boolean) {
+        super.setUserVisibleHint(isVisibleToUser)
+    }
+
+    // Fragment 보여질 때
+    override fun onResume() {
+        super.onResume()
+        Log.i(TAG, "onResume()")
+
+        if(isFirstStart) {
+            Log.i(TAG, "Load Data!!")
+            isFirstStart = false
+            adapter.updateList(itemList)
+        }
+    }
+
+    // Fragment 가려질 때
+    override fun onPause() {
+        super.onPause()
+
+        Log.i(TAG, "onPause()")
+    }
+
 }
