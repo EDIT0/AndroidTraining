@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">SocialLogin</string>
+
+    <!--카카오 정보-->
+    <string name="kakao_app_key"></string>
+
+    <!--네이버 정보-->
+    <string name="naver_client_id"></string>
+    <string name="naver_client_secret"></string>
+    <string name="naver_client_name"></string>
+</resources>
