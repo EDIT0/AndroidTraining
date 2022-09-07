@@ -27,6 +27,10 @@ class MainActivity : AppCompatActivity() {
         binding.btnNaver.setOnClickListener {
             startActivity(Intent(this, NaverLoginActivity::class.java))
         }
+
+        binding.btnGoogle.setOnClickListener {
+            startActivity(Intent(this, GoogleLoginActivity::class.java))
+        }
     }
 
     override fun onDestroy() {

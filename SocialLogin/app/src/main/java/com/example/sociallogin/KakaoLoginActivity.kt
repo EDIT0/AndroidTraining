@@ -30,7 +30,7 @@ class KakaoLoginActivity : AppCompatActivity() {
         setContentView(view)
 
         val keyHash = Utility.getKeyHash(this)
-        Log.i(TAG, "카카오 릴리즈 키: ${keyHash}")
+        Log.i(TAG, "카카오 디버그 키: ${keyHash}")
         
         val callback: (OAuthToken?, Throwable?) -> Unit = { token, error ->
             Log.i(TAG, "${token.toString()}\nAccessToken : ${token?.accessToken}" +

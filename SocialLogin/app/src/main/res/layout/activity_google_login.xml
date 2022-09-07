@@ -6,24 +6,31 @@
     android:layout_height="match_parent"
     android:gravity="center|top"
     android:orientation="vertical"
-    tools:context=".MainActivity">
+    tools:context=".GoogleLoginActivity">
 
     <Button
-        android:id="@+id/btnKakao"
+        android:id="@+id/btnLogin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="카카오 로그인" />
+        android:text="로그인" />
 
     <Button
-        android:id="@+id/btnNaver"
+        android:id="@+id/btnLogout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="네이버 로그인" />
+        android:text="로그아웃" />
 
     <Button
-        android:id="@+id/btnGoogle"
+        android:id="@+id/btnDeleteAccount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="구글 로그인" />
+        android:text="계정삭제" />
+
+    <Button
+        android:id="@+id/btnUserInfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="계정정보" />
+
 
 </LinearLayout>
