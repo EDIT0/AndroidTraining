@@ -22,11 +22,8 @@ class TextAdapter : ListAdapter<TextModel, TextAdapter.ViewHolder>(diffUtil) {
 
         fun bind(textModel: TextModel) {
 
-            binding.tvText.text = textModel.word
+            binding.textModel = textModel
 
-//            binding.movieListItem = popularMovieModelResult
-//            binding.executePendingBindings()
-//
 //            binding.root.setOnClickListener {
 //                onItemClickListener?.let {
 //                    it(adapterPosition, popularMovieModelResult)
@@ -37,7 +34,6 @@ class TextAdapter : ListAdapter<TextModel, TextAdapter.ViewHolder>(diffUtil) {
 
     companion object {
         val diffUtil = object: DiffUtil.ItemCallback<TextModel>() {
-            @SuppressLint("DiffUtilEquals")
             override fun areContentsTheSame(oldItem: TextModel, newItem: TextModel) =
                 oldItem == newItem
 

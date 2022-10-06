@@ -1,30 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
-
+<layout>
     <data>
 
-        <import type="android.view.View" />
-
         <variable
-            name="mainViewModelInMainActivity"
+            name="mainViewModelInSecondActivity"
             type="com.example.databindingdemo2.viewmodel.MainViewModel" />
 
         <variable
-            name="textRecyclerViewModelInMainActivity"
+            name="textRecyclerViewModelInSecondActivity"
             type="com.example.databindingdemo2.viewmodel.TextRecyclerViewModel" />
 
         <variable
-            name="buttonViewModelInMainActivity"
+            name="buttonViewModelInSecondActivity"
             type="com.example.databindingdemo2.viewmodel.ButtonViewModel" />
 
     </data>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".MainActivity">
+        tools:context=".SecondActivity">
 
         <EditText
             android:id="@+id/et_input"
@@ -32,7 +28,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="20dp"
             android:singleLine="true"
-            android:text="@={mainViewModelInMainActivity.etInput}"
+            android:text="@={mainViewModelInSecondActivity.etInput}"
             app:layout_constraintBottom_toTopOf="@+id/tv_etPreview"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -40,7 +36,7 @@
 
         <TextView
             android:id="@+id/tv_etPreview"
-            setCustomText="@{mainViewModelInMainActivity.etInput.toString()}"
+            setCustomText="@{mainViewModelInSecondActivity.etInput.toString()}"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="20dp"
@@ -52,13 +48,13 @@
 
         <Button
             android:id="@+id/btnAdd"
-            animDuration="@{mainViewModelInMainActivity.animDuration}"
-            animType="@{mainViewModelInMainActivity.etInput.toString().length() > 0 ? mainViewModelInMainActivity.animTypeIn : mainViewModelInMainActivity.animTypeOut}"
-            visible="@{mainViewModelInMainActivity.etInput.toString().length() > 0}"
+            animDuration="@{mainViewModelInSecondActivity.animDuration}"
+            animType="@{mainViewModelInSecondActivity.etInput.toString().length() > 0 ? mainViewModelInSecondActivity.animTypeIn : mainViewModelInSecondActivity.animTypeOut}"
+            visible="@{mainViewModelInSecondActivity.etInput.toString().length() > 0}"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="20dp"
-            android:onClick="@{() -> textRecyclerViewModelInMainActivity.addItem()}"
+            android:onClick="@{() -> textRecyclerViewModelInSecondActivity.addItem()}"
             android:text="@string/add"
             app:layout_constraintBottom_toTopOf="@+id/include_rvText"
             app:layout_constraintEnd_toEndOf="parent"
@@ -70,20 +66,10 @@
             layout="@layout/recyclerview_text"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:layout_constraintBottom_toTopOf="@+id/include_bottom"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/btnAdd" />
-
-        <include
-            android:id="@+id/include_bottom"
-            layout="@layout/button"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@+id/include_rvText"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

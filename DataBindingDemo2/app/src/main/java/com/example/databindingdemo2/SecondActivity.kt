@@ -1,6 +1,5 @@
 package com.example.databindingdemo2
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -8,15 +7,15 @@ import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.databindingdemo2.databinding.ActivityMainBinding
+import com.example.databindingdemo2.databinding.ActivitySecondBinding
 import com.example.databindingdemo2.viewmodel.*
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
+class SecondActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityMainBinding
+    private lateinit var binding: ActivitySecondBinding
 
     // 화면에 따른 뷰모델팩토리
     @Inject
@@ -33,29 +32,24 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_second)
 
         mainViewModel = ViewModelProvider(this, mainViewModelFactory).get(MainViewModel::class.java)
         textRecyclerViewModel = ViewModelProvider(this, textRecyclerViewModelFactory).get(TextRecyclerViewModel::class.java)
         buttonViewModel = ViewModelProvider(this, buttonViewModelFactory).get(ButtonViewModel::class.java)
 
-        Log.i("MYTAG", "Main ${mainViewModel.hashCode()} / ${mainViewModelFactory.hashCode()}")
+        Log.i("MYTAG", "Second ${mainViewModel.hashCode()} / ${mainViewModelFactory.hashCode()}")
 
-        binding.mainViewModelInMainActivity = mainViewModel
-        binding.textRecyclerViewModelInMainActivity = textRecyclerViewModel
+        binding.mainViewModelInSecondActivity = mainViewModel
+        binding.textRecyclerViewModelInSecondActivity = textRecyclerViewModel
         binding.lifecycleOwner = this
 
         binding.includeRvText.textRecyclerViewModelInRecyclerText = textRecyclerViewModel
         binding.includeRvText.lifecycleOwner = this
 
-        binding.includeBottom.buttonViewModelInButton = buttonViewModel
-        binding.includeBottom.listenerEventInButton = ListenerEvent(this)
-        binding.includeBottom.textRecyclerViewModelInButton = textRecyclerViewModel
-        binding.includeBottom.lifecycleOwner = this
-
         binding.includeRvText.rv.apply {
             adapter = TextAdapter()
-            layoutManager = LinearLayoutManager(this@MainActivity)
+            layoutManager = LinearLayoutManager(this@SecondActivity)
         }
     }
 }

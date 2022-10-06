@@ -8,12 +8,8 @@
         <import type="android.view.View" />
 
         <variable
-            name="mainViewModelInRecyclerText"
-            type="com.example.databindingdemo2.MainViewModel" />
-
-        <variable
             name="textRecyclerViewModelInRecyclerText"
-            type="com.example.databindingdemo2.TextRecyclerViewModel" />
+            type="com.example.databindingdemo2.viewmodel.TextRecyclerViewModel" />
 
     </data>
 
@@ -23,8 +19,6 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv"
-            adapter="@{textRecyclerViewModelInRecyclerText.textAdapter}"
-            layoutManager="@{textRecyclerViewModelInRecyclerText.linearLayoutManager}"
             setAdapterItems="@{textRecyclerViewModelInRecyclerText.textList}"
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -33,6 +27,9 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:itemCount="100" />
+
+<!--        adapter="@{textRecyclerViewModelInRecyclerText.textAdapter}"-->
+<!--        layoutManager="@{textRecyclerViewModelInRecyclerText.linearLayoutManager}"-->
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

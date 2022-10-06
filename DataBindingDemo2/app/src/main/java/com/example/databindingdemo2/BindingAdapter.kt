@@ -53,24 +53,25 @@ object BindingAdapter {
         view.text = text
     }
 
-    @JvmStatic
-    @BindingAdapter("adapter", "layoutManager", "setAdapterItems", requireAll = false)
-    fun setRVTextAdapter(
-        view: RecyclerView,
-        adapter: TextAdapter,
-        layoutManager: LinearLayoutManager,
-        items: MutableList<TextModel>?
-    ) {
-        view.apply {
-            this.adapter = adapter
-            this.layoutManager = layoutManager
-        }
+//    @JvmStatic
+//    @BindingAdapter("adapter", "layoutManager")
+//    fun setRVTextAdapter(view: RecyclerView, adapter: TextAdapter, layoutManager: LinearLayoutManager) {
+//        view.apply {
+//            this.adapter = adapter
+//            this.layoutManager = layoutManager
+//        }
+//    }
 
+    @JvmStatic
+    @BindingAdapter("setAdapterItems")
+    fun RecyclerView.setAdapterItems(items: MutableList<TextModel>?) {
         items?.let {
-//            val adapter : TextAdapter by lazy {
-//                (adapter as TextAdapter)
-//            }
-            (adapter as TextAdapter).submitList(it.toMutableList())
+//            Log.i("MYTAG", "1")
+            adapter?.let {
+//                Log.i("MYTAG", "2")
+                (it as TextAdapter).submitList(items.toMutableList())
+//                Log.i("MYTAG", "3")
+            }
         }
     }
 }
