@@ -1,4 +1,4 @@
-package com.example.databindingdemo2
+package com.example.databindingdemo2.util
 
 import androidx.databinding.BindingAdapter
 import android.util.Log
@@ -8,8 +8,9 @@ import android.view.animation.AnimationUtils
 import android.widget.Button
 import android.widget.TextView
 import androidx.annotation.AnimRes
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.databindingdemo2.adapter.TextAdapter
+import com.example.databindingdemo2.model.TextModel
 
 object BindingAdapter {
 

@@ -3,15 +3,15 @@
     <data>
 
         <variable
-            name="mainViewModelInSecondActivity"
-            type="com.example.databindingdemo2.viewmodel.MainViewModel" />
+            name="inputEditTextViewModel"
+            type="com.example.databindingdemo2.viewmodel.InputEditTextViewModel" />
 
         <variable
-            name="textRecyclerViewModelInSecondActivity"
+            name="textRecyclerViewModel"
             type="com.example.databindingdemo2.viewmodel.TextRecyclerViewModel" />
 
         <variable
-            name="buttonViewModelInSecondActivity"
+            name="buttonViewModel"
             type="com.example.databindingdemo2.viewmodel.ButtonViewModel" />
 
     </data>
@@ -20,56 +20,30 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".SecondActivity">
+        tools:context=".activity.SecondActivity">
 
-        <EditText
-            android:id="@+id/et_input"
+        <include
+            android:id="@+id/include_inputEt"
+            layout="@layout/input_edittext"
+            app:inputEditTextViewModel="@{inputEditTextViewModel}"
+            app:textRecyclerViewModel="@{textRecyclerViewModel}"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
-            android:singleLine="true"
-            android:text="@={mainViewModelInSecondActivity.etInput}"
-            app:layout_constraintBottom_toTopOf="@+id/tv_etPreview"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/tv_etPreview"
-            setCustomText="@{mainViewModelInSecondActivity.etInput.toString()}"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
-            app:layout_constraintBottom_toTopOf="@+id/btnAdd"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/et_input" />
-
-        <Button
-            android:id="@+id/btnAdd"
-            animDuration="@{mainViewModelInSecondActivity.animDuration}"
-            animType="@{mainViewModelInSecondActivity.etInput.toString().length() > 0 ? mainViewModelInSecondActivity.animTypeIn : mainViewModelInSecondActivity.animTypeOut}"
-            visible="@{mainViewModelInSecondActivity.etInput.toString().length() > 0}"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
-            android:onClick="@{() -> textRecyclerViewModelInSecondActivity.addItem()}"
-            android:text="@string/add"
-            app:layout_constraintBottom_toTopOf="@+id/include_rvText"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_etPreview" />
+            app:layout_constraintBottom_toTopOf="@+id/include_rvText" />
 
         <include
             android:id="@+id/include_rvText"
             layout="@layout/recyclerview_text"
+            app:textRecyclerViewModel="@{textRecyclerViewModel}"
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btnAdd" />
+            app:layout_constraintTop_toBottomOf="@+id/include_inputEt" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

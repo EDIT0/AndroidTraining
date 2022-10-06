@@ -1,9 +1,10 @@
-package com.example.databindingdemo2
+package com.example.databindingdemo2.util
 
 import android.content.Context
 import android.content.Intent
 import android.util.Log
 import android.widget.Toast
+import com.example.databindingdemo2.activity.SecondActivity
 import com.example.databindingdemo2.viewmodel.TextRecyclerViewModel
 
 class ListenerEvent(
@@ -19,6 +20,6 @@ class ListenerEvent(
     }
 
     private fun getLogin() : Boolean {
-        return false
+        return true
     }
 }

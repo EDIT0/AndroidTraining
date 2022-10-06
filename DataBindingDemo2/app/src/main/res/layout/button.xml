@@ -1,16 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
     <data>
-        <variable
-            name="buttonViewModelInButton"
-            type="com.example.databindingdemo2.viewmodel.ButtonViewModel" />
 
         <variable
-            name="listenerEventInButton"
-            type="com.example.databindingdemo2.ListenerEvent" />
+            name="listenerEvent"
+            type="com.example.databindingdemo2.util.ListenerEvent" />
 
         <variable
-            name="textRecyclerViewModelInButton"
+            name="textRecyclerViewModel"
             type="com.example.databindingdemo2.viewmodel.TextRecyclerViewModel" />
     </data>
 
@@ -24,7 +21,7 @@
             android:layout_height="wrap_content"
             android:text="@string/button"
             android:id="@+id/btnButton"
-            android:onClick="@{() -> listenerEventInButton.onClickListener(textRecyclerViewModelInButton)}"
+            android:onClick="@{() -> listenerEvent.onClickListener(textRecyclerViewModel)}"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"

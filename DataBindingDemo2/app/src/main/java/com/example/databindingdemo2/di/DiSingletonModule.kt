@@ -1,19 +1,15 @@
-package com.example.databindingdemo2
+package com.example.databindingdemo2.di
 
-import android.app.Application
-import android.content.Context
 import com.example.databindingdemo2.viewmodel.*
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ViewModelComponent
-import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object DiModule {
+object DiSingletonModule {
 //    @Singleton
 //    @Provides
 //    fun provideContext(@ApplicationContext context: Context) : Context {
@@ -22,8 +18,8 @@ object DiModule {
 
     @Provides
     @Singleton
-    fun providesMainViewModelFactory() : MainViewModelFactory {
-        return MainViewModelFactory()
+    fun providesInputEditTextViewModelFactory() : InputEditTextViewModelFactory {
+        return InputEditTextViewModelFactory()
     }
 
     @Provides

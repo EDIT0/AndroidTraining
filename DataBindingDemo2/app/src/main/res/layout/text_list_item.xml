@@ -4,7 +4,7 @@
     <data>
         <variable
             name="textModel"
-            type="com.example.databindingdemo2.TextModel" />
+            type="com.example.databindingdemo2.model.TextModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"

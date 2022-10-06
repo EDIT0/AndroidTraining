@@ -1,12 +1,12 @@
-package com.example.databindingdemo2
+package com.example.databindingdemo2.adapter
 
-import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.databindingdemo2.databinding.TextListItemBinding
+import com.example.databindingdemo2.model.TextModel
 
 class TextAdapter : ListAdapter<TextModel, TextAdapter.ViewHolder>(diffUtil) {
 
@@ -24,12 +24,18 @@ class TextAdapter : ListAdapter<TextModel, TextAdapter.ViewHolder>(diffUtil) {
 
             binding.textModel = textModel
 
-//            binding.root.setOnClickListener {
-//                onItemClickListener?.let {
-//                    it(adapterPosition, popularMovieModelResult)
-//                }
-//            }
+            binding.root.setOnClickListener {
+                onItemClickListener?.let {
+                    it(adapterPosition, textModel)
+                }
+            }
         }
+    }
+
+    private var onItemClickListener : ((Int, TextModel) -> Unit)? = null
+
+    fun setOnItemClickListener(listener : (Int, TextModel) -> Unit) {
+        onItemClickListener = listener
     }
 
     companion object {

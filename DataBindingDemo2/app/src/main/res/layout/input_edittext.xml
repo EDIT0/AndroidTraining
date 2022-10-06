@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+            name="inputEditTextViewModel"
+            type="com.example.databindingdemo2.viewmodel.InputEditTextViewModel" />
+
+        <variable
+            name="textRecyclerViewModel"
+            type="com.example.databindingdemo2.viewmodel.TextRecyclerViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <EditText
+            android:id="@+id/et_input"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:singleLine="true"
+            android:text="@={inputEditTextViewModel.etInput}"
+            app:layout_constraintBottom_toTopOf="@+id/tv_etPreview"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_etPreview"
+            setCustomText="@{inputEditTextViewModel.etInput.toString()}"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            app:layout_constraintBottom_toTopOf="@+id/btnAdd"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/et_input" />
+
+        <Button
+            android:id="@+id/btnAdd"
+            animDuration="@{inputEditTextViewModel.animDuration}"
+            animType="@{inputEditTextViewModel.etInput.toString().length() > 0 ? inputEditTextViewModel.animTypeIn : inputEditTextViewModel.animTypeOut}"
+            visible="@{inputEditTextViewModel.etInput.toString().length() > 0}"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:onClick="@{() -> textRecyclerViewModel.addItem(String.valueOf(inputEditTextViewModel.etInput))}"
+            android:text="@string/add"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_etPreview" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

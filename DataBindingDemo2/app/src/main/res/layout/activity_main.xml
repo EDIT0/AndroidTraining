@@ -8,62 +8,39 @@
         <import type="android.view.View" />
 
         <variable
-            name="mainViewModelInMainActivity"
-            type="com.example.databindingdemo2.viewmodel.MainViewModel" />
+            name="inputEditTextViewModel"
+            type="com.example.databindingdemo2.viewmodel.InputEditTextViewModel" />
 
         <variable
-            name="textRecyclerViewModelInMainActivity"
+            name="textRecyclerViewModel"
             type="com.example.databindingdemo2.viewmodel.TextRecyclerViewModel" />
 
         <variable
-            name="buttonViewModelInMainActivity"
+            name="buttonViewModel"
             type="com.example.databindingdemo2.viewmodel.ButtonViewModel" />
+
+        <variable
+            name="listenerEvent"
+            type="com.example.databindingdemo2.util.ListenerEvent" />
 
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".MainActivity">
+        tools:context=".activity.MainActivity">
 
-        <EditText
-            android:id="@+id/et_input"
+        <include
+            android:id="@+id/include_inputEt"
+            layout="@layout/input_edittext"
+            app:inputEditTextViewModel="@{inputEditTextViewModel}"
+            app:textRecyclerViewModel="@{textRecyclerViewModel}"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
-            android:singleLine="true"
-            android:text="@={mainViewModelInMainActivity.etInput}"
-            app:layout_constraintBottom_toTopOf="@+id/tv_etPreview"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/tv_etPreview"
-            setCustomText="@{mainViewModelInMainActivity.etInput.toString()}"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
-            app:layout_constraintBottom_toTopOf="@+id/btnAdd"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/et_input" />
-
-        <Button
-            android:id="@+id/btnAdd"
-            animDuration="@{mainViewModelInMainActivity.animDuration}"
-            animType="@{mainViewModelInMainActivity.etInput.toString().length() > 0 ? mainViewModelInMainActivity.animTypeIn : mainViewModelInMainActivity.animTypeOut}"
-            visible="@{mainViewModelInMainActivity.etInput.toString().length() > 0}"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
-            android:onClick="@{() -> textRecyclerViewModelInMainActivity.addItem()}"
-            android:text="@string/add"
-            app:layout_constraintBottom_toTopOf="@+id/include_rvText"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_etPreview" />
+            app:layout_constraintBottom_toTopOf="@+id/include_rvText" />
 
         <include
             android:id="@+id/include_rvText"
@@ -73,17 +50,20 @@
             app:layout_constraintBottom_toTopOf="@+id/include_bottom"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btnAdd" />
+            app:layout_constraintTop_toBottomOf="@+id/include_inputEt"
+            app:textRecyclerViewModel="@{textRecyclerViewModel}" />
 
         <include
             android:id="@+id/include_bottom"
             layout="@layout/button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@+id/include_rvText"
-            app:layout_constraintStart_toStartOf="parent"
+            app:listenerEvent="@{listenerEvent}"
+            app:textRecyclerViewModel="@{textRecyclerViewModel}"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/include_rvText" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

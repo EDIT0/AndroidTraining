@@ -8,7 +8,7 @@
         <import type="android.view.View" />
 
         <variable
-            name="textRecyclerViewModelInRecyclerText"
+            name="textRecyclerViewModel"
             type="com.example.databindingdemo2.viewmodel.TextRecyclerViewModel" />
 
     </data>
@@ -19,7 +19,7 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv"
-            setAdapterItems="@{textRecyclerViewModelInRecyclerText.textList}"
+            setAdapterItems="@{textRecyclerViewModel.textList}"
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
