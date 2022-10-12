@@ -11,13 +11,16 @@ import java.io.IOException
 private const val STARTING_PAGE_INDEX = 1
 
 class MoviePagingSource(
-    service: Service
+    service: Service,
+    query: String
 ) : PagingSource<Int, MovieModel.MovieModelResult>() {
 
     private var apiService: Service
+    private lateinit var query: String
 
     init {
         apiService = service
+        this.query = query
     }
 
     // 데이터 로드
@@ -31,7 +34,7 @@ class MoviePagingSource(
             // 데이터를 제공하는 인스턴스의 메소드 사용
             val response = apiService.getPopularMovies(
                 BuildConfig.API_KEY,
-                "aaa",
+                query,
                 "en_US",
                 position
             )
@@ -40,6 +43,13 @@ class MoviePagingSource(
 
             val post = response?.body()
             Log.i("MYTAG", "${post?.totalPages} / ${post?.page} / ${post?.movieModelResults}")
+            if(post == null || post.totalPages == 0) {
+                throw IOException()
+            }
+
+//            if(post?.page == 3) {
+//                throw IOException()
+//            }
 
             /* 로드에 성공 시 LoadResult.Page 반환
             data : 전송되는 데이터
@@ -62,7 +72,11 @@ class MoviePagingSource(
 
     // 데이터가 새로고침되거나 첫 로드 후 무효화되었을 때 키를 반환하여 load()로 전달
     override fun getRefreshKey(state: PagingState<Int, MovieModel.MovieModelResult>): Int? {
-        TODO("Not yet implemented")
+        return state.anchorPosition?.let {
+            Log.i("MYTAG", "getRefreshKey() ${state.anchorPosition} ${state.closestPageToPosition(it)?.prevKey} ${state.closestPageToPosition(it)?.nextKey}")
+            Log.i("MYTAG", "getRefreshKey() ${state.closestPageToPosition(it)?.prevKey?.plus(1)?: state.closestPageToPosition(it)?.nextKey?.minus(1)}")
+            state.closestPageToPosition(it)?.prevKey?.plus(1)?: state.closestPageToPosition(it)?.nextKey?.minus(1)
+        }
     }
 
 }

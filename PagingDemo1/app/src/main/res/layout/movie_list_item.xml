@@ -6,7 +6,7 @@
     <data>
         <variable
             name="movieListItem"
-            type="com.example.pagingdemo1.model.MovieModel" />
+            type="com.example.pagingdemo1.model.MovieModel.MovieModelResult" />
     </data>
 
     <LinearLayout

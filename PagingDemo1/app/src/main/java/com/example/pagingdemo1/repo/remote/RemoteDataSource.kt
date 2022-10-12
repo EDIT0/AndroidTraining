@@ -5,5 +5,5 @@ import com.example.pagingdemo1.model.MovieModel
 import kotlinx.coroutines.flow.Flow
 
 interface RemoteDataSource {
-    suspend fun getPopularMovies(language : String, page : Int) : Flow<PagingData<MovieModel.MovieModelResult>>
+    fun getPopularMovies(query: String, language : String, page : Int) : Flow<PagingData<MovieModel.MovieModelResult>>
 }

@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
+
     <data>
+
         <variable
             name="mainViewModel"
             type="com.example.pagingdemo1.ui.MainViewModel" />
     </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
@@ -12,14 +15,31 @@
         android:layout_height="match_parent"
         tools:context=".ui.MainActivity">
 
+        <EditText
+            android:id="@+id/etInput"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:text="@={mainViewModel.etInput}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btnRefresh" />
+
+        <Button
+            android:id="@+id/btnRefresh"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipeRefresh"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:id="@+id/swipeRefresh"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent">
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/etInput">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_movie"
@@ -27,7 +47,6 @@
                 android:layout_height="match_parent"
                 android:overScrollMode="always" />
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
