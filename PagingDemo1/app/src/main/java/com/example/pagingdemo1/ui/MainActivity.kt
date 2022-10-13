@@ -7,6 +7,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.pagingdemo1.R
@@ -78,7 +79,7 @@ class MainActivity : AppCompatActivity() {
         binding.swipeRefresh.setOnRefreshListener {
             movieAdapter.refresh()
 
-            binding.swipeRefresh.isRefreshing = false
+//            binding.swipeRefresh.isRefreshing = false
         }
 
         binding.btnRefresh.setOnClickListener {
@@ -86,6 +87,26 @@ class MainActivity : AppCompatActivity() {
             movieAdapter.refresh()
         }
 
+        movieAdapter.addLoadStateListener {
+            Log.i("MYTAG", "prepend Loading ${it.source.prepend is LoadState.Loading}")
+            Log.i("MYTAG", "append Loading ${it.source.append is LoadState.Loading}")
+            Log.i("MYTAG", "refresh Loading ${it.source.refresh is LoadState.Loading}")
+
+            // 리프래시 끝나면 없애기
+            if(it.source.refresh !is LoadState.Loading) {
+                binding.swipeRefresh.isRefreshing = false
+            }
+        }
+
+        // retry 말그대로 실패 후 재시도
+        binding.apply {
+            rvMovie.setHasFixedSize(true) // 사이즈 고정
+            // header, footer 설정
+            rvMovie.adapter = movieAdapter.withLoadStateHeaderAndFooter(
+                header = MovieLoadStateAdapter { movieAdapter.retry() },
+                footer = MovieLoadStateAdapter { movieAdapter.retry() }
+            )
+        }
 
     }
 

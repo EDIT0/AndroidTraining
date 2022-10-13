@@ -16,7 +16,7 @@ class MainViewModel(
     private val getPopularMovieUseCase: GetPopularMovieUseCase
 ) : ViewModel(){
 
-    var etInput : MutableLiveData<String> = MutableLiveData("aaa")
+    var etInput : MutableLiveData<String> = MutableLiveData("good")
     var alert = false
 
     var result : LiveData<PagingData<MovieModel.MovieModelResult>> = etInput.switchMap {

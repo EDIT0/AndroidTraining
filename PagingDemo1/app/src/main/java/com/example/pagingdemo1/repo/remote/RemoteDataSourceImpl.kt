@@ -20,7 +20,7 @@ class RemoteDataSourceImpl(
         return Pager(
             config = PagingConfig(
                 pageSize = 20,
-                maxSize = 1000,
+                maxSize = 300,
                 enablePlaceholders = false
             ),
             // 사용할 메소드 선언

@@ -5,8 +5,10 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.example.pagingdemo1.model.MovieModel
 import com.example.pagingdemo1.network.Service
+import kotlinx.coroutines.delay
 import retrofit2.HttpException
 import java.io.IOException
+import java.util.*
 
 private const val STARTING_PAGE_INDEX = 1
 
@@ -47,9 +49,17 @@ class MoviePagingSource(
                 throw IOException()
             }
 
-//            if(post?.page == 3) {
-//                throw IOException()
-//            }
+            delay(1000L)
+
+            if(post.page == 3) {
+                val randomNumber = Random().nextInt(10) + 1
+                if(randomNumber > 5) {
+
+                } else {
+                    throw IOException()
+                }
+
+            }
 
             /* 로드에 성공 시 LoadResult.Page 반환
             data : 전송되는 데이터
@@ -75,7 +85,8 @@ class MoviePagingSource(
         return state.anchorPosition?.let {
             Log.i("MYTAG", "getRefreshKey() ${state.anchorPosition} ${state.closestPageToPosition(it)?.prevKey} ${state.closestPageToPosition(it)?.nextKey}")
             Log.i("MYTAG", "getRefreshKey() ${state.closestPageToPosition(it)?.prevKey?.plus(1)?: state.closestPageToPosition(it)?.nextKey?.minus(1)}")
-            state.closestPageToPosition(it)?.prevKey?.plus(1)?: state.closestPageToPosition(it)?.nextKey?.minus(1)
+//            state.closestPageToPosition(it)?.prevKey?.plus(1)?: state.closestPageToPosition(it)?.nextKey?.minus(1)
+            STARTING_PAGE_INDEX
         }
     }
 
