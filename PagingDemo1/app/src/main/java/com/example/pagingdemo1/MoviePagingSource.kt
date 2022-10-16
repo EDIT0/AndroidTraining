@@ -51,32 +51,37 @@ class MoviePagingSource(
 
             delay(1000L)
 
-            if(post.page == 3) {
+            if(post.page % 3 == 0) {
                 val randomNumber = Random().nextInt(10) + 1
                 if(randomNumber > 5) {
-
-                } else {
                     throw IOException()
                 }
-
             }
 
             /* 로드에 성공 시 LoadResult.Page 반환
             data : 전송되는 데이터
             prevKey : 이전 값 (위 스크롤 방향)
             nextKey : 다음 값 (아래 스크롤 방향)
+            itemsBefore, itemsAfter : 리스트 앞, 뒤에 표시할 placeholder 수
              */
             LoadResult.Page(
                 data = post!!.movieModelResults,
                 prevKey = if (position == STARTING_PAGE_INDEX) null else position - 1,
-                nextKey = if (position == post.totalPages) null else position + 1
+                nextKey = if (position == post.totalPages) null else position + 1,
+                itemsBefore = 0,
+                itemsAfter = 0
             )
 
             // 로드에 실패 시 LoadResult.Error 반환
-        } catch (exception: IOException) {
-            LoadResult.Error(exception)
-        } catch (exception: HttpException) {
-            LoadResult.Error(exception)
+        } catch (e: IOException) {
+            Log.i("MYTAG", "IOException: ${e.message}")
+            LoadResult.Error(e)
+        } catch (e: HttpException) {
+            Log.i("MYTAG", "HttpException: ${e.message}")
+            LoadResult.Error(e)
+        } catch (e: Exception) {
+            Log.i("MYTAG", "Exception: ${e.message}")
+            LoadResult.Error(e)
         }
     }
 

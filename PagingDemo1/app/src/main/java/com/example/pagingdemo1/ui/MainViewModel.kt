@@ -17,24 +17,12 @@ class MainViewModel(
 ) : ViewModel(){
 
     var etInput : MutableLiveData<String> = MutableLiveData("good")
-    var alert = false
 
+    // LiveData
     var result : LiveData<PagingData<MovieModel.MovieModelResult>> = etInput.switchMap {
-        getPopularMovieUseCase.execute(it, "", 0).asLiveData()
+        getPopularMovieUseCase.execute(it, "", 0).asLiveData().cachedIn(viewModelScope)
     }
 
-
-
-//    Flow<PagingData<MovieModel.MovieModelResult>>
-    fun getPopularMovies() = getPopularMovieUseCase.execute(etInput.value.toString(), "", 0)
-
-//    private val myCustomPosts2 : MutableLiveData<String> = MutableLiveData()
-//
-//    // 라이브 데이터 변경 시 다른 라이브 데이터 발행
-//    val result = myCustomPosts2.switchMap { queryString ->
-//        getPopularMovieUseCase.execute("", 0).cachedIn(viewModelScope)
-//    }
-
-
-//    Log.i("MYTAG", "현재 스레드 collect: ${Thread.currentThread().name}\n${it}")
+    // Flow
+//    fun getPopularMovies() = getPopularMovieUseCase.execute(etInput.value.toString(), "", 0)
 }

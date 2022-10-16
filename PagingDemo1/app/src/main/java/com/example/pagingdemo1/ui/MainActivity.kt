@@ -9,9 +9,11 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
 import androidx.paging.PagingData
+import androidx.paging.map
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.pagingdemo1.R
 import com.example.pagingdemo1.databinding.ActivityMainBinding
+import com.example.pagingdemo1.model.MovieModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
@@ -45,48 +47,49 @@ class MainActivity : AppCompatActivity() {
 //            addOnScrollListener(onScrollListener)
         }
 
+        // 아이템 클릭 리스너
         movieAdapter.setOnItemClickListener { position, movieModelResult ->
             Log.i("MYTAG", "${position} ${movieModelResult}")
         }
 
+        // 페이징 결과 관찰 (LiveData)
         mainViewModel.result.observe(this as LifecycleOwner) {
             try {
                 movieAdapter.submitData(this.lifecycle, it)
             } catch (e: Exception) {
-
+                Log.i("MYTAG", "${e.message}")
             }
         }
 
-        lifecycleScope.launch(Dispatchers.IO) {
-            mainViewModel.getPopularMovies()
-                .collect {
-                    movieAdapter.submitData(it)
-                }
-        }
+        // 페이징 결과 관찰 (Flow)
+//        lifecycleScope.launch(Dispatchers.IO) {
+//            mainViewModel.getPopularMovies()
+//                .collect {
+//                    movieAdapter.submitData(it)
+//                }
+//        }
 
+        // 검색어 바뀔 때 마다 기존 검색된 데이터 삭제
         mainViewModel.etInput.observe(this as LifecycleOwner) {
             movieAdapter.submitData(lifecycle, PagingData.empty())
         }
 
-
-//        lifecycleScope.launch(Dispatchers.IO) {
-//            mainViewModel.getPopularMovies().collect {
-//                Log.i("MYTAG", "${it}")
-//                movieAdapter.submitData(lifecycle, it)
-//            }
-//        }
-
+        // 리스트 새로고침
         binding.swipeRefresh.setOnRefreshListener {
             movieAdapter.refresh()
 
 //            binding.swipeRefresh.isRefreshing = false
         }
 
+        // 리스트 새로고침
         binding.btnRefresh.setOnClickListener {
             Log.i("MYTAG", "${mainViewModel.etInput.value}")
             movieAdapter.refresh()
         }
 
+        /*
+        * 상태 변화 리스너
+        * */
         movieAdapter.addLoadStateListener {
             Log.i("MYTAG", "prepend Loading ${it.source.prepend is LoadState.Loading}")
             Log.i("MYTAG", "append Loading ${it.source.append is LoadState.Loading}")
