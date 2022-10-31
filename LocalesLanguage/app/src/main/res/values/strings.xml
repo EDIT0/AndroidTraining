@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">LocalesLanguage</string>
+    <string name="welcome">Welcome</string>
+    <string name="bye">Bye</string>
+    <string name="top" translatable="false">Top</string>
+    <string name="bottom" translatable="false">Bottom</string>
+</resources>
