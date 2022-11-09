@@ -1,15 +1,18 @@
 package com.example.mvcexample1.controller
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout.OnRefreshListener
 import com.example.mvcexample1.controller.adapter.MovieAdapter
 import com.example.mvcexample1.databinding.ActivityMainBinding
+import com.example.mvcexample1.db.MovieDao
 import com.example.mvcexample1.model.Movie
 import com.example.mvcexample1.network.ApiService
 import dagger.hilt.android.AndroidEntryPoint
@@ -36,22 +39,34 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     @Inject
     lateinit var apiService: ApiService
+    @Inject
+    lateinit var movieDao: MovieDao
     lateinit var movie: Movie
     private lateinit var movieAdapter: MovieAdapter
+
+    private var toast: Toast? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        movie = Movie(apiService, object : MainActivity.movieCallback {
+        setMovieModel()
+        setMovieRV()
+        buttonClickListener()
+    }
+
+    private fun setMovieModel() {
+        movie = Movie(apiService, movieDao, object : MainActivity.movieCallback {
             override suspend fun isLoading(value: Boolean) {
                 withContext(Dispatchers.Main) {
                     binding.swipeRefresh.isRefreshing = value
                 }
             }
         })
+    }
 
+    private fun setMovieRV() {
         movieAdapter = MovieAdapter()
 
         binding.rvMovie.apply {
@@ -59,7 +74,9 @@ class MainActivity : AppCompatActivity() {
             layoutManager = LinearLayoutManager(binding.root.context)
             addOnScrollListener(onScrollListener)
         }
+    }
 
+    private fun buttonClickListener() {
         binding.btnSearch.setOnClickListener {
             lifecycleScope.launch(Dispatchers.IO) {
                 movie.setSearchQuery(binding.etInput.text.toString().trim())
@@ -78,7 +95,23 @@ class MainActivity : AppCompatActivity() {
         }
 
         movieAdapter.setOnItemClickListener { i, movieModelResult ->
-            Toast.makeText(binding.root.context, "${i} / ${movieModelResult.title}", Toast.LENGTH_SHORT).show()
+            lifecycleScope.launch(Dispatchers.IO) {
+                kotlin.runCatching {
+                    movie.saveMovie(movieModelResult)
+                }.onFailure {
+                    withContext(Dispatchers.Main) {
+                        toast?.cancel()
+                        toast = Toast.makeText(binding.root.context, "Already Saved", Toast.LENGTH_SHORT)
+                        toast?.show()
+                    }
+                }.onSuccess {
+                    withContext(Dispatchers.Main) {
+                        toast?.cancel()
+                        toast = Toast.makeText(binding.root.context, "Save ${movieModelResult.title}", Toast.LENGTH_SHORT)
+                        toast?.show()
+                    }
+                }
+            }
         }
 
         binding.swipeRefresh.setOnRefreshListener {
@@ -117,6 +150,9 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        binding.btnSavedMovies.setOnClickListener {
+            startActivity(Intent(this, SavedMoviesActivity::class.java))
+        }
     }
 
     private val onScrollListener = object : RecyclerView.OnScrollListener() {

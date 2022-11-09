@@ -1,5 +1,7 @@
 package com.example.mvcexample1.model.data
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 
@@ -13,18 +15,19 @@ data class MovieModel(
     @SerializedName("total_results")
     val totalResults: Int
 ) {
-    //    @Entity(
-//        tableName = "saved_movies"
-//    )
+    @Entity(
+        tableName = "saved_movies"
+    )
     data class MovieModelResult(
 //        @PrimaryKey(autoGenerate = true)
-        val idx : Int? = null,
+//        val idx : Int? = null,
         @SerializedName("adult")
         val adult: Boolean?,
         @SerializedName("backdrop_path")
         val backdropPath: String?,
         @SerializedName("genre_ids")
         val genreIds: List<Int>?,
+        @PrimaryKey
         @SerializedName("id")
         val id: Int?,
         @SerializedName("original_language")

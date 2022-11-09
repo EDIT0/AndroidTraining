@@ -32,10 +32,20 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="Refresh"
-        app:layout_constraintBottom_toTopOf="@+id/swipeRefresh"
+        app:layout_constraintBottom_toTopOf="@+id/btnSavedMovies"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/etInput" />
+
+    <Button
+        android:id="@+id/btnSavedMovies"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Saved Movies"
+        app:layout_constraintBottom_toTopOf="@+id/swipeRefresh"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnRefresh" />
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipeRefresh"
@@ -44,7 +54,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnRefresh">
+        app:layout_constraintTop_toBottomOf="@+id/btnSavedMovies">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvMovie"
