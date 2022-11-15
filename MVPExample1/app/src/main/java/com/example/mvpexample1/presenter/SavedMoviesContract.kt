@@ -9,7 +9,6 @@ class SavedMoviesContract {
 
     interface Presenter : BasePresenter<View> {
         suspend fun getSavedMovies()
-        suspend fun saveMovie(data: MovieModel.MovieModelResult)
         suspend fun deleteMovie(data: MovieModel.MovieModelResult)
     }
 }

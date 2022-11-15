@@ -11,6 +11,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.mvpexample1.databinding.ActivityMainBinding
 import com.example.mvpexample1.model.db.MovieDao
 import com.example.mvpexample1.model.network.ApiService
+import com.example.mvpexample1.model.usecase.GetSearchMoviesUseCase
+import com.example.mvpexample1.model.usecase.InsertMovieUseCase
+import com.example.mvpexample1.model.util.ERROR
+import com.example.mvpexample1.model.util.NO_DATA
 import com.example.mvpexample1.presenter.MainContract
 import com.example.mvpexample1.presenter.MainPresenter
 import com.example.mvpexample1.view.adapter.MovieAdapter
@@ -29,9 +33,9 @@ class MainActivity : AppCompatActivity(), MainContract.View {
     private lateinit var mainPresenter: MainPresenter
 
     @Inject
-    lateinit var apiService: ApiService
+    lateinit var getSearchMoviesUseCase: GetSearchMoviesUseCase
     @Inject
-    lateinit var movieDao: MovieDao
+    lateinit var insertMovieUseCase: InsertMovieUseCase
 
     private lateinit var movieAdapter: MovieAdapter
 
@@ -41,11 +45,11 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        mainPresenter = MainPresenter(apiService, movieDao)
-        mainPresenter.setView(this)
 
+        setPresenter()
         setMovieRV()
         buttonClickListener()
+        observer()
 
     }
 
@@ -59,6 +63,14 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         toast?.cancel()
         toast = Toast.makeText(binding.root.context, str, Toast.LENGTH_SHORT)
         toast?.show()
+    }
+
+    private fun setPresenter() {
+        mainPresenter = MainPresenter(
+            this,
+            getSearchMoviesUseCase,
+            insertMovieUseCase
+        )
     }
 
     private fun setMovieRV() {
@@ -78,14 +90,7 @@ class MainActivity : AppCompatActivity(), MainContract.View {
                 mainPresenter.setPage(1)
                 movieAdapter.submitList(emptyList())
 
-                val result = mainPresenter.searchMovies()
-                withContext(Dispatchers.Main) {
-                    movieAdapter.apply {
-                        submitList(result) {
-                            notifyDataSetChanged()
-                        }
-                    }
-                }
+                mainPresenter.searchMovies()
             }
         }
 
@@ -115,15 +120,7 @@ class MainActivity : AppCompatActivity(), MainContract.View {
                 mainPresenter.setPage(1)
                 movieAdapter.submitList(emptyList())
 
-                val result = mainPresenter.searchMovies()
-                withContext(Dispatchers.Main) {
-                    movieAdapter.apply {
-                        submitList(result) {
-                            notifyDataSetChanged()
-                            binding.swipeRefresh.isRefreshing = false
-                        }
-                    }
-                }
+                mainPresenter.searchMovies()
             }
         }
 
@@ -133,20 +130,39 @@ class MainActivity : AppCompatActivity(), MainContract.View {
                 mainPresenter.setPage(1)
                 movieAdapter.submitList(emptyList())
 
-                val result = mainPresenter.searchMovies()
-                withContext(Dispatchers.Main) {
-                    movieAdapter.apply {
-                        submitList(result) {
-                            notifyDataSetChanged()
-                            binding.swipeRefresh.isRefreshing = false
-                        }
-                    }
-                }
+                mainPresenter.searchMovies()
             }
         }
 
         binding.btnSavedMovies.setOnClickListener {
             startActivity(Intent(this, SavedMoviesActivity::class.java))
+        }
+    }
+
+    private fun observer() {
+        mainPresenter.movieList.observe(this) {
+            Log.i("MYTAG", "라이브데이터 관찰 : ${it}")
+            movieAdapter.apply {
+                submitList(it) {
+                    notifyDataSetChanged()
+                    binding.swipeRefresh.isRefreshing = false
+                }
+            }
+        }
+
+        mainPresenter.error.observe(this) {
+            when(it) {
+                NO_DATA -> {
+                    toast?.cancel()
+                    toast = Toast.makeText(binding.root.context, "No Data", Toast.LENGTH_SHORT)
+                    toast?.show()
+                }
+                ERROR -> {
+                    toast?.cancel()
+                    toast = Toast.makeText(binding.root.context, "Error", Toast.LENGTH_SHORT)
+                    toast?.show()
+                }
+            }
         }
     }
 
@@ -167,14 +183,7 @@ class MainActivity : AppCompatActivity(), MainContract.View {
                         if (getTotalPages() != getCurrentPage()) {
                             lifecycleScope.launch(Dispatchers.IO) {
                                 Log.i(TAG, "TotalPages = ${getTotalPages()}")
-                                val result = searchMovies()
-                                withContext(Dispatchers.Main) {
-                                    movieAdapter.apply {
-                                        submitList(result) {
-                                            notifyDataSetChanged()
-                                        }
-                                    }
-                                }
+                                searchMovies()
                             }
                         }
                     }

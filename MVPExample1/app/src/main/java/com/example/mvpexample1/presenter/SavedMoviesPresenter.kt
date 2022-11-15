@@ -4,19 +4,19 @@ import androidx.lifecycle.MutableLiveData
 import com.example.mvpexample1.model.data.MovieModel
 import com.example.mvpexample1.model.db.MovieDao
 import com.example.mvpexample1.model.network.ApiService
+import com.example.mvpexample1.model.usecase.DeleteMovieUseCase
+import com.example.mvpexample1.model.usecase.GetAllSavedMoviesUseCase
 
 class SavedMoviesPresenter(
-//    private val savedContractView: SavedMoviesContract.View,
-    private val apiService: ApiService,
-    private val movieDao: MovieDao
+    private val savedContractView: SavedMoviesContract.View,
+    private val getAllSavedMoviesUseCase: GetAllSavedMoviesUseCase,
+    private val deleteMovieUseCase: DeleteMovieUseCase
 ) : SavedMoviesContract.Presenter {
-
-    private lateinit var savedContractView: SavedMoviesContract.View
 
     val savedMovieList = MutableLiveData<ArrayList<MovieModel.MovieModelResult>>()
     override suspend fun getSavedMovies() {
         try {
-            val result = movieDao.getAllSavedMovies()
+            val result = getAllSavedMoviesUseCase.execute()
 
             result.collect {
                 savedMovieList.postValue(it as ArrayList)
@@ -27,17 +27,8 @@ class SavedMoviesPresenter(
         }
     }
 
-    override suspend fun saveMovie(data: MovieModel.MovieModelResult) {
-        movieDao.insertMovie(data)
-    }
-
     override suspend fun deleteMovie(data: MovieModel.MovieModelResult) {
-        movieDao.deleteSavedMovies(data)
-    }
-
-    override fun setView(view: SavedMoviesContract.View) {
-        savedContractView = view
-        savedContractView.showToast("setView")
+        deleteMovieUseCase.execute(data)
     }
 
     override fun releaseView() {

@@ -9,6 +9,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.mvpexample1.databinding.ActivitySavedMoviesBinding
 import com.example.mvpexample1.model.db.MovieDao
 import com.example.mvpexample1.model.network.ApiService
+import com.example.mvpexample1.model.usecase.DeleteMovieUseCase
+import com.example.mvpexample1.model.usecase.GetAllSavedMoviesUseCase
 import com.example.mvpexample1.presenter.MainPresenter
 import com.example.mvpexample1.presenter.SavedMoviesContract
 import com.example.mvpexample1.presenter.SavedMoviesPresenter
@@ -26,9 +28,9 @@ class SavedMoviesActivity : AppCompatActivity(), SavedMoviesContract.View {
     private lateinit var savedMoviesPresenter: SavedMoviesPresenter
 
     @Inject
-    lateinit var apiService: ApiService
+    lateinit var getAllSavedMoviesUseCase: GetAllSavedMoviesUseCase
     @Inject
-    lateinit var movieDao: MovieDao
+    lateinit var deleteMovieUseCase: DeleteMovieUseCase
 
     private lateinit var savedMoviesAdapter: SavedMoviesAdapter
 
@@ -38,9 +40,8 @@ class SavedMoviesActivity : AppCompatActivity(), SavedMoviesContract.View {
         super.onCreate(savedInstanceState)
         binding = ActivitySavedMoviesBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        savedMoviesPresenter = SavedMoviesPresenter(apiService, movieDao)
-        savedMoviesPresenter.setView(this)
 
+        setPresenter()
         setSavedMovieRV()
         buttonClickListener()
         getSavedMovies()
@@ -54,6 +55,14 @@ class SavedMoviesActivity : AppCompatActivity(), SavedMoviesContract.View {
         toast?.cancel()
         toast = Toast.makeText(binding.root.context, str, Toast.LENGTH_SHORT)
         toast?.show()
+    }
+
+    private fun setPresenter() {
+        savedMoviesPresenter = SavedMoviesPresenter(
+            this,
+            getAllSavedMoviesUseCase,
+            deleteMovieUseCase
+        )
     }
 
     private fun setSavedMovieRV() {

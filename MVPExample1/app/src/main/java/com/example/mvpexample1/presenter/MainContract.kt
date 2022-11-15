@@ -13,7 +13,7 @@ class MainContract {
         fun getTotalPages() : Int
         fun getCurrentPage() : Int
         fun setPage(page : Int)
-        suspend fun searchMovies() : List<MovieModel.MovieModelResult>
+        suspend fun searchMovies()
         suspend fun saveMovie(data: MovieModel.MovieModelResult)
     }
 }
