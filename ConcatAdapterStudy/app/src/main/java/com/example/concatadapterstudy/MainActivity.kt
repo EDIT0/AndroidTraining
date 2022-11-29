@@ -35,7 +35,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var tmdbAPIService: TmdbAPIService
 
     val BASE_URL = "https://api.themoviedb.org/3/"
-    val API_KEY = ""
+    val API_KEY = "6db59bbd7b6f0437a11a5d733f5889fb"
 
     private lateinit var concatAdapter: ConcatAdapter
 
