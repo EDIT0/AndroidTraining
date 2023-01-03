@@ -36,7 +36,7 @@ class EventActivity : AppCompatActivity() {
             .setDomainUriPrefix("https://testeditlink.page.link")
             .setAndroidParameters(
                 DynamicLink.AndroidParameters.Builder(packageName)
-                    .setMinimumVersion(1)
+                    .setMinimumVersion(6) // 앱 버전 정보 (현재 앱 버전 5로 설정해놓음)
                     .build()
             )
 //            .setGoogleAnalyticsParameters(

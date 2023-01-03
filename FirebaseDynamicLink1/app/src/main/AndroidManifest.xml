@@ -59,10 +59,10 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
-                    android:host="testeditlink.com"
+                    android:host="testeditlink.page.link"
                     android:scheme="http" />
                 <data
-                    android:host="testeditlink.com"
+                    android:host="testeditlink.page.link"
                     android:scheme="https" />
             </intent-filter>
         </activity>

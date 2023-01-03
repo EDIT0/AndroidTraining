@@ -29,11 +29,19 @@ class AD1Activity : AppCompatActivity() {
         val flag = AD1_FLAG
         val code = "Ad1"
         val publisher = "marketing1"
-        return Uri.parse("https://search.naver.com/search.naver/${flag}?where=nexearch&sm=top_hty&fbm=1&ie=utf8&query=광고1&code=${code}&publisher=${publisher}")
+//        https://your_subdomain.page.link/?link=your_deep_link&apn=package_name[&amv=minimum_version][&afl=fallback_link]
+//        return Uri.parse("https://testeditlink.page.link/?link=https://search.naver.com/search.naver/${flag}?query=광고1&code=${code}&publisher=${publisher}")
+//        return Uri.parse("https://testeditlink.page.link/?" +
+//                "link=https://search.naver.com/search.naver/${flag}&where=nexearch&sm=top_hty&fbm=1&ie=utf8&query=광고1&code=${code}&publisher=${publisher}" +
+//                "&apn=${packageName}&amv=1&afl=https://www.naver.com")
+//        link=https://edit.com/${flag}&where=nexearch&sm=top_hty&fbm=1&ie=utf8&query=광고1&code=${code}&publisher=${publisher}&apn=com.example.firebasedynamiclink1&afl=https://www.naver.com
+//            return Uri.parse("https://search.naver.com/search.naver/${flag}?where=nexearch&sm=top_hty&fbm=1&ie=utf8&query=광고1&code=${code}&publisher=${publisher}")
+        return Uri.parse("https://edit.com/${flag}?code=${code}&publisher=${publisher}")
     }
 
     private fun onDynamicLinkClick() {
         FirebaseDynamicLinks.getInstance().createDynamicLink()
+//            .setLongLink(getPromotionDeepLink())
             .setLink(getPromotionDeepLink())
             .setDomainUriPrefix("https://testeditlink.page.link")
             .setAndroidParameters(
@@ -68,7 +76,7 @@ class AD1Activity : AppCompatActivity() {
                     } catch (ignored: ActivityNotFoundException) {
                     }
                 } else {
-                    Log.w("MYTAG", task.toString())
+                    Log.w("MYTAG", task.exception.toString())
                 }
             }
     }
