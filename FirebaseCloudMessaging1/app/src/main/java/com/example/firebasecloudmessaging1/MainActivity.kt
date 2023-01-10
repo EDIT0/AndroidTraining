@@ -3,10 +3,13 @@ package com.example.firebasecloudmessaging1
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import com.example.firebasecloudmessaging1.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
+
+    private val TAG = MainActivity::class.java.simpleName
 
     private lateinit var activityMainBinding : ActivityMainBinding
 
@@ -14,6 +17,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         activityMainBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(activityMainBinding.root)
+        Log.i(TAG, "onCreate()")
 
         updateResult()
 
@@ -36,6 +40,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
+        Log.i(TAG, "onNewIntent()")
         setIntent(intent)
         updateResult(true)
     }

@@ -52,6 +52,7 @@ class DataMessageActivity : AppCompatActivity() {
                 val token = it.result
 
                 activityDataMessageBinding.tvToken.text = token
+                Log.i(TAG, "Token: ${token}")
             }
     }
 }

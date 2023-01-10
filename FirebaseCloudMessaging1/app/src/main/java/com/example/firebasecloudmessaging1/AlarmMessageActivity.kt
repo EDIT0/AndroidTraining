@@ -45,6 +45,7 @@ class AlarmMessageActivity : AppCompatActivity() {
                 val token = it.result
 
                 activityAlarmMessageBinding.tvToken.text = token
+                Log.i(TAG, "Token: ${token}")
             }
     }
 }
