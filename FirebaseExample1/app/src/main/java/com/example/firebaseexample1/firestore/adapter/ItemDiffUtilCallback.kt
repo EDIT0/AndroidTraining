@@ -1,6 +1,7 @@
-package com.example.firebaseexample1.firestore
+package com.example.firebaseexample1.firestore.adapter
 
 import androidx.recyclerview.widget.DiffUtil
+import com.example.firebaseexample1.firestore.model.UserModel
 
 class ItemDiffUtilCallback(private val oldList: List<Any>, private val newList: List<Any>) : DiffUtil.Callback() {
 
@@ -12,7 +13,7 @@ class ItemDiffUtilCallback(private val oldList: List<Any>, private val newList: 
         val oldItem = oldList[oldItemPosition]
         val newItem = newList[newItemPosition]
 
-        return if (oldItem is Item && newItem is Item) {
+        return if (oldItem is UserModel && newItem is UserModel) {
             oldItem.date == newItem.date
         } else {
             false
