@@ -223,7 +223,7 @@ class FireStoreHomeActivity : AppCompatActivity() {
                                 )
                             )
                         )
-                        userAdapter.updateList(userList)
+                        userAdapter.submitList(userList.toMutableList())
                     }
                     if (dc.type == DocumentChange.Type.REMOVED) {
                         Log.d(TAG, "Remove User: ${dc.document.data}")
@@ -236,7 +236,7 @@ class FireStoreHomeActivity : AppCompatActivity() {
                                 dc.document.data["date"].toString().toLong()
                             )
                         )
-                        userAdapter.updateList(userList)
+                        userAdapter.submitList(userList.toMutableList())
                     }
                     if (dc.type == DocumentChange.Type.MODIFIED) {
                         Log.d(TAG, "Modified User: ${dc.document.data}")
@@ -249,14 +249,14 @@ class FireStoreHomeActivity : AppCompatActivity() {
                                     dc.document.data["tel"].toString().toLong(),
                                     dc.document.data["date"].toString().toLong()
                                 )
-                                userAdapter.updateList(userList)
+                                userAdapter.submitList(userList.toMutableList())
                             }
                         }
                     }
                 }
             } else {
                 userList.clear()
-                userAdapter.updateList(userList)
+                userAdapter.submitList(userList.toMutableList())
             }
         }
     }

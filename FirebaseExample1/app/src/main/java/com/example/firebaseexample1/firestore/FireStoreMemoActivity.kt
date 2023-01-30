@@ -118,6 +118,7 @@ class FireStoreMemoActivity : AppCompatActivity() {
 
                 // Get the last visible document
                 val lastVisible = result.documents[result.size() - 1]
+                Log.i(TAG, "What is the LastVisible? ${lastVisible}")
 
                 // Construct a new query starting at this document,
                 // get the next 25 cities.
@@ -139,7 +140,7 @@ class FireStoreMemoActivity : AppCompatActivity() {
                                     )
                                 )
                             )
-                            memoAdapter.updateList(memoList)
+                            memoAdapter.submitList(memoList.toMutableList())
                             docRef = next
                         }
                     }
@@ -157,22 +158,37 @@ class FireStoreMemoActivity : AppCompatActivity() {
             }
 
             if (value?.isEmpty == false) {
-                Log.i(TAG, "${value.documents}\n${value.documents.size}\n${value.documentChanges}\n${value.documentChanges.size}")
+                Log.i(TAG, "documents: ${value.documents}\n" +
+                        "documents size: ${value.documents.size}\n" +
+                        "documentChanges: ${value.documentChanges}\n" +
+                        "documentChanges size: ${value.documentChanges.size}")
                 for (dc in value.documentChanges) {
                     if (dc.type == DocumentChange.Type.ADDED) {
                         Log.d(TAG, "New Memo: ${dc.document.data}")
-                        memoList.addAll(memoList.size,
-                            listOf(
-                                MemoModel(
-                                    dc.document.data["uid"].toString(),
-                                    dc.document.data["textMemo"].toString(),
-                                    dc.document.data["date"].toString().toLong()
+                        if(value.documents.size == 10) {
+                            memoList.addAll(memoList.size,
+                                listOf(
+                                    MemoModel(
+                                        dc.document.data["uid"].toString(),
+                                        dc.document.data["textMemo"].toString(),
+                                        dc.document.data["date"].toString().toLong()
+                                    )
                                 )
                             )
-                        )
-                        memoAdapter.updateList(memoList)
-                    }
-                    if (dc.type == DocumentChange.Type.REMOVED) {
+                        } else {
+                            memoList.addAll(0,
+                                listOf(
+                                    MemoModel(
+                                        dc.document.data["uid"].toString(),
+                                        dc.document.data["textMemo"].toString(),
+                                        dc.document.data["date"].toString().toLong()
+                                    )
+                                )
+                            )
+                        }
+
+                        memoAdapter.submitList(memoList.toMutableList())
+                    } else if (dc.type == DocumentChange.Type.REMOVED) {
                         Log.d(TAG, "Remove Memo: ${dc.document.data}")
                         memoList.remove(
                             MemoModel(
@@ -181,9 +197,8 @@ class FireStoreMemoActivity : AppCompatActivity() {
                                 dc.document.data["date"].toString().toLong()
                             )
                         )
-                        memoAdapter.updateList(memoList)
-                    }
-                    if (dc.type == DocumentChange.Type.MODIFIED) {
+                        memoAdapter.submitList(memoList.toMutableList())
+                    } else if (dc.type == DocumentChange.Type.MODIFIED) {
                         Log.d(TAG, "Modified Memo: ${dc.document.data}")
                         for(i in 0 until memoList.size) {
                             if(memoList[i].date == dc.document.data["date"].toString().toLong()) {
@@ -192,14 +207,14 @@ class FireStoreMemoActivity : AppCompatActivity() {
                                     dc.document.data["textMemo"].toString(),
                                     dc.document.data["date"].toString().toLong()
                                 )
-                                memoAdapter.updateList(memoList)
+                                memoAdapter.submitList(memoList.toMutableList())
                             }
                         }
                     }
                 }
             } else {
                 memoList.clear()
-                memoAdapter.updateList(memoList)
+                memoAdapter.submitList(memoList.toMutableList())
             }
         }
     }
