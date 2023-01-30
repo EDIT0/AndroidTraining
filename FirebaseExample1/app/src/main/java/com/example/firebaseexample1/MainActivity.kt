@@ -7,6 +7,7 @@ import android.util.Log
 import com.example.firebaseexample1.databinding.ActivityFireStoreHomeBinding
 import com.example.firebaseexample1.databinding.ActivityMainBinding
 import com.example.firebaseexample1.firestore.FireStoreHomeActivity
+import com.example.firebaseexample1.realtime_db.RealtimeHomeActivity
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -25,6 +26,10 @@ class MainActivity : AppCompatActivity() {
 
         binding.btnFireStore.setOnClickListener {
             startActivity(Intent(binding.root.context, FireStoreHomeActivity::class.java))
+        }
+
+        binding.btnRealtimeDB.setOnClickListener {
+            startActivity(Intent(binding.root.context, RealtimeHomeActivity::class.java))
         }
 
     }
