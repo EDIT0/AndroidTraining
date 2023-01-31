@@ -13,6 +13,7 @@ import com.example.firebaseexample1.firestore.FireStoreMemoActivity
 import com.example.firebaseexample1.firestore.adapter.UserAdapter
 import com.example.firebaseexample1.firestore.model.UserModel
 import com.google.firebase.database.*
+import com.google.firebase.database.FirebaseDatabase
 
 
 class RealtimeHomeActivity : AppCompatActivity() {
@@ -23,8 +24,7 @@ class RealtimeHomeActivity : AppCompatActivity() {
 
     private lateinit var userAdapter: UserAdapter
 
-    private val db =
-        FirebaseDatabase.getInstance("https://fir-example1-e865b-default-rtdb.asia-southeast1.firebasedatabase.app/").reference
+    private val db = FirebaseDatabase.getInstance("https://fir-example1-e865b-default-rtdb.asia-southeast1.firebasedatabase.app/").reference
     private val userList = mutableListOf<UserModel>()
 
     private var date: Long = 0
@@ -48,11 +48,8 @@ class RealtimeHomeActivity : AppCompatActivity() {
                 .setTitle("알림")
                 .setMessage("삭제 or 로그인")
                 .setPositiveButton("로그인", DialogInterface.OnClickListener { _, _ ->
-                    val startMemoActivity =
-                        Intent(binding.root.context, FireStoreMemoActivity::class.java)
-                    startMemoActivity.apply {
-                        putExtra("uid", "${it.uid}")
-                    }
+                    val startMemoActivity = Intent(binding.root.context, RealtimeMemoActivity::class.java)
+                    startMemoActivity.apply { putExtra("email", "${it.email}") }
                     startActivity(startMemoActivity)
                 })
                 .setNegativeButton("삭제") { _, _ ->
@@ -113,7 +110,7 @@ class RealtimeHomeActivity : AppCompatActivity() {
             .orderByChild("date")
             .addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {  // Called once with the initial value and again
-                    userList.clear();
+                    userList.clear()
                     val value = dataSnapshot.value
                     Log.d(TAG, "Value is: $value")
 
@@ -154,7 +151,8 @@ class RealtimeHomeActivity : AppCompatActivity() {
             )
 
             db.child("users")
-                .child(emailConverter(binding.etEmail.text.toString()))
+//                .child(emailConverter(binding.etEmail.text.toString()))
+                .push()
                 .setValue(user)
                 .addOnSuccessListener {
                     Log.i(TAG, "성공")
