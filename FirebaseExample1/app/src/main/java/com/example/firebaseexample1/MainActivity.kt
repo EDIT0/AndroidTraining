@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import com.example.firebaseexample1.chat_app.ChatLoginActivity
 import com.example.firebaseexample1.databinding.ActivityFireStoreHomeBinding
 import com.example.firebaseexample1.databinding.ActivityMainBinding
 import com.example.firebaseexample1.firestore.FireStoreHomeActivity
@@ -30,6 +31,10 @@ class MainActivity : AppCompatActivity() {
 
         binding.btnRealtimeDB.setOnClickListener {
             startActivity(Intent(binding.root.context, RealtimeHomeActivity::class.java))
+        }
+
+        binding.btnChatApp.setOnClickListener {
+            startActivity(Intent(binding.root.context, ChatLoginActivity::class.java))
         }
 
     }
