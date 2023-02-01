@@ -1,7 +1,9 @@
-package com.example.firebaseexample1.chat_app
+package com.example.firebaseexample1.chat_app.ui.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.example.firebaseexample1.R
+import com.example.firebaseexample1.chat_app.ui.fragment.ChatPeopleFragment
 import com.example.firebaseexample1.databinding.ActivityChatHomeBinding
 
 class ChatHomeActivity : AppCompatActivity() {
@@ -16,6 +18,9 @@ class ChatHomeActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.frameLayout, ChatPeopleFragment())
+            .commitAllowingStateLoss()
 
     }
 }

@@ -1,4 +1,4 @@
-package com.example.firebaseexample1.chat_app
+package com.example.firebaseexample1.chat_app.ui.activity
 
 import android.content.Intent
 import android.net.Uri
@@ -7,8 +7,6 @@ import android.provider.MediaStore
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.example.firebaseexample1.R
-import com.example.firebaseexample1.chat_app.model.ChatUserModel
 import com.example.firebaseexample1.databinding.ActivityChatSignUpBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
@@ -49,7 +47,7 @@ class ChatSignUpActivity : AppCompatActivity() {
 
         binding.btnSignUp.setOnClickListener {
             binding.apply {
-                if (etEmail.text.isEmpty() || etName.text.isEmpty() || etPw.text.isEmpty() || imageUri == null || etPw.text.length < 6) {
+                if (etEmail.text.isEmpty() || etName.text.isEmpty() || etPw.text.isEmpty() || etPw.text.length < 6) {
                     Toast.makeText(binding.root.context, "가입 조건이 맞지 않습니다.", Toast.LENGTH_SHORT)
                         .show()
                     return@setOnClickListener

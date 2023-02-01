@@ -1,7 +1,8 @@
-package com.example.firebaseexample1.chat_app
+package com.example.firebaseexample1.chat_app.ui.activity
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.firebaseexample1.databinding.ActivityChatLoginBinding
@@ -52,17 +53,21 @@ class ChatLoginActivity : AppCompatActivity() {
                 if(!it.isSuccessful) {
                     // 로그인 실패
                     Toast.makeText(binding.root.context, "로그인 실패", Toast.LENGTH_SHORT).show()
+                } else {
+                    Log.i(TAG, "Success Login Current User: ${mFirebaseAuth.currentUser?.uid}")
+                    startActivity(Intent(binding.root.context, ChatHomeActivity::class.java))
+                    onBackPressed()
                 }
             }
     }
 
-    override fun onStart() {
-        super.onStart()
-        mFirebaseAuth.addAuthStateListener(mAuthStateListener!!)
-    }
-
-    override fun onStop() {
-        super.onStop()
-        mFirebaseAuth.removeAuthStateListener(mAuthStateListener!!)
-    }
+//    override fun onStart() {
+//        super.onStart()
+//        mFirebaseAuth.addAuthStateListener(mAuthStateListener!!)
+//    }
+//
+//    override fun onStop() {
+//        super.onStop()
+//        mFirebaseAuth.removeAuthStateListener(mAuthStateListener!!)
+//    }
 }

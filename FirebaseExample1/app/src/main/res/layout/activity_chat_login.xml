@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".chat_app.ChatLoginActivity">
+    tools:context=".chat_app.ui.activity.ChatLoginActivity">
 
     <ImageView
         android:id="@+id/ivLogo"
