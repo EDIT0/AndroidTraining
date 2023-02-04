@@ -7,6 +7,7 @@ import android.provider.MediaStore
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.firebaseexample1.chat_app.model.ChatUserModel
 import com.example.firebaseexample1.databinding.ActivityChatSignUpBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
@@ -27,7 +28,7 @@ class ChatSignUpActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityChatSignUpBinding
 
-    private val database = FirebaseDatabase.getInstance()
+    private val database = FirebaseDatabase.getInstance("https://fir-example1-e865b-default-rtdb.asia-southeast1.firebasedatabase.app/")
     private val myRef = database.reference
     private var mFirebaseStorage: FirebaseStorage = Firebase.storage
 
@@ -63,12 +64,35 @@ class ChatSignUpActivity : AppCompatActivity() {
                         }
 
                         if (it.isSuccessful) {
-                            onBackPressed()
                             val uid = it.result.user?.uid!!
-                            val userProfileChangeRequest: UserProfileChangeRequest =
-                                UserProfileChangeRequest.Builder()
-                                    .setDisplayName(etName.text.toString()).build()
-                            it.result.user?.updateProfile(userProfileChangeRequest)
+
+                            val chatUserModel = ChatUserModel(
+                                binding.etName.text.toString(),
+                                imageUri.toString(),
+                                uid,
+                                "",
+                                "기본 메시지"
+                            )
+
+                            myRef.child("chat_users")
+                                .child(uid)
+                                .setValue(chatUserModel)
+                                .addOnSuccessListener {
+                                    onBackPressed()
+                                    val intent = Intent(binding.root.context, ChatSplashActivity::class.java)
+                                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                                    startActivity(intent)
+                                }
+                                .addOnFailureListener {
+                                    onBackPressed()
+                                }
+
+
+//                            val userProfileChangeRequest: UserProfileChangeRequest =
+//                                UserProfileChangeRequest.Builder()
+//                                    .setDisplayName(etName.text.toString()).build()
+//                            it.result.user?.updateProfile(userProfileChangeRequest)
+
 
 //                            try {
 //                                mFirebaseStorage.reference
