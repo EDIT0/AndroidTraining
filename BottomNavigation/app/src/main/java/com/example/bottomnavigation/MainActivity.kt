@@ -3,6 +3,7 @@ package com.example.bottomnavigation
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
@@ -22,6 +23,8 @@ class MainActivity : AppCompatActivity() {
     private var oneFragment: OneFragment? = null
     private var twoFragment: TwoFragment? = null
     private var threeFragment: ThreeFragment? = null
+
+    private var toast: Toast? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,7 +52,7 @@ class MainActivity : AppCompatActivity() {
                     }
                     R.id.twoFragment -> {
                         if (twoFragment == null) {
-                            twoFragment = TwoFragment()
+                            twoFragment = TwoFragment.newInstance("Welcome", "to TwoFragment")
                             fragmentManager!!.beginTransaction().add(activityMainBinding.framelayout.id, twoFragment!!).commit()
                         }
 
@@ -74,5 +77,11 @@ class MainActivity : AppCompatActivity() {
         })
 
 
+    }
+
+    fun showToast(str: String) {
+        toast?.cancel()
+        toast = Toast.makeText(this, str, Toast.LENGTH_SHORT)
+        toast?.show()
     }
 }
