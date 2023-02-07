@@ -79,7 +79,8 @@ class BFragment : Fragment() {
             val transaction = (activity as MainActivity).supportFragmentManager.beginTransaction()
             transaction.apply {
 //                add(R.id.fragment, (activity as MainActivity).aFragment!!)\
-                replace(R.id.fragment, AFragment.newInstance("프래그먼트B-1", "프래그먼트B-2"))
+//                setCustomAnimations(R.anim.right_in, R.anim.left_out, R.anim.left_in, R.anim.right_out)
+                add(R.id.fragment, AFragment.newInstance("프래그먼트B-1", "프래그먼트B-2"))
                 addToBackStack(null)
                 commit()
             }
@@ -111,5 +112,10 @@ class BFragment : Fragment() {
     override fun onDestroy() {
         super.onDestroy()
         Log.i("MYTAG", "BFragment onDestroy ${this.hashCode()}")
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        Log.i("MYTAG", "BFragment onDetach")
     }
 }
