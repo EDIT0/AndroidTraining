@@ -61,6 +61,10 @@ class ChatChatFragment : Fragment() {
         binding.rvChatRoom.layoutManager = LinearLayoutManager(layoutInflater.context)
         binding.rvChatRoom.adapter = chatChatRoomAdapter
 
+        /*
+        * orderByChild는 key값, equalTo는 그 key값의 value 값이다.
+        * 해당 key값의 value가 같은 값을 모두 찾아 나열할 수 있다.
+        * */
         myRef.child("chat_rooms")
             .orderByChild("users/${myUid}")
             .equalTo(true)
@@ -85,6 +89,7 @@ class ChatChatFragment : Fragment() {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     chatModels.clear()
                     for(item in snapshot.children) {
+                        Log.i(TAG, "방 종류: ${item}")
                         item.getValue(ChatMessageModel::class.java)?.let {
                             Log.i(TAG, "방: ${it}")
                             chatModels.add(it)
