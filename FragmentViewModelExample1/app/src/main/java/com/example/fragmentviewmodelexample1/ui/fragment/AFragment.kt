@@ -74,6 +74,7 @@ class AFragment : Fragment() {
 
         binding.btnNext.setOnClickListener {
             requireActivity().supportFragmentManager.beginTransaction()
+                .setCustomAnimations(R.anim.right_in, R.anim.left_out, R.anim.left_in, R.anim.right_out)
                 .replace(R.id.fragment, AFragment.newInstance("", ""))
                 .addToBackStack(null)
                 .commit()
