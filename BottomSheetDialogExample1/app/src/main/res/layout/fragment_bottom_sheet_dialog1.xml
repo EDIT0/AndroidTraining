@@ -1,14 +1,91 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/bottomSheetLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".BottomSheetDialogFragment1">
+    app:behavior_peekHeight="50dp"
+    android:background="@drawable/top_radius_white_background"
+    app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
-    <!-- TODO: Update blank fragment layout -->
+    <View
+        android:id="@+id/lineView1"
+        android:layout_width="30dp"
+        android:layout_height="5dp"
+        android:layout_marginTop="15dp"
+        android:background="#606060"
+        app:layout_constraintVertical_bias="0"
+        app:layout_constraintVertical_chainStyle="packed"
+        app:layout_constraintBottom_toTopOf="@+id/tvCollapsedTitle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:id="@+id/tvCollapsedTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="끌어올려서 확인해보세요!!!"
+        android:textColor="#000000"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lineView1"
+        app:layout_constraintBottom_toTopOf="@+id/expandedLayout"/>
 
-</FrameLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvHalfExpandedTitle"
+        android:textSize="30sp"
+        android:text="더 끌어올려 보세요!!! 영차영차"
+        android:textColor="#000000"
+        android:layout_marginTop="50dp"
+        app:layout_constraintTop_toBottomOf="@+id/tvCollapsedTitle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvHalfExpandedSubTitle"
+        android:textSize="30sp"
+        android:text="거의 다 왔어요!!\n힘내봐요!!!\n영차영차영차\n\n보너스가 눈 앞에!!!"
+        android:textColor="#000000"
+        android:layout_marginTop="60dp"
+        app:layout_constraintTop_toBottomOf="@+id/tvHalfExpandedTitle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/expandedLayout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="10dp"
+        android:visibility="invisible"
+        android:animateLayoutChanges="true"
+        app:layout_constraintTop_toBottomOf="@+id/tvCollapsedTitle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:visibility="visible">
+
+        <TextView
+            android:id="@+id/tvMain"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="촤아아아아악... (효과음) 수면 위의 공기맛을 보러 올라오는 소리"
+            android:textSize="50sp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
