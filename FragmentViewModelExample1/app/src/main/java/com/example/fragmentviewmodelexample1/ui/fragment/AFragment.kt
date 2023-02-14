@@ -52,6 +52,7 @@ class AFragment : Fragment() {
         // Inflate the layout for this fragment
         _binding = DataBindingUtil.inflate(inflater, R.layout.fragment_a, container, false)
         _binding?.avm = aViewModel
+        _binding?.lifecycleOwner = this
         val view = binding.root
         return view
     }
