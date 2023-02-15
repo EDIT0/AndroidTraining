@@ -1,19 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:behavior_peekHeight="50dp"
-    app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+    tools:context=".BottomSheetDialogActivity">
 
-    <TextView
-        android:layout_width="0dp"
-        android:layout_height="90dp"
-        android:gravity="center"
-        android:background="@drawable/top_radius_white_background"
-        android:text="이벤트"
-        android:textColor="#000000"
-        android:textSize="30sp"
+    <Button
+        android:id="@+id/btnShowBottomSheet"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Show BottomSheet"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
