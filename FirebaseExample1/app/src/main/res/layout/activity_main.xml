@@ -25,4 +25,10 @@
         android:text="ChatApp"
         android:id="@+id/btnChatApp"/>
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="DeepLinks"
+        android:id="@+id/btnDeepLinks"/>
+
 </LinearLayout>

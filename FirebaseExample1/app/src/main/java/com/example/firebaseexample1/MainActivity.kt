@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.example.firebaseexample1.chat_app.ui.activity.ChatSplashActivity
 import com.example.firebaseexample1.databinding.ActivityMainBinding
+import com.example.firebaseexample1.dynamic_links.DynamicLinksHomeActivity
 import com.example.firebaseexample1.firestore.FireStoreHomeActivity
 import com.example.firebaseexample1.realtime_db.RealtimeHomeActivity
 
@@ -30,6 +31,10 @@ class MainActivity : AppCompatActivity() {
 
         binding.btnChatApp.setOnClickListener {
             startActivity(Intent(binding.root.context, ChatSplashActivity::class.java))
+        }
+
+        binding.btnDeepLinks.setOnClickListener {
+            startActivity(Intent(binding.root.context, DynamicLinksHomeActivity::class.java))
         }
 
     }
