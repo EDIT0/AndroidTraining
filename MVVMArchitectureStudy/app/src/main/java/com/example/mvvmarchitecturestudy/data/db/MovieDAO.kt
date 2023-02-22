@@ -17,6 +17,9 @@ interface MovieDAO {
     @Query("SELECT * FROM saved_movies WHERE title LIKE '%' || :keyword || '%'")
     fun getSearchSavedMovies(keyword : String) : LiveData<List<MovieModelResult>>
 
+    @Query("SELECT * FROM saved_movies WHERE title LIKE '%' || :keyword || '%'")
+    fun getSearchSavedMovies_using_stateflow(keyword : String) : Flow<List<MovieModelResult>>
+
     @Delete
     suspend fun deleteSavedMovies(movieModelResult: MovieModelResult)
 

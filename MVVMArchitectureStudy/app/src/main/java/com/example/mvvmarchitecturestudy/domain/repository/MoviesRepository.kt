@@ -15,5 +15,5 @@ interface MoviesRepository {
     suspend fun deleteSavedMovie(movieModelResult: MovieModelResult)
     fun getSavedMovies() : Flow<List<MovieModelResult>>
     fun getSearchSavedMovies(keyword : String) : LiveData<List<MovieModelResult>>
-
+    fun getSearchSavedMovies_using_stateflow(keyword : String) : Flow<List<MovieModelResult>>
 }

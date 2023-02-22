@@ -44,4 +44,8 @@ class MoviesRepositoryImpl(
         return movieLocalDataSource.getSearchSavedMovies(keyword)
     }
 
+    override fun getSearchSavedMovies_using_stateflow(keyword: String): Flow<List<MovieModelResult>> {
+        return movieLocalDataSource.getSearchSavedMovies_using_stateflow(keyword)
+    }
+
 }

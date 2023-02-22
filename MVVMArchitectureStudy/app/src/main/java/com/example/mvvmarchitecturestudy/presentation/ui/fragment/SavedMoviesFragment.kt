@@ -13,8 +13,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.core.view.accessibility.AccessibilityEventCompat.setAction
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -27,6 +29,9 @@ import com.example.mvvmarchitecturestudy.presentation.ui.activity.MovieInfoActiv
 import com.example.mvvmarchitecturestudy.presentation.viewmodel.MainViewModel
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 
 
 class SavedMoviesFragment : Fragment() {
@@ -39,6 +44,8 @@ class SavedMoviesFragment : Fragment() {
     private lateinit var savedMoviesAdapter: SavedMoviesAdapter
 
     private var isLoading = false
+
+    lateinit var posts1Job : Job
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -132,6 +139,23 @@ class SavedMoviesFragment : Fragment() {
 
             hideProgressBar()
         })
+
+        posts1Job = lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                mainViewModel.getSavedMoviesStateFlow.collectLatest {
+                    Log.i("MYTAG", "저장된 영화 전체를 관찰 StateFlow ${it.size}")
+                }
+            }
+        }
+
+        posts1Job = lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                mainViewModel.getSearchSavedMoviesStateFlow.collectLatest {
+                    Log.i("MYTAG", "저장된 영화들 중 현재 검색된 영화 관찰 StateFlow ${it.size}")
+                }
+            }
+        }
+
     }
 
     private fun actionbarElevation() {

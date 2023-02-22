@@ -24,4 +24,8 @@ class MovieLocalDataSourceImpl(
     override fun getSearchSavedMovies(keyword: String): LiveData<List<MovieModelResult>> {
         return movieDAO.getSearchSavedMovies(keyword)
     }
+
+    override fun getSearchSavedMovies_using_stateflow(keyword: String): Flow<List<MovieModelResult>> {
+        return movieDAO.getSearchSavedMovies_using_stateflow(keyword)
+    }
 }
