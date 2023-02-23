@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import androidx.annotation.RequiresApi
 import androidx.core.view.accessibility.AccessibilityEventCompat.setAction
 import androidx.lifecycle.Lifecycle
@@ -29,9 +30,8 @@ import com.example.mvvmarchitecturestudy.presentation.ui.activity.MovieInfoActiv
 import com.example.mvvmarchitecturestudy.presentation.viewmodel.MainViewModel
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.*
 
 
 class SavedMoviesFragment : Fragment() {
@@ -46,6 +46,7 @@ class SavedMoviesFragment : Fragment() {
     private var isLoading = false
 
     lateinit var posts1Job : Job
+    private var searchCoroutineJob: Job = Job()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -196,30 +197,74 @@ class SavedMoviesFragment : Fragment() {
     }
 
     private fun searchListener() {
-        fragmentSavedMoviesBinding.etSavedMovieSearch.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+//        fragmentSavedMoviesBinding.etSavedMovieSearch.addTextChangedListener(object : TextWatcher {
+//            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+//
+//            }
+//
+//            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+//
+//            }
+//
+//            override fun afterTextChanged(p0: Editable?) {
+//                if(p0?.length!! > 0 && !isLoading) {
+//                    showProgressBar()
+//
+//                    MainScope().launch {
+//                        delay(2000)
+//                        mainViewModel.keyword.value = p0.toString()
+//
+//                    }
+//                } else if(p0?.length!! == 0) {
+//                    mainViewModel.keyword.value = p0.toString()
+//
+//                }
+//            }
+//
+//        })
+        // Rx의 스케줄러와 비슷
+        // IO 스레드에서 돌리겠다
+        searchCoroutineJob = lifecycleScope.launch {
 
-            }
+            // editText 가 변경되었을때
+            val editTextFlow = fragmentSavedMoviesBinding.etSavedMovieSearch.textChangesToFlow()
 
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            editTextFlow
+                // 연산자들
+                // 입력되고 나서 1초 뒤에 받는다
+                .debounce(1000)
+                .filter {
+                    it?.length!! > 0
+                }
+                .onEach {
+                    Log.d(MainActivity.TAG + CLASS_NAME, "flow로 받는다 $it")
+                    // 해당 검색어로 api 호출
+                    Log.i(MainActivity.TAG + CLASS_NAME, "검색어는 ? ${it} / 로딩상태 : ${isLoading}")
+                    mainViewModel.keyword.value = it.toString()
+                }
+                .launchIn(this) // Main이 아닌 별도 스레드로 수행
+        }
+    }
 
-            }
+    fun EditText.textChangesToFlow(): Flow<CharSequence?> {
+        return callbackFlow {
+            val listener = object : TextWatcher {
+                override fun afterTextChanged(s: Editable?) = Unit
+                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) =
+                    Unit
 
-            override fun afterTextChanged(p0: Editable?) {
-                if(p0?.length!! > 0 && !isLoading) {
-                    showProgressBar()
-
-                    MainScope().launch {
-                        delay(2000)
-                        mainViewModel.keyword.value = p0.toString()
-
-                    }
-                } else if(p0?.length!! == 0) {
-                    mainViewModel.keyword.value = p0.toString()
-
+                override fun onTextChanged(text: CharSequence?, start: Int, before: Int, count: Int) {
+                    //offer(text)
+                    // 값 내보내기
+                    trySend(text)
                 }
             }
-
-        })
+            addTextChangedListener(listener)
+            // 콜백이 사라질때 실행, 리스너 제거
+            awaitClose { removeTextChangedListener(listener) }
+        }.onStart {
+            // event 방출
+            emit(text)
+        }
     }
 }

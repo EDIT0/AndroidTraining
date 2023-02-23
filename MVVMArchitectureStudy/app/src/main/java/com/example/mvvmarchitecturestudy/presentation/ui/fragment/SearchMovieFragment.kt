@@ -10,8 +10,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.Toast
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mvvmarchitecturestudy.R
@@ -21,9 +23,11 @@ import com.example.mvvmarchitecturestudy.presentation.adapter.SearchMovieAdapter
 import com.example.mvvmarchitecturestudy.presentation.ui.activity.MainActivity
 import com.example.mvvmarchitecturestudy.presentation.ui.activity.MovieInfoActivity
 import com.example.mvvmarchitecturestudy.presentation.viewmodel.MainViewModel
-import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.onStart
+import kotlin.coroutines.CoroutineContext
 
 
 class SearchMovieFragment : Fragment() {
@@ -39,6 +43,8 @@ class SearchMovieFragment : Fragment() {
 
     private var page = 1
     private var totalPages = 0
+
+    private var searchCoroutineJob: Job = Job()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -156,36 +162,87 @@ class SearchMovieFragment : Fragment() {
     }
 
     private fun searchListener() {
-        fragmentSearchMovieBinding.etMovieSearch.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+//        fragmentSearchMovieBinding.etMovieSearch.addTextChangedListener(object : TextWatcher {
+//            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+//
+//            }
+//
+//            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+//
+//            }
+//
+//            override fun afterTextChanged(p0: Editable?) {
+//                page = 1
+//
+//                if(p0?.length!! > 0 && !isLoading) {
+//                    showProgressBar()
+//
+//                    MainScope().launch {
+//                        delay(2000)
+//
+//
+//                        Log.i(MainActivity.TAG + CLASS_NAME, "검색어는 ? ${p0} / 로딩상태 : ${isLoading}")
+//                        searchMovieAdapter.submitList(emptyList())
+//
+//                        mainViewModel.getSearchMovies(p0.toString(), language, page)
+//
+//                    }
+//                } else if(p0?.length!! == 0) {
+//                }
+//            }
+//
+//        })
+        // Rx의 스케줄러와 비슷
+        // IO 스레드에서 돌리겠다
+        searchCoroutineJob = lifecycleScope.launch {
 
-            }
+            // editText 가 변경되었을때
+            val editTextFlow = fragmentSearchMovieBinding.etMovieSearch.textChangesToFlow()
 
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            editTextFlow
+                // 연산자들
+                // 입력되고 나서 1초 뒤에 받는다
+                .debounce(1000)
+                .filter {
+                    it?.length!! > 0
+                }
+                .onEach {
+                    Log.d(MainActivity.TAG + CLASS_NAME, "flow로 받는다 $it")
+                    // 해당 검색어로 api 호출
+                    Log.i(MainActivity.TAG + CLASS_NAME, "검색어는 ? ${it} / 로딩상태 : ${isLoading}")
+                    searchMovieAdapter.submitList(emptyList())
 
-            }
-
-            override fun afterTextChanged(p0: Editable?) {
-                page = 1
-
-                if(p0?.length!! > 0 && !isLoading) {
-                    showProgressBar()
-
-                    MainScope().launch {
-                        delay(2000)
+                    mainViewModel.getSearchMovies(it.toString(), language, page)
+                }
+                .launchIn(this) // Main이 아닌 별도 스레드로 수행
+        }
+    }
 
 
-                        Log.i(MainActivity.TAG + CLASS_NAME, "검색어는 ? ${p0} / 로딩상태 : ${isLoading}")
-                        searchMovieAdapter.submitList(emptyList())
+    fun EditText.textChangesToFlow(): Flow<CharSequence?> {
+        return callbackFlow {
+            val listener = object : TextWatcher {
+                override fun afterTextChanged(s: Editable?) = Unit
+                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) =
+                    Unit
 
-                        mainViewModel.getSearchMovies(p0.toString(), language, page)
-
-                    }
-                } else if(p0?.length!! == 0) {
+                override fun onTextChanged(text: CharSequence?, start: Int, before: Int, count: Int) {
+                    //offer(text)
+                    // 값 내보내기
+                    trySend(text)
                 }
             }
+            addTextChangedListener(listener)
+            // 콜백이 사라질때 실행, 리스너 제거
+            awaitClose { removeTextChangedListener(listener) }
+        }.onStart {
+            // event 방출
+            emit(text)
+        }
+    }
 
-        })
+    override fun onDestroyView() {
+        super.onDestroyView()
     }
 
 }
