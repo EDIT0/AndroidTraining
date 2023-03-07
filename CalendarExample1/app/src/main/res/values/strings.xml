@@ -1,0 +1,28 @@
+<resources>
+    <string name="app_name">CalendarExample1</string>
+
+    <string-array name="custom_weekdays">
+        <item>일(Sun)</item>
+        <item>월(Mon)</item>
+        <item>화(Tue)</item>
+        <item>수(Wed)</item>
+        <item>목(Thu)</item>
+        <item>금(Fri)</item>
+        <item>토(Sat)</item>
+    </string-array>
+
+    <string-array name="custom_months">
+        <item>1. 1월</item>
+        <item>2. 2월</item>
+        <item>3. 3월</item>
+        <item>4. 4월</item>
+        <item>5. 5월</item>
+        <item>6. 6월</item>
+        <item>7. 7월</item>
+        <item>8. 8월</item>
+        <item>9. 9월</item>
+        <item>10. 10월</item>
+        <item>11. 11월</item>
+        <item>12. 12월</item>
+    </string-array>
+</resources>
