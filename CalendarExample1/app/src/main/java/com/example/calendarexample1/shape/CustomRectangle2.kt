@@ -11,7 +11,7 @@ import com.example.calendarexample1.MainActivity.Companion.TAG_C
 /**
  * Span to draw a dot centered under a section of text
  */
-class CustomRectangle : LineBackgroundSpan {
+class CustomRectangle2 : LineBackgroundSpan {
     private val radius: Float
     private val color: Int
 
@@ -79,7 +79,7 @@ class CustomRectangle : LineBackgroundSpan {
         }
 //        canvas.drawRect(left.toFloat(), top.toFloat(), right.toFloat(), bottom.toFloat(), paint)
         var rect = RectF(left.toFloat() + 5, bottom.toFloat(), right.toFloat() - 5, bottom.toFloat() + 10)
-//        var rect2 = RectF(left.toFloat() + 5, bottom.toFloat() + 15, right.toFloat() - 5, bottom.toFloat() + 15 + 10)
+        var rect2 = RectF(left.toFloat() + 5, bottom.toFloat() + 15, right.toFloat() - 5, bottom.toFloat() + 15 + 10)
 //        val rect = RectF(0f,49f,162f,49f + 20)
 //        val rect2 = RectF(0f, 74f, 162f, 74f + 20)
         val corners = floatArrayOf(
@@ -92,7 +92,7 @@ class CustomRectangle : LineBackgroundSpan {
         Log.i(TAG_C, "left:${left}, top:${top}, right:${right}, bottom:${bottom}")
         val path = Path()
         path.addRoundRect(rect, corners, Path.Direction.CW)
-//        path.addRoundRect(rect2, corners, Path.Direction.CW)
+        path.addRoundRect(rect2, corners, Path.Direction.CW)
         canvas.drawPath(path, paint)
         paint.setColor(oldColor)
     }

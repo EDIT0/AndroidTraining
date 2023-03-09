@@ -6,6 +6,7 @@ import android.util.Log
 import androidx.appcompat.app.AlertDialog
 import com.example.calendarexample1.Decorators.BaseDecorator
 import com.example.calendarexample1.Decorators.AddEventDecorator
+import com.example.calendarexample1.Decorators.AddEventDecorator2
 import com.example.calendarexample1.MainActivity
 import com.example.calendarexample1.MainActivity.Companion.TAG_C
 import com.example.calendarexample1.R
@@ -28,8 +29,9 @@ class EventCalendarActivity : AppCompatActivity() {
         binding = ActivityEventCalendarBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        calendarDayList.add(CalendarDay.today())
-        calendarDayList.add(CalendarDay.from(2023, 3, 25))
+//        calendarDayList.add(CalendarDay.today())
+//        calendarDayList.add(CalendarDay.from(2023, 3, 25))
+//        calendarDayList.add(CalendarDay.today())
 
         // 첫 시작 요일이 일요일이 되도록 설정
         binding.eventCalendarView.state()
@@ -91,10 +93,13 @@ class EventCalendarActivity : AppCompatActivity() {
                     .setPositiveButton("예") { dialogInterface, i ->
                         calendarDayList.remove(date)
                         binding.eventCalendarView.removeDecorators()
-                        binding.eventCalendarView.addDecorator(AddEventDecorator(binding.root.context, R.color.blue, calendarDayList))
+//                        binding.eventCalendarView.addDecorator(AddEventDecorator(binding.root.context, R.color.blue, calendarDayList, emptyList<CalendarDay>() as ArrayList<CalendarDay>))
+                        duplicatesAddDecorator()
                     }
-                    .setNegativeButton("아니오") { _, _ ->
-
+                    .setNegativeButton("추가할건데요?") { _, _ ->
+                        calendarDayList.add(date)
+                        binding.eventCalendarView.removeDecorators()
+                        duplicatesAddDecorator()
                     }
                 builder.show()
             } else {
@@ -103,7 +108,8 @@ class EventCalendarActivity : AppCompatActivity() {
                     .setPositiveButton("예") { dialogInterface, i ->
                         calendarDayList.add(date)
                         binding.eventCalendarView.removeDecorators()
-                        binding.eventCalendarView.addDecorator(AddEventDecorator(binding.root.context, R.color.blue, calendarDayList))
+//                        binding.eventCalendarView.addDecorator(AddEventDecorator(binding.root.context, R.color.blue, calendarDayList, emptyList<CalendarDay>() as ArrayList<CalendarDay>))
+                        duplicatesAddDecorator()
                     }
                     .setNegativeButton("아니오") { _, _ ->
 
@@ -112,5 +118,16 @@ class EventCalendarActivity : AppCompatActivity() {
             }
 
         }
+    }
+
+    fun duplicatesAddDecorator() {
+        val duplicatesList = findAllDuplicates(calendarDayList) as ArrayList
+        binding.eventCalendarView.addDecorator(AddEventDecorator(binding.root.context, R.color.blue, calendarDayList, duplicatesList))
+        binding.eventCalendarView.addDecorator(AddEventDecorator2(binding.root.context, R.color.blue, duplicatesList))
+    }
+
+    fun findAllDuplicates(array: ArrayList<CalendarDay>): List<CalendarDay> {
+        val seen: MutableSet<CalendarDay> = mutableSetOf()
+        return array.filter { !seen.add(it) }
     }
 }
