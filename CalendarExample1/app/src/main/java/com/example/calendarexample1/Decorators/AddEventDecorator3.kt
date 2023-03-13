@@ -9,11 +9,12 @@ import com.example.calendarexample1.R
 import com.example.calendarexample1.shape.CustomDotSpan
 import com.example.calendarexample1.shape.CustomRectangle
 import com.example.calendarexample1.shape.CustomRectangle2
+import com.example.calendarexample1.shape.CustomRectangle3
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import com.prolificinteractive.materialcalendarview.DayViewFacade
 import com.prolificinteractive.materialcalendarview.spans.DotSpan
 
-class AddEventDecorator2(context: Context, color: Int, dates: ArrayList<CalendarDay>, duplicatesList: ArrayList<CalendarDay>) : ParentDecorator() {
+class AddEventDecorator3(context: Context, color: Int, dates: ArrayList<CalendarDay>) : ParentDecorator() {
 
     private lateinit var context: Context
     private var color: Int = 0
@@ -30,9 +31,9 @@ class AddEventDecorator2(context: Context, color: Int, dates: ArrayList<Calendar
     }
 
     override fun shouldDecorate(day: CalendarDay?): Boolean {
-        Log.i(TAG_C, "AddDecorator2 ${day?.date} ${dates.contains(day)}")
+        Log.i(TAG_C, "AddDecorator3 ${day?.date} ${dates.contains(day)}")
         if(duplicatesList.contains(day)) {
-            Log.i(TAG_C, "AddDecorator2 적용 안된다.")
+            Log.i(TAG_C, "AddDecorator3 적용 안된다.")
             return false
         } else {
             return dates.contains(day)
@@ -43,7 +44,7 @@ class AddEventDecorator2(context: Context, color: Int, dates: ArrayList<Calendar
         drawable?.let { d ->
             view?.setSelectionDrawable(d)
             view?.addSpan(boldSpan)
-            view?.addSpan(CustomRectangle2(5f, R.color.teal_200))
+            view?.addSpan(CustomRectangle3(5f, R.color.teal_200))
         }
 
     }

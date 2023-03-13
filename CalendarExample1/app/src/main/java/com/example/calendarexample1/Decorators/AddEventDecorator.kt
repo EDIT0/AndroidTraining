@@ -42,7 +42,7 @@ class AddEventDecorator(context: Context, color: Int, dates: ArrayList<CalendarD
         drawable?.let { d ->
             view?.setSelectionDrawable(d)
             view?.addSpan(boldSpan)
-            view?.addSpan(CustomRectangle(5f, color))
+            view?.addSpan(CustomRectangle(5f, R.color.teal_200))
         }
     }
 }

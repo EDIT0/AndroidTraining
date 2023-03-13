@@ -7,6 +7,7 @@ import androidx.appcompat.app.AlertDialog
 import com.example.calendarexample1.Decorators.BaseDecorator
 import com.example.calendarexample1.Decorators.AddEventDecorator
 import com.example.calendarexample1.Decorators.AddEventDecorator2
+import com.example.calendarexample1.Decorators.AddEventDecorator3
 import com.example.calendarexample1.MainActivity
 import com.example.calendarexample1.MainActivity.Companion.TAG_C
 import com.example.calendarexample1.R
@@ -121,13 +122,24 @@ class EventCalendarActivity : AppCompatActivity() {
     }
 
     fun duplicatesAddDecorator() {
-        val duplicatesList = findAllDuplicates(calendarDayList) as ArrayList
-        binding.eventCalendarView.addDecorator(AddEventDecorator(binding.root.context, R.color.blue, calendarDayList, duplicatesList))
-        binding.eventCalendarView.addDecorator(AddEventDecorator2(binding.root.context, R.color.blue, duplicatesList))
+        val duplicatesList1 = findAllDuplicates(calendarDayList) as ArrayList
+        binding.eventCalendarView.addDecorator(AddEventDecorator(binding.root.context, R.color.blue, calendarDayList, duplicatesList1))
+        val duplicatesList2 = findAllDuplicates2(duplicatesList1) as ArrayList
+        binding.eventCalendarView.addDecorator(AddEventDecorator2(binding.root.context, R.color.blue, duplicatesList1, duplicatesList2))
+        binding.eventCalendarView.addDecorator(AddEventDecorator3(binding.root.context, R.color.blue, duplicatesList2))
     }
 
     fun findAllDuplicates(array: ArrayList<CalendarDay>): List<CalendarDay> {
         val seen: MutableSet<CalendarDay> = mutableSetOf()
-        return array.filter { !seen.add(it) }
+        val resultArray = array.filter { !seen.add(it) }
+        Log.i(TAG_C, "findAllDuplicates ${resultArray}")
+        return resultArray
+    }
+
+    fun findAllDuplicates2(array: ArrayList<CalendarDay>): List<CalendarDay> {
+        val seen: MutableSet<CalendarDay> = mutableSetOf()
+        val resultArray = array.filter { !seen.add(it) }
+        Log.i(TAG_C, "findAllDuplicates2 ${resultArray}")
+        return resultArray
     }
 }
