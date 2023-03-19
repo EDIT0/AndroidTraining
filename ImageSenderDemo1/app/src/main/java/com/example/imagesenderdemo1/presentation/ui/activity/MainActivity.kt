@@ -32,6 +32,7 @@ import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import java.io.File
 import java.io.IOException
+import java.io.InputStream
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -194,8 +195,45 @@ class MainActivity : DataBindingBaseActivity<ActivityMainBinding>(R.layout.activ
                 data?:return
                 Utility.photoURI = data.data as Uri
 
+                /**
+                 * 사진 각도 맞춤
+                 * Uri를 수정(리사이즈 등)하기 전에 회전되어 있는 이미지를 꼭 맞춰줘야한다.
+                 * */
+                val bitmap = Utility.loadBitmapFromMediaStoreBy(mActivity, Utility.photoURI!!)
+                Log.i("MYTAG", "이미지 비트맵: ${bitmap}")
+
+                /**
+                 * val bitmap = Utility.loadBitmapFromMediaStoreBy(app, photoURIList[i])
+                 * 이 부분에서 만든 Bitmap 파일을 제거하기 위해 imagePath를 받아놓는다.
+                 * */
+//                    val contentUri = Utility.fileUriToContentUri(app, File(photoURIList[i].getPath()))
+                imagePath = Utility.absolutelyPath(mActivity, Utility.photoURI!!) // 파일 경로 얻기
+
+                try {
+                    val aaa: InputStream = mActivity.contentResolver.openInputStream(Utility.photoURI!!)!!
+                    exif = ExifInterface(aaa)
+                    aaa.close()
+                } catch (e: IOException) {
+                    e.printStackTrace()
+                }
+                val orientation = exif!!.getAttributeInt(
+                    ExifInterface.ORIENTATION_ROTATE_90.toString(),
+                    ExifInterface.ORIENTATION_UNDEFINED
+                )
+                val bmRotated: Bitmap = Utility.rotateBitmap(bitmap!!, orientation)!!
+//            val bmRotated: Bitmap = Utility.rotateImage(app, photoURIList[i], bitmap!!)
+                Utility.photoURI = Utility.getBitmapToUri(mActivity, bmRotated) // bitmap에서 uri로 변경
+
+                /**
+                 * getBitmapToUri로 새로운 Bitmap을 생성하였으므로 기존에 Bitmap 파일을 imagePath를 이용하여 지워준다.
+                 * */
+                deleteFile = File(imagePath) // 1. 사진 찍으면 생성된 이미지 파일 삭제
+                deleteFile.delete()
+
+                imagePath = Utility.absolutelyPath(mActivity, Utility.photoURI!!) // 파일 경로 얻기
+
                 Log.i(pickImageFragment.TAG, "Uri: ${Utility.photoURI}")
-                Log.i(pickImageFragment.TAG, "AbsolutelyPath: ${Utility.absolutelyPath(mActivity, Utility.photoURI!!)}")
+//                Log.i(pickImageFragment.TAG, "AbsolutelyPath: ${Utility.absolutelyPath(mActivity, Utility.photoURI!!)}")
 
                 // 가져온 이미지 해상도 그대로 만들기
 //                val bitmap = loadBitmapFromMediaStoreBy(photoURI!!) // 가져온 이미지 Bitmap으로 전환
@@ -205,6 +243,12 @@ class MainActivity : DataBindingBaseActivity<ActivityMainBinding>(R.layout.activ
                 var resizeBitmap = Utility.resize(mActivity, Utility.photoURI!!, 500)
                 Utility.photoURI = Utility.getBitmapToUri(mActivity, resizeBitmap!!)
                 Log.i(pickImageFragment.TAG, "완성된 uri ${Utility.photoURI}")
+
+                /**
+                 * getBitmapToUri로 새로운 Bitmap을 생성하였으므로 기존에 Bitmap 파일을 imagePath를 이용하여 지워준다.
+                 * */
+                deleteFile = File(imagePath) // 1. 사진 찍으면 생성된 이미지 파일 삭제
+                deleteFile.delete()
 
                 imagePath = Utility.absolutelyPath(mActivity, Utility.photoURI!!) // 파일 경로 얻기
 
@@ -260,6 +304,10 @@ class MainActivity : DataBindingBaseActivity<ActivityMainBinding>(R.layout.activ
 //                Utility.photoURI = data.data as Uri
                 Log.i(pickImageFragment.TAG, "${data.clipData}")
                 Log.i(pickImageFragment.TAG, "${data.clipData?.itemCount}")
+                val itemCount = data.clipData?.itemCount?:-1
+                if(itemCount == -1) {
+                    return
+                }
                 for(i in 0 until data.clipData?.itemCount!!) {
                     Log.i(pickImageFragment.TAG, "${data.clipData?.getItemAt(i)}")
                     Utility.photoURIArray.add(data.clipData?.getItemAt(i)!!.uri)
@@ -270,12 +318,66 @@ class MainActivity : DataBindingBaseActivity<ActivityMainBinding>(R.layout.activ
 //                photoURI = getBitmapToUri(bitmap!!)
 
                 // 가져온 이미지 해상도 리사이즈 후 만들기
+//                for(i in 0 until data.clipData?.itemCount!!) {
+//                    val resizeBitmap = Utility.resize(mActivity, Utility.photoURIArray[i], 500)
+//                    Utility.photoURIArray[i] = Utility.getBitmapToUri(mActivity, resizeBitmap!!)
+//                    Log.i(pickImageFragment.TAG, "완성된 uri ${Utility.photoURIArray[i]}")
+//                }
+
+                /**
+                 * 사진 각도 맞춤
+                 * Uri를 수정(리사이즈 등)하기 전에 회전되어 있는 이미지를 꼭 맞춰줘야한다.
+                 * */
                 for(i in 0 until data.clipData?.itemCount!!) {
-                    val resizeBitmap = Utility.resize(mActivity, Utility.photoURIArray[i], 500)
-                    Utility.photoURIArray[i] = Utility.getBitmapToUri(mActivity, resizeBitmap!!)
-                    Log.i(pickImageFragment.TAG, "완성된 uri ${Utility.photoURIArray[i]}")
+                    val bitmap = Utility.loadBitmapFromMediaStoreBy(mActivity, Utility.photoURIArray[i])
+                    Log.i("MYTAG", "이미지 비트맵: ${bitmap}")
+
+                    /**
+                     * val bitmap = Utility.loadBitmapFromMediaStoreBy(app, photoURIList[i])
+                     * 이 부분에서 만든 Bitmap 파일을 제거하기 위해 imagePath를 받아놓는다.
+                     * */
+//                    val contentUri = Utility.fileUriToContentUri(app, File(photoURIList[i].getPath()))
+                    imagePath = Utility.absolutelyPath(mActivity, Utility.photoURIArray[i]) // 파일 경로 얻기
+
+                    try {
+                        val aaa: InputStream = mActivity.contentResolver.openInputStream(Utility.photoURIArray[i])!!
+                        exif = ExifInterface(aaa)
+                        aaa.close()
+                    } catch (e: IOException) {
+                        e.printStackTrace()
+                    }
+                    val orientation = exif!!.getAttributeInt(
+                        ExifInterface.ORIENTATION_ROTATE_90.toString(),
+                        ExifInterface.ORIENTATION_UNDEFINED
+                    )
+                    val bmRotated: Bitmap = Utility.rotateBitmap(bitmap!!, orientation)!!
+//            val bmRotated: Bitmap = Utility.rotateImage(app, photoURIList[i], bitmap!!)
+                    Utility.photoURIArray[i] = Utility.getBitmapToUri(mActivity, bmRotated) // bitmap에서 uri로 변경
+
+                    /**
+                     * getBitmapToUri로 새로운 Bitmap을 생성하였으므로 기존에 Bitmap 파일을 imagePath를 이용하여 지워준다.
+                     * */
+                    deleteFile = File(imagePath) // 1. 사진 찍으면 생성된 이미지 파일 삭제
+                    deleteFile.delete()
                 }
 
+                // 가져온 이미지 해상도 리사이즈 후 만들기
+                for(i in 0 until data.clipData?.itemCount!!) {
+                    /**
+                     * photoURIList[i] = Utility.getBitmapToUri(app, bmRotated)
+                     * 이 부분에서 만든 Bitmap 파일을 제거하기 위해 imagePath를 받아놓는다.
+                     * */
+                    imagePath = Utility.absolutelyPath(mActivity, Utility.photoURIArray[i]) // 파일 경로 얻기
+                    val resizeBitmap = Utility.resize(mActivity, Utility.photoURIArray[i], 500)
+                    Utility.photoURIArray[i] = Utility.getBitmapToUri(mActivity, resizeBitmap!!)
+                    Log.i("MYTAG", "완성된 uri ${Utility.photoURIArray[i]}")
+
+                    /**
+                     * getBitmapToUri로 새로운 Bitmap을 생성하였으므로 기존에 Bitmap 파일을 imagePath를 이용하여 지워준다.
+                     * */
+                    deleteFile = File(imagePath) // 1. 사진 찍으면 생성된 이미지 파일 삭제
+                    deleteFile.delete()
+                }
 
                 for(i in 0 until data.clipData?.itemCount!!) {
                     imagePathArray.add(Utility.absolutelyPath(mActivity, Utility.photoURIArray[i]))

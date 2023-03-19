@@ -53,10 +53,14 @@ object Utility {
 
     fun openMultiGallery(activity: Activity) {
         val intent = Intent(Intent.ACTION_PICK)
-        intent.type = MediaStore.Images.Media.CONTENT_TYPE
+//        intent.type = MediaStore.Images.Media.CONTENT_TYPE
+//        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+//        intent.data = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+//        activity.startActivityForResult(intent, FLAG_REQ_MULTI_GALLERY)
+        intent.setType("image/*");
         intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
-        intent.data = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
-        activity.startActivityForResult(intent, FLAG_REQ_MULTI_GALLERY)
+        intent.setType(MediaStore.Images.Media.CONTENT_TYPE)
+        activity.startActivityForResult(Intent.createChooser(intent,"다중 선택은 '포토'를 선택하세요."), FLAG_REQ_MULTI_GALLERY)
     }
 
     // 1장
