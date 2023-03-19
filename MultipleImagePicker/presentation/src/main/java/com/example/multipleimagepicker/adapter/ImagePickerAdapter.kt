@@ -60,9 +60,9 @@ class ImagePickerAdapter() : ListAdapter<ImagePickerModel, ImagePickerAdapter.Vi
         onItemClickListener = listener
     }
 
-    override fun getItemViewType(position: Int): Int {
-        return position
-    }
+//    override fun getItemViewType(position: Int): Int {
+//        return position
+//    }
 
     companion object {
         val diffUtil = object: DiffUtil.ItemCallback<ImagePickerModel>() {
