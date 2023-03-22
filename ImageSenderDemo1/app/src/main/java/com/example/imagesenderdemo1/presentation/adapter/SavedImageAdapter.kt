@@ -42,9 +42,9 @@ class SavedImageAdapter : ListAdapter<SavedImageModel, SavedImageAdapter.ViewHol
         }
     }
 
-    override fun getItemViewType(position: Int): Int {
-        return position
-    }
+//    override fun getItemViewType(position: Int): Int {
+//        return position
+//    }
 
     private var onItemClickListener : ((SavedImageItemBinding, Int, SavedImageModel) -> Unit)? = null
 

@@ -36,6 +36,8 @@ class MainViewModel(
     private val _isSuccess = SingleLiveEvent<Boolean>()
     val isSuccess: LiveData<Boolean> get() = _isSuccess
 
+    var currentImageCrop = -1
+
     fun saveImage(file: File, fileName: String) {
         if(!networkManager.checkNetworkState()) {
             _isSuccess.value = false

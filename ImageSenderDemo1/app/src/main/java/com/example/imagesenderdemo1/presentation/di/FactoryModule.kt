@@ -6,6 +6,7 @@ import com.example.imagesenderdemo1.domain.usecase.DeleteImageUseCase
 import com.example.imagesenderdemo1.domain.usecase.SaveImageToServerUseCase
 import com.example.imagesenderdemo1.domain.usecase.SaveImagesToServerUseCase
 import com.example.imagesenderdemo1.domain.usecase.SelectTotalSavedImageUseCase
+import com.example.imagesenderdemo1.presentation.viewmodel.ImageDecoViewPagerViewModelFactory
 import com.example.imagesenderdemo1.presentation.viewmodel.ImageZoomInOutViewModelFactory
 import com.example.imagesenderdemo1.presentation.viewmodel.MainViewModelFactory
 import dagger.Module
@@ -50,4 +51,15 @@ object FactoryModule {
         )
     }
 
+    @Provides
+    @Singleton
+    fun provideImageDecoViewPagerViewModelFactory(
+        app: Application,
+        networkManager: NetworkManager
+    ) : ImageDecoViewPagerViewModelFactory {
+        return ImageDecoViewPagerViewModelFactory(
+            app,
+            networkManager
+        )
+    }
 }

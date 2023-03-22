@@ -14,7 +14,7 @@ import android.os.Build
 import android.provider.MediaStore
 import android.util.Log
 import androidx.exifinterface.media.ExifInterface
-import okhttp3.MediaType
+import com.theartofdev.edmodo.cropper.CropImage
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -22,14 +22,16 @@ import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.IOException
-import java.util.*
 import kotlin.collections.ArrayList
 
 object Utility {
 
     val FLAG_REQ_CAMERA = 200 // requestCode
+    val FLAG_REQ_CAMERA_CROP = 201 // requestCode
     val FLAG_REQ_GALLERY = 100 // requestCode
+    val FLAG_REQ_GALLERY_CROP = 101 // requestCode
     val FLAG_REQ_MULTI_GALLERY = 300 // requestCode
+    val FLAG_REQ_MULTI_GALLERY_CROP = 301 // requestCode
     var photoURI: Uri? = null // 카메라 원본이미지 Uri를 저장할 변수
     var photoURIArray: ArrayList<Uri> = ArrayList<Uri>() // 1장 이상 선택 시 이미지 Uri 저장할 변수
 
@@ -61,6 +63,55 @@ object Utility {
         intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
         intent.setType(MediaStore.Images.Media.CONTENT_TYPE)
         activity.startActivityForResult(Intent.createChooser(intent,"다중 선택은 '포토'를 선택하세요."), FLAG_REQ_MULTI_GALLERY)
+    }
+
+    fun cropImage(activity: Activity, uri: Uri) {
+        try {
+            CropImage.activity(uri)
+                .setAutoZoomEnabled(false)
+                .setOutputCompressFormat(Bitmap.CompressFormat.PNG)
+                .start(activity)
+        } catch (e: Exception) {
+
+        }
+    }
+
+    /**
+     * @param context
+     * */
+    fun clearCroppedCache(context: Context) {
+        try {
+            val dir = context.cacheDir
+            deleteCroppedFiles(dir)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    //Helper function to delete all files in a directory if they are named cropped
+    private fun deleteCroppedFiles(dir: File?): Boolean {
+        return if (dir != null && dir.isDirectory) {
+            val children = dir.list()
+            if (children != null) {
+                for (i in children.indices) {
+                    deleteCroppedFiles(File(dir, children[i]))
+                }
+            }
+            if (dir.isDirectory && dir.length() == 0L) {
+                dir.delete()
+            } else {
+                false
+            }
+        } else if (dir != null && dir.isFile) {
+            Log.i("CropImage", "제거 ${Regex("(cropped)\\d+.jpg")}")
+            if (dir.toString().contains("cropped")) {
+                dir.delete()
+            } else {
+                false
+            }
+        } else {
+            false
+        }
     }
 
     // 1장
@@ -192,5 +243,17 @@ object Utility {
             e.printStackTrace()
         }
         return resizeBitmap
+    }
+
+    fun fileUriToContentUri(context: Context, file: File): Uri? {
+
+        //Uri localImageUri = Uri.fromFile(localImageFile); // Not suitable as it's not a content Uri
+        val cr = context.contentResolver
+        val imagePath = file.absolutePath
+        val imageName: String? = null
+        val imageDescription: String? = null
+        val uriString =
+            MediaStore.Images.Media.insertImage(cr, imagePath, imageName, imageDescription)
+        return Uri.parse(uriString)
     }
 }
