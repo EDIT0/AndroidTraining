@@ -14,6 +14,7 @@ import androidx.annotation.RequiresApi
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
 import com.example.data.util.MessageSet
+import com.example.data.util.Utility
 import com.example.domain.model.ImagePickerModel
 import com.example.multipleimagepicker.adapter.SelectedImageAdapter
 import com.example.multipleimagepicker.databinding.ActivityMainBinding
@@ -28,8 +29,6 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ViewBindingBaseActivity<ActivityMainBinding>() {
-
-//    private lateinit var binding : ActivityMainBinding
 
     @Inject
     lateinit var mainViewModelFactory: MainViewModelFactory
@@ -79,6 +78,9 @@ class MainActivity : ViewBindingBaseActivity<ActivityMainBinding>() {
             try {
                 mainViewModel.setSelectedImageItemList(result.data?.getParcelableArrayListExtra<ImagePickerModel>("uris")!!)
                 Log.i("MYTAG", "넘어온 이미지 갯수: ${mainViewModel.selectedImageItemList.value?.size}")
+                for(i in result.data?.getParcelableArrayListExtra<ImagePickerModel>("uris")!!) {
+                    Log.i("MYTAG", "아아아 ${i}")
+                }
             } catch (e : Exception) {
                 Log.i("MYTAG", "${e.message}")
             }
@@ -91,8 +93,6 @@ class MainActivity : ViewBindingBaseActivity<ActivityMainBinding>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        binding = ActivityMainBinding.inflate(layoutInflater)
-//        setContentView(binding.root)
 
         mainViewModel = ViewModelProvider(this, mainViewModelFactory)[MainViewModel::class.java]
 
@@ -111,33 +111,6 @@ class MainActivity : ViewBindingBaseActivity<ActivityMainBinding>() {
 
         binding.btnSaveToServer.setOnClickListener {
             mainViewModel.saveSelectedImagesToServer()
-//            if((mainViewModel.selectedImageItemList.value?.size?:0) == 0) {
-//                return@setOnClickListener
-//            }
-
-//            for(i in 0 until mainViewModel.selectedImageItemList.value?.size!!) {
-//                mainViewModel.photoURIList.add(mainViewModel.selectedImageItemList.value?.get(i)?.uri!!)
-//            }
-//
-//            // 가져온 이미지 해상도 리사이즈 후 만들기
-//            for(i in 0 until mainViewModel.selectedImageItemList.value?.size!!) {
-//                val resizeBitmap = Utility.resize(mActivity, mainViewModel.photoURIList[i], 500)
-//                mainViewModel.photoURIList[i] = Utility.getBitmapToUri(mActivity, resizeBitmap!!)
-//                Log.i("MYTAG", "완성된 uri ${mainViewModel.photoURIList[i]}")
-//            }
-//
-//            for(i in 0 until mainViewModel.selectedImageItemList.value?.size!!) {
-//                mainViewModel.imagePathList.add(Utility.absolutelyPath(mActivity, mainViewModel.photoURIList[i]))
-//            }
-//
-//            val fileArray = ArrayList<File>()
-//            val fileNameArray = ArrayList<String>()
-//            for(i in 0 until mainViewModel.selectedImageItemList.value?.size!!) {
-//                fileArray.add(File(mainViewModel.imagePathList[i]))
-//                fileNameArray.add("all${i}")
-//            }
-
-//            mainViewModel.saveImages(fileArray, fileNameArray)
         }
     }
 
@@ -179,6 +152,7 @@ class MainActivity : ViewBindingBaseActivity<ActivityMainBinding>() {
         }
 
         mainViewModel.selectedImageItemList.observe(binding.root.context as LifecycleOwner) {
+            Log.i("MYTAG", "업데이트")
             selectedImageAdapter.submitList(it.toMutableList())
             val selectedImageListSize = it?.size?:0
             if(selectedImageListSize > 0) {

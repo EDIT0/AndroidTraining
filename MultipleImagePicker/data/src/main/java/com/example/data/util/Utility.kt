@@ -11,7 +11,6 @@ import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
 import android.util.Log
-import androidx.annotation.RequiresApi
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -190,4 +189,53 @@ object Utility {
         return Uri.parse(uriString)
     }
 
+
+    fun contentUriToFileUri(ctx: Context, uri: Uri?): Uri? {
+        var cursor: Cursor? = null
+        return try {
+            cursor = ctx.contentResolver.query(uri!!, null, null, null, null)
+            cursor!!.moveToNext()
+            Uri.fromFile(File(cursor.getString(cursor.getColumnIndex(MediaStore.MediaColumns.DATA))))
+        } finally {
+            cursor?.close()
+        }
+    }
+
+    /**
+     * @param context
+     * */
+    fun clearCroppedCache(context: Context) {
+        try {
+            val dir = context.cacheDir
+            deleteCroppedFiles(dir)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    //Helper function to delete all files in a directory if they are named cropped
+    private fun deleteCroppedFiles(dir: File?): Boolean {
+        return if (dir != null && dir.isDirectory) {
+            val children = dir.list()
+            if (children != null) {
+                for (i in children.indices) {
+                    deleteCroppedFiles(File(dir, children[i]))
+                }
+            }
+            if (dir.isDirectory && dir.length() == 0L) {
+                dir.delete()
+            } else {
+                false
+            }
+        } else if (dir != null && dir.isFile) {
+            Log.i("CropImage", "제거 ${Regex("(cropped)\\d+.jpg")}")
+            if (dir.toString().contains("cropped")) {
+                dir.delete()
+            } else {
+                false
+            }
+        } else {
+            false
+        }
+    }
 }

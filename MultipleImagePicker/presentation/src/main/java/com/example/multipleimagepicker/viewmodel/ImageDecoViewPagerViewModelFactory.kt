@@ -1,10 +1,9 @@
-package com.example.imagesenderdemo1.presentation.viewmodel
+package com.example.multipleimagepicker.viewmodel
 
 import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.imagesenderdemo1.data.util.NetworkManager
-import com.example.imagesenderdemo1.domain.usecase.DeleteImageUseCase
+import com.example.data.util.NetworkManager
 
 class ImageDecoViewPagerViewModelFactory(
     private val app : Application,

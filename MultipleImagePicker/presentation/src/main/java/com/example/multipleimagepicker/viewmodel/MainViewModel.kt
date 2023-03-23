@@ -41,7 +41,7 @@ class MainViewModel(
     lateinit var deleteFile: File
 
     fun setSelectedImageItemList(list: ArrayList<ImagePickerModel>) {
-        _selectedImageItemList.value = list
+        _selectedImageItemList.value = list.toMutableList()
     }
 
     /**
@@ -95,8 +95,15 @@ class MainViewModel(
              * val bitmap = Utility.loadBitmapFromMediaStoreBy(app, photoURIList[i])
              * 이 부분에서 만든 Bitmap 파일을 제거하기 위해 imagePath를 받아놓는다.
              * */
-            val contentUri = Utility.fileUriToContentUri(app, File(photoURIList[i].getPath()))
-            val imagePath = Utility.absolutelyPath(app, contentUri!!) // 파일 경로 얻기
+            var imagePath = ""
+            if(photoURIList[i].toString().contains("file://")) {
+                val contentUri = Utility.fileUriToContentUri(app, File(photoURIList[i].getPath()))
+                imagePath = Utility.absolutelyPath(app, contentUri!!) // 파일 경로 얻기
+            } else if(photoURIList[i].toString().contains("content://")) {
+                imagePath = Utility.absolutelyPath(app, photoURIList[i]) // 파일 경로 얻기
+            }
+//            val contentUri = Utility.fileUriToContentUri(app, File(photoURIList[i].getPath()))
+//            val imagePath = Utility.absolutelyPath(app, contentUri!!) // 파일 경로 얻기
 
             try {
                 val aaa: InputStream = app.contentResolver.openInputStream(photoURIList[i])!!
@@ -174,6 +181,7 @@ class MainViewModel(
                         }
                     }
                     withContext(Dispatchers.Main) {
+                        Utility.clearCroppedCache(app)
                         selectedImagesDelete()
                         _eventObserver.value = MessageSet.ERROR
                     }
@@ -181,6 +189,7 @@ class MainViewModel(
                 .collect {
                     Log.i("MYTAG", "이미지 저장: ${it}")
                     withContext(Dispatchers.Main) {
+                        Utility.clearCroppedCache(app)
                         selectedImagesDelete()
                         _eventObserver.value = MessageSet.SUCCESS
                     }

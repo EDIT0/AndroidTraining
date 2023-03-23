@@ -4,6 +4,7 @@ import android.app.Application
 import com.example.data.util.NetworkManager
 import com.example.domain.usecase.GetAlbumImageListUseCase
 import com.example.domain.usecase.SaveSelectedImagesToServerUseCase
+import com.example.multipleimagepicker.viewmodel.ImageDecoViewPagerViewModelFactory
 import com.example.multipleimagepicker.viewmodel.ImagePickerViewModel
 import com.example.multipleimagepicker.viewmodel.ImagePickerViewModelFactory
 import com.example.multipleimagepicker.viewmodel.MainViewModelFactory
@@ -36,6 +37,18 @@ object FactoryModule {
             application,
             networkManager,
             saveSelectedImagesToServerUseCase
+        )
+    }
+
+    @Provides
+    @Singleton
+    fun provideImageDecoViewPagerViewModelFactory(
+        app: Application,
+        networkManager: NetworkManager
+    ) : ImageDecoViewPagerViewModelFactory {
+        return ImageDecoViewPagerViewModelFactory(
+            app,
+            networkManager
         )
     }
 }
