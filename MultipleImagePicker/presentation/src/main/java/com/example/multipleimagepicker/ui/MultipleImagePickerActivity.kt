@@ -1,28 +1,38 @@
 package com.example.multipleimagepicker.ui
 
+import android.app.Activity
+import android.content.ContentValues
 import android.content.Intent
+import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Parcelable
+import android.provider.MediaStore
 import android.util.Log
 import android.view.View
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
+import androidx.exifinterface.media.ExifInterface
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
+import com.example.data.util.FLAG_REQ_CAMERA
+import com.example.data.util.FLAG_REQ_CAMERA_CROP
 import com.example.data.util.MessageSet
+import com.example.data.util.Utility
 import com.example.domain.model.ImagePickerModel
+import com.example.domain.model.ViewType
 import com.example.multipleimagepicker.adapter.ImagePickerAdapter
 import com.example.multipleimagepicker.adapter.SelectedImageAdapter
 import com.example.multipleimagepicker.databinding.ActivityMultipleImagePickerBinding
 import com.example.multipleimagepicker.ui.base.ViewBindingBaseActivity
 import com.example.multipleimagepicker.viewmodel.ImagePickerViewModel
 import com.example.multipleimagepicker.viewmodel.ImagePickerViewModelFactory
+import com.theartofdev.edmodo.cropper.CropImage
 import dagger.hilt.android.AndroidEntryPoint
+import java.io.File
+import java.io.IOException
 import javax.inject.Inject
 import kotlin.collections.ArrayList
 
@@ -35,6 +45,11 @@ class MultipleImagePickerActivity : ViewBindingBaseActivity<ActivityMultipleImag
 
     private val selectedImageAdapter = SelectedImageAdapter()
     private val imagePickerAdapter = ImagePickerAdapter()
+
+    private lateinit var cameraResultUri: Uri
+
+    lateinit var deleteFile: File
+    private var imagePath = ""
 
     override fun getBinding(): ActivityMultipleImagePickerBinding = ActivityMultipleImagePickerBinding.inflate(layoutInflater)
 
@@ -84,11 +99,30 @@ class MultipleImagePickerActivity : ViewBindingBaseActivity<ActivityMultipleImag
         }
     }
 
+    // Camera
+    private fun createImageUri(activity: Activity, filename: String, mimeType: String) : Uri? {
+        var values = ContentValues()
+//        values.put(MediaStore.Images.Media.DISPLAY_NAME, filename)
+//        values.put(MediaStore.Images.Media.MIME_TYPE, mimeType)
+        return activity.contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
+    }
+
     private fun imagePickerRVSetting() {
         binding.rvImage.adapter = imagePickerAdapter
 
         imagePickerAdapter.setOnItemClickListener { i, imagePickerModel ->
-            imagePickerViewModel.setCheckedForImagePicker(i, !(imagePickerModel.isChecked))
+            if(imagePickerModel.type == ViewType.CAMERA) {
+                val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+                createImageUri(mActivity, "PictureCameraImageFolder"+ System.currentTimeMillis(), "image/jpeg")?.let { uri ->
+                    cameraResultUri = uri
+                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, cameraResultUri)
+                    Log.i("MYTAG", "카메라 이미지 uri ${cameraResultUri}")
+                    cameraLauncher.launch(takePictureIntent)
+//                    startActivityForResult(takePictureIntent, FLAG_REQ_CAMERA)
+                }
+            } else if(imagePickerModel.type == ViewType.ALBUM) {
+                imagePickerViewModel.setCheckedForImagePicker(i, !(imagePickerModel.isChecked))
+            }
         }
     }
 
@@ -123,6 +157,17 @@ class MultipleImagePickerActivity : ViewBindingBaseActivity<ActivityMultipleImag
         }
 
         imagePickerViewModel.imageItemList.observe(binding.root.context as LifecycleOwner) { imageItemList ->
+            if(imageItemList.isEmpty()) {
+                imagePickerViewModel.addCameraItem(imageItemList as ArrayList<ImagePickerModel>)
+            } else {
+                imagePickerViewModel.apply {
+                    if(imageItemList?.get(0)?.uri.toString() != "") {
+                        addCameraItem(imageItemList as ArrayList<ImagePickerModel>)
+                        return@observe
+                    }
+                }
+            }
+
             imagePickerAdapter.submitList(imageItemList.toMutableList())
             imagePickerAdapter.notifyDataSetChanged()
         }
@@ -138,13 +183,6 @@ class MultipleImagePickerActivity : ViewBindingBaseActivity<ActivityMultipleImag
         if (result.resultCode == RESULT_OK) {
             val data: Intent = result.data!!
             // RESULT_OK일 때 실행할 코드...
-//            try {
-//                mainViewModel.setSelectedImageItemList(result.data?.getParcelableArrayListExtra<ImagePickerModel>("uris")!!)
-//                Log.i("MYTAG", "넘어온 이미지 갯수: ${mainViewModel.selectedImageItemList.value?.size}")
-//            } catch (e : Exception) {
-//                Log.i("MYTAG", "${e.message}")
-//            }
-
             val intent = Intent(binding.root.context, MainActivity::class.java).apply {
                 putParcelableArrayListExtra("uris", result.data?.getParcelableArrayListExtra<ImagePickerModel>("uris")!! as ArrayList)
             }
@@ -155,4 +193,49 @@ class MultipleImagePickerActivity : ViewBindingBaseActivity<ActivityMultipleImag
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+    val cameraLauncher: ActivityResultLauncher<Intent> = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+        if (result.resultCode == RESULT_OK) {
+//            val data: Intent = result.data!!
+
+            CropImage.activity(cameraResultUri)
+                .setAutoZoomEnabled(false)
+                .setOutputCompressFormat(Bitmap.CompressFormat.PNG)
+                .start(mActivity)
+
+
+            val bitmap = Utility.loadBitmapFromMediaStoreBy(mActivity, cameraResultUri)
+            Log.i("MYTAG", "이미지 비트맵: ${bitmap}")
+
+            imagePath = Utility.absolutelyPath(mActivity, cameraResultUri) // 파일 경로 얻기
+
+            Log.i("MYTAG", "${cameraResultUri}")
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if(requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            val result: CropImage.ActivityResult = CropImage.getActivityResult(data)
+            if(resultCode == RESULT_OK) {
+                cameraResultUri = result.uri as Uri
+                Log.i("MYTAG", "크롭된 이미지 ${result.uri as Uri}")
+                cameraResultUri = Utility.fileUriToContentUri(mActivity, File(cameraResultUri.path))!!
+
+                deleteFile = File(imagePath) // 1. 사진 찍으면 생성된 이미지 파일 삭제
+                deleteFile.delete()
+
+                val intent = Intent(binding.root.context, MainActivity::class.java).apply {
+                    val a = ArrayList<ImagePickerModel>()
+                    a.add(ImagePickerModel(cameraResultUri, false, ViewType.CAMERA))
+                    putParcelableArrayListExtra("uris", a as ArrayList)
+                }
+                setResult(FLAG_REQ_CAMERA_CROP, intent)
+                onBackPressed()
+
+
+            }
+        }
+    }
 }

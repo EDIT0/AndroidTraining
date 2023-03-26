@@ -9,6 +9,8 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.domain.model.ImagePickerModel
+import com.example.domain.model.ViewType
+import com.example.multipleimagepicker.databinding.CameraItemBinding
 import com.example.multipleimagepicker.databinding.ImagePickerItemBinding
 import com.example.multipleimagepicker.viewmodel.ImagePickerViewModel
 
@@ -16,19 +18,48 @@ import com.example.multipleimagepicker.viewmodel.ImagePickerViewModel
  * @param parentViewModel The ImagePicker's ViewModel which holds each ImageItem
  * whose isChecked should be updated when checkbox checked.
  */
-class ImagePickerAdapter() : ListAdapter<ImagePickerModel, ImagePickerAdapter.ViewHolder>(diffUtil) {
+class ImagePickerAdapter() : ListAdapter<ImagePickerModel, RecyclerView.ViewHolder>(diffUtil) {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
 //        val _binding = ImagePickerItemBinding.inflate(LayoutInflater.from(parent.context), parent,false)
 //        val viewHolder = ViewHolder(_binding)
-        return ViewHolder(ImagePickerItemBinding.inflate(LayoutInflater.from(parent.context), parent,false))
+        if(viewType == ViewType.CAMERA) {
+            return CameraViewHolder(CameraItemBinding.inflate(LayoutInflater.from(parent.context), parent,false))
+        } else if(viewType == ViewType.ALBUM) {
+            return ImagePickerViewHolder(ImagePickerItemBinding.inflate(LayoutInflater.from(parent.context), parent,false))
+        } else {
+            return ImagePickerViewHolder(ImagePickerItemBinding.inflate(LayoutInflater.from(parent.context), parent,false))
+        }
+//        return ViewHolder(ImagePickerItemBinding.inflate(LayoutInflater.from(parent.context), parent,false))
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(getItem(position))
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        when(currentList[position].type) {
+            ViewType.CAMERA -> {
+                (holder as CameraViewHolder).bind(getItem(position))
+            }
+            ViewType.ALBUM -> {
+                (holder as ImagePickerViewHolder).bind(getItem(position))
+            }
+            else -> {
+
+            }
+        }
+
     }
 
-    inner class ViewHolder(val binding: ImagePickerItemBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class CameraViewHolder(val binding: CameraItemBinding) : RecyclerView.ViewHolder(binding.root) {
+
+        fun bind(imagePickerModel: ImagePickerModel) {
+            binding.root.setOnClickListener {
+                onItemClickListener?.let {
+                    it(adapterPosition, imagePickerModel)
+                }
+            }
+        }
+    }
+
+    inner class ImagePickerViewHolder(val binding: ImagePickerItemBinding) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(imagePickerModel: ImagePickerModel) {
 
@@ -60,9 +91,9 @@ class ImagePickerAdapter() : ListAdapter<ImagePickerModel, ImagePickerAdapter.Vi
         onItemClickListener = listener
     }
 
-//    override fun getItemViewType(position: Int): Int {
-//        return position
-//    }
+    override fun getItemViewType(position: Int): Int {
+        return currentList.get(position).type
+    }
 
     companion object {
         val diffUtil = object: DiffUtil.ItemCallback<ImagePickerModel>() {

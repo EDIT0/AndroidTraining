@@ -13,6 +13,7 @@ import androidx.activity.result.contract.ActivityResultContracts.*
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
+import com.example.data.util.FLAG_REQ_CAMERA_CROP
 import com.example.data.util.MessageSet
 import com.example.data.util.Utility
 import com.example.domain.model.ImagePickerModel
@@ -86,6 +87,9 @@ class MainActivity : ViewBindingBaseActivity<ActivityMainBinding>() {
             }
 
             Log.i("MYTAG", "${result}")
+        } else if(result.resultCode == FLAG_REQ_CAMERA_CROP) {
+            mainViewModel.setSelectedImageItemList(result.data?.getParcelableArrayListExtra<ImagePickerModel>("uris")!!)
+            mainViewModel.saveSelectedImagesToServer()
         }
     }
 

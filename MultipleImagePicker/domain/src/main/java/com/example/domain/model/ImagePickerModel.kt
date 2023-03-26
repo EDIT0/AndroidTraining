@@ -12,7 +12,13 @@ data class ImagePickerModel(
     @SerializedName("uri")
     var uri: Uri,
     @SerializedName("isChecked")
-    var isChecked: Boolean
-) : Parcelable, ImagePickerTypeModel {
+    var isChecked: Boolean,
+    var type: Int = ViewType.ALBUM
+) : Parcelable {
 
+}
+
+object ViewType {
+    const val CAMERA = 0
+    const val ALBUM = 1
 }

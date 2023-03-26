@@ -1,5 +1,6 @@
 package com.example.multipleimagepicker.viewmodel
 
+import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -8,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.data.util.MessageSet
 import com.example.data.util.SingleLiveEvent
 import com.example.domain.model.ImagePickerModel
+import com.example.domain.model.ViewType
 import com.example.domain.usecase.GetAlbumImageListUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -25,6 +27,11 @@ class ImagePickerViewModel (
 
     private val _imageItemList = MutableLiveData<MutableList<ImagePickerModel>>(mutableListOf())
     val imageItemList: LiveData<MutableList<ImagePickerModel>> = _imageItemList
+
+    fun addCameraItem(list: ArrayList<ImagePickerModel>) {
+        list.add(0, ImagePickerModel(Uri.parse("") ,false, ViewType.CAMERA))
+        _imageItemList.value = list as ArrayList
+    }
 
     private var imageLimitationCount = 10
 
