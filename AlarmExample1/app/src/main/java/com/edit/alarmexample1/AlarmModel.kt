@@ -4,7 +4,8 @@ data class AlarmModel(
     var alarmType: AlarmType,
     var id: Int,
     var finishDate: String,
-    var time: Long,
-    var isSwitch: Boolean
+    var remainingTime: Long,
+    var isSwitch: Boolean,
+    var repeatTime: Long = 0
 ) {
 }

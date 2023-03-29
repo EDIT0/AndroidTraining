@@ -1,12 +1,9 @@
 package com.edit.alarmexample1
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -20,11 +17,21 @@ class MainViewModel(
     var minute = -1
     var seconds = -1
 
-    private val _alarmSaveObserver = SingleLiveEvent<String>()
-    val alarmSaveObserver: LiveData<String> get() = _alarmSaveObserver
+    var secondsTime = -1
 
-    fun saveAlarm() {
-        _alarmSaveObserver.call()
+    private val _alarmSaveObserver = SingleLiveEvent<AlarmType>()
+    val alarmSaveObserver: LiveData<AlarmType> get() = _alarmSaveObserver
+
+    fun saveOneTimeAlarm() {
+        _alarmSaveObserver.value = AlarmType.ONE_TIME_ALARM_PER_DAY
+    }
+
+    fun saveRepeatAlarmPerDay() {
+        _alarmSaveObserver.value = AlarmType.REPEAT_ALARM_PER_DAY
+    }
+
+    fun saveRepeatAlarmPerTime() {
+        _alarmSaveObserver.value = AlarmType.ONE_TIME_ALARM_PER_TIME
     }
 
     private val _alarmList = MutableLiveData<MutableList<AlarmModel>>(mutableListOf())
@@ -53,6 +60,13 @@ class MainViewModel(
         _alarmList.value?.add(position, alarmModel)
         PreferencesManager.putAlarmList(app, alarmList.value as ArrayList<AlarmModel>)
         _alarmList.value = _alarmList.value?.toMutableList()
+    }
+
+    fun changePosition(old: Int, new: Int) {
+        val temp = _alarmList.value?.get(new)
+        _alarmList.value?.set(new, _alarmList.value!!.get(old))
+        _alarmList.value?.set(old, temp!!)
+        PreferencesManager.putAlarmList(app, alarmList.value as ArrayList<AlarmModel>)
     }
 
     val random = Random()

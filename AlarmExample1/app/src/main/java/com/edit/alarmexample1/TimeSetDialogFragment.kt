@@ -50,7 +50,7 @@ class TimeSetDialogFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.btnSave.setOnClickListener {
+        binding.btnOneTimeSave.setOnClickListener {
             (requireActivity() as MainActivity).apply {
                 mainViewModel.apply {
                     binding.apply {
@@ -75,7 +75,63 @@ class TimeSetDialogFragment : Fragment() {
                     seconds = binding.etSeconds.text.toString().toInt()
 
 
-                    mainViewModel.saveAlarm()
+                    mainViewModel.saveOneTimeAlarm()
+                }
+
+            }
+            (requireActivity() as MainActivity).apply {
+                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED)
+            }
+        }
+
+        binding.btnRepeatSavePerDay.setOnClickListener {
+            (requireActivity() as MainActivity).apply {
+                mainViewModel.apply {
+                    binding.apply {
+                        if(etYear.text.toString().isEmpty() ||
+                            etMonth.text.toString().isEmpty() ||
+                            etDay.text.toString().isEmpty() ||
+                            etHour.text.toString().isEmpty() ||
+                            etMinute.text.toString().isEmpty() ||
+                            etSeconds.text.toString().isEmpty()) {
+                            Toast.makeText(requireContext(), "날짜, 시간을 적어주세요.", Toast.LENGTH_SHORT).show()
+                            return@setOnClickListener
+                        }
+                    }
+
+
+                    year = binding.etYear.text.toString().toInt()
+                    month = binding.etMonth.text.toString().toInt()
+                    day = binding.etDay.text.toString().toInt()
+
+                    hour = binding.etHour.text.toString().toInt()
+                    minute = binding.etMinute.text.toString().toInt()
+                    seconds = binding.etSeconds.text.toString().toInt()
+
+
+                    mainViewModel.saveRepeatAlarmPerDay()
+                }
+
+            }
+            (requireActivity() as MainActivity).apply {
+                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED)
+            }
+        }
+
+        binding.btnRepeatSavePerTime.setOnClickListener {
+            (requireActivity() as MainActivity).apply {
+                mainViewModel.apply {
+                    binding.apply {
+                        if(etSecondsTime.text.toString().isEmpty()) {
+                            Toast.makeText(requireContext(), "시간을 적어주세요.", Toast.LENGTH_SHORT).show()
+                            return@setOnClickListener
+                        }
+                    }
+
+
+                    secondsTime = binding.etSecondsTime.text.toString().toInt()
+
+                    mainViewModel.saveRepeatAlarmPerTime()
                 }
 
             }

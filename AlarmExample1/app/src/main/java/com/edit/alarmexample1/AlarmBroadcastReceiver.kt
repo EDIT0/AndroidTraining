@@ -30,20 +30,20 @@ class AlarmBroadcastReceiver : BroadcastReceiver() {
                 Log.i("MYTAG", "BOOT_COMPLETED")
                 val alarmList = PreferencesManager.getAlarmList(context)
                 for(i in 0 until alarmList.size) {
-                    if(alarmList[i].alarmType == AlarmType.ONE_TIME_ALARM) {
+                    if(alarmList[i].alarmType == AlarmType.ONE_TIME_ALARM_PER_DAY) {
                         if(alarmList[i].isSwitch) {
-                            Log.i("MYTAG", "다시 알람 재등록 전: ${alarmList[i].id} / ${alarmList[i].time}")
+                            Log.i("MYTAG", "다시 알람 재등록 전: ${alarmList[i].id} / ${alarmList[i].remainingTime}")
                             val newAlarmData = AlarmModel(
                                 alarmList[i].alarmType,
                                 alarmList[i].id,
-                                Alarm.stringDateToDate("${Alarm.convertDateDayString("${alarmList[i].finishDate}")}").toString(),
-                                Alarm.calculateTime("${Alarm.convertDateDayString("${alarmList[i].finishDate}")}"),
+                                Alarm.stringDateToDate(Alarm.convertDateDayString(alarmList[i].finishDate)).toString(),
+                                Alarm.calculateTime(Alarm.convertDateDayString(alarmList[i].finishDate)),
                                 true
                             )
-                            if(newAlarmData.time > 0) {
+                            if(newAlarmData.remainingTime > 0) {
                                 // 설정해놓은 시간이 안지났으면 알람 재등록
                                 alarmList[i] = newAlarmData
-                                Alarm.registerAlarmOneTime(context, newAlarmData.id, newAlarmData.time)
+                                Alarm.registerAlarmOneTimePerDay(context, newAlarmData.id, newAlarmData.remainingTime)
                             } else {
                                 // 설정해놓은 시간이 지났으면 다음날 같은 시간 정보를 넣고 알람 오프
 //                                newAlarmData.finishDate = Alarm.calculateTimeDate("${Alarm.convertDatePlusDayString("${alarmList[i].finishDate}")}").toString()
@@ -51,12 +51,58 @@ class AlarmBroadcastReceiver : BroadcastReceiver() {
                                 newAlarmData.isSwitch = false
                                 alarmList[i] = newAlarmData
                             }
-                            Log.i("MYTAG", "다시 알람 재등록 후: ${alarmList[i].id} / ${alarmList[i].time}")
+                            Log.i("MYTAG", "다시 알람 재등록 후: ${alarmList[i].id} / ${alarmList[i].remainingTime}")
                             PreferencesManager.putAlarmList(context, alarmList)
                         }
-                    } else if(alarmList[i].alarmType == AlarmType.REPEAT_ALARM) {
+                    } else if(alarmList[i].alarmType == AlarmType.REPEAT_ALARM_PER_DAY) {
                         if(alarmList[i].isSwitch) {
-
+                            Log.i("MYTAG", "다시 알람 재등록 전: ${alarmList[i].id} / ${alarmList[i].remainingTime}")
+                            val newAlarmData = AlarmModel(
+                                alarmList[i].alarmType,
+                                alarmList[i].id,
+                                Alarm.stringDateToDate(Alarm.convertDateDayString(alarmList[i].finishDate)).toString(),
+                                Alarm.calculateTime(Alarm.convertDateDayString(alarmList[i].finishDate)),
+                                true
+                            )
+                            if(newAlarmData.remainingTime > 0) {
+                                // 설정해놓은 시간이 안지났으면 알람 재등록
+                                alarmList[i] = newAlarmData
+                                Alarm.registerAlarmRepeatPerDay(context, newAlarmData.id, newAlarmData.remainingTime)
+                            } else {
+                                // 설정해놓은 시간이 지났으면 다음날 같은 시간 정보를 넣고 알람 오프
+                                newAlarmData.finishDate = Alarm.stringDateToDate(Alarm.convertDatePlusDayString(alarmList[i].finishDate)).toString()
+                                newAlarmData.remainingTime = Alarm.calculateTime(Alarm.convertDatePlusDayString(alarmList[i].finishDate))
+                                newAlarmData.isSwitch = true
+                                alarmList[i] = newAlarmData
+                            }
+                            Log.i("MYTAG", "다시 알람 재등록 후: ${alarmList[i].id} / ${alarmList[i].remainingTime}")
+                            PreferencesManager.putAlarmList(context, alarmList)
+                        }
+                    } else if(alarmList[i].alarmType == AlarmType.ONE_TIME_ALARM_PER_TIME) {
+                        if(alarmList[i].isSwitch) {
+                            Log.i("MYTAG", "다시 알람 재등록 전: ${alarmList[i].id} / ${alarmList[i].remainingTime}")
+                            val newAlarmData = AlarmModel(
+                                alarmList[i].alarmType,
+                                alarmList[i].id,
+                                alarmList[i].finishDate,
+                                alarmList[i].remainingTime,
+                                true,
+                                alarmList[i].repeatTime
+                            )
+                            Log.i("MYTAG", "${newAlarmData.remainingTime} / ${System.currentTimeMillis()}")
+                            if((newAlarmData.remainingTime + (newAlarmData.repeatTime * 1000)) > System.currentTimeMillis()) {
+                                // 설정해놓은 시간이 안지났으면 알람 재등록
+                                newAlarmData.repeatTime = ((newAlarmData.remainingTime + (newAlarmData.repeatTime * 1000)) - System.currentTimeMillis()) / 1000
+                                Log.i("MYTAG", "새롭게 계산된 남은 시간: ${newAlarmData.repeatTime}")
+                                alarmList[i] = newAlarmData
+                                Alarm.registerAlarmOneTimePerTime(context, newAlarmData.id, alarmList[i].repeatTime)
+                            } else {
+                                // 설정해놓은 시간이 지났으면 다음날 같은 시간 정보를 넣고 알람 오프
+                                newAlarmData.isSwitch = false
+                                alarmList[i] = newAlarmData
+                            }
+                            Log.i("MYTAG", "다시 알람 재등록 후: ${alarmList[i].id} / ${alarmList[i].remainingTime}")
+                            PreferencesManager.putAlarmList(context, alarmList)
                         }
                     }
                 }
@@ -65,7 +111,7 @@ class AlarmBroadcastReceiver : BroadcastReceiver() {
         } else {
             val powerManager = context?.getSystemService(Context.POWER_SERVICE) as PowerManager
             val wakeLock = powerManager.newWakeLock(
-                PowerManager.FULL_WAKE_LOCK or
+                PowerManager.SCREEN_BRIGHT_WAKE_LOCK or
                         PowerManager.ACQUIRE_CAUSES_WAKEUP or
                         PowerManager.ON_AFTER_RELEASE, "My:Tag"
             )
@@ -82,27 +128,51 @@ class AlarmBroadcastReceiver : BroadcastReceiver() {
     }
 
     private fun checkAlarmType(context: Context, intent: Intent) {
-        if(intent.getStringExtra("alarmType") == AlarmType.REPEAT_ALARM.toString()) {
+        Log.i("MYTAG", "${intent.getStringExtra("alarmType")}")
+        if(intent.getStringExtra("alarmType") == AlarmType.REPEAT_ALARM_PER_DAY.toString()) {
             Log.i("MYTAG", "${intent.getIntExtra("id", 0)}")
             Log.i("MYTAG", "${intent.getLongExtra("time", 0)}")
 //            Alarm.registerAlarmRepeat(context, intent.getIntExtra("requestCode", 0), intent.getLongExtra("time", 0))
-        } else if(intent.getStringExtra("alarmType") == AlarmType.ONE_TIME_ALARM.toString()) {
-            Log.i("MYTAG", "${intent.getStringExtra("alarmType")}")
 
             val alarmList = PreferencesManager.getAlarmList(context)
 
             for(i in 0 until alarmList.size) {
                 if(intent.getIntExtra("id", 0) == alarmList[i].id){
-//                    alarmList.removeAt(i)
-
-                    alarmList[i].isSwitch = false
+                    val finishDate = alarmList[i].finishDate
+                    alarmList[i].finishDate = Alarm.stringDateToDate(Alarm.convertDatePlusDayString(finishDate)).toString()
+                    alarmList[i].remainingTime = Alarm.calculateTime(Alarm.convertDatePlusDayString(finishDate))
+                    alarmList[i].isSwitch = true
                     PreferencesManager.putAlarmList(context, alarmList)
-                    Alarm.unregisterAlarmOneTime(context, alarmList[i].id)
+                    Alarm.registerAlarmRepeatPerDay(context, alarmList[i].id, alarmList[i].remainingTime)
                     return
                 }
             }
 
+        } else if(intent.getStringExtra("alarmType") == AlarmType.ONE_TIME_ALARM_PER_DAY.toString()) {
+            val alarmList = PreferencesManager.getAlarmList(context)
 
+            for(i in 0 until alarmList.size) {
+                if(intent.getIntExtra("id", 0) == alarmList[i].id){
+                    alarmList[i].isSwitch = false
+                    PreferencesManager.putAlarmList(context, alarmList)
+                    Alarm.unregisterAlarm(context, alarmList[i].id)
+                    return
+                }
+            }
+        } else if(intent.getStringExtra("alarmType") == AlarmType.ONE_TIME_ALARM_PER_TIME.toString()) {
+            val alarmList = PreferencesManager.getAlarmList(context)
+
+            for(i in 0 until alarmList.size) {
+                if(intent.getIntExtra("id", 0) == alarmList[i].id){
+                    alarmList[i].finishDate = alarmList[i].finishDate
+                    alarmList[i].remainingTime = alarmList[i].remainingTime
+                    alarmList[i].isSwitch = false
+                    alarmList[i].repeatTime = alarmList[i].finishDate.toLong()
+                    PreferencesManager.putAlarmList(context, alarmList)
+                    Alarm.unregisterAlarm(context, alarmList[i].id)
+                    return
+                }
+            }
         }
     }
 

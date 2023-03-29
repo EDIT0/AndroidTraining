@@ -38,7 +38,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:hint="일"
-            android:text="28"/>
+            android:text="29" />
 
 
     </LinearLayout>
@@ -77,12 +77,50 @@
     </LinearLayout>
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btnSave"
+        android:id="@+id/btnOneTimeSave"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="저장"
+        android:text="일회성 알람 저장"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/timeLayout" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnRepeatSavePerDay"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="반복 알람 저장 (일 기준)"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnOneTimeSave" />
+
+    <LinearLayout
+        android:id="@+id/secondsLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnRepeatSavePerDay">
+
+        <EditText
+            android:id="@+id/etSecondsTime"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="초" />
+
+
+    </LinearLayout>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnRepeatSavePerTime"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="반복 알람 저장 (시간 기준)"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/secondsLayout" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.os.SystemClock
 import android.util.Log
 import android.view.View
-import androidx.core.view.accessibility.AccessibilityEventCompat.setAction
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -15,8 +14,10 @@ import com.edit.alarmexample1.Alarm.calculateTime
 import com.edit.alarmexample1.Alarm.stringDateToDate
 import com.edit.alarmexample1.Alarm.convertDateDayString
 import com.edit.alarmexample1.Alarm.convertDatePlusDayString
-import com.edit.alarmexample1.Alarm.registerAlarmOneTime
-import com.edit.alarmexample1.Alarm.unregisterAlarmOneTime
+import com.edit.alarmexample1.Alarm.registerAlarmOneTimePerDay
+import com.edit.alarmexample1.Alarm.registerAlarmRepeatPerDay
+import com.edit.alarmexample1.Alarm.registerAlarmOneTimePerTime
+import com.edit.alarmexample1.Alarm.unregisterAlarm
 import com.edit.alarmexample1.databinding.ActivityMainBinding
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.snackbar.Snackbar
@@ -64,6 +65,8 @@ class MainActivity : AppCompatActivity() {
                 viewHolder: RecyclerView.ViewHolder,
                 target: RecyclerView.ViewHolder
             ): Boolean {
+                mainViewModel.changePosition(viewHolder.adapterPosition, target.adapterPosition)
+                alarmListAdapter.notifyItemMoved(viewHolder.adapterPosition,target.adapterPosition)
                 return true
             }
 
@@ -72,13 +75,14 @@ class MainActivity : AppCompatActivity() {
                 val alarmModel = alarmListAdapter.currentList[position]
 
                 mainViewModel.deleteOneTimeAlarm(alarmModel)
+                unregisterAlarm(binding.root.context, alarmModel.id)
 
-                Snackbar.make(binding.root, "Delete Alarm", Snackbar.LENGTH_LONG).apply {
-                    setAction("되돌리기") {
-                        mainViewModel.saveOneTimeAlarm(alarmModel, position)
-                    }
-                    show()
-                }
+//                Snackbar.make(binding.root, "Delete Alarm", Snackbar.LENGTH_LONG).apply {
+//                    setAction("되돌리기") {
+//                        mainViewModel.saveOneTimeAlarm(alarmModel, position)
+//                    }
+//                    show()
+//                }
             }
 
         }
@@ -89,61 +93,109 @@ class MainActivity : AppCompatActivity() {
 
         alarmListAdapter.setOnItemClickListener { i, alarmModel ->
             Log.i("MYTAG", "${alarmModel}")
-            if(alarmModel.isSwitch) {
-                /**
-                 * 알람이 켜져있는 경우 off로 만들어야한다.
-                 * 이 알람이 울리는 날짜 상관없이 시간만 잘 저장하고 isSwitch off 해주면 된다.
-                 * id를 이용해 알람 등록을 해제한다.
-                 * */
-                val newAlarmData = AlarmModel(
-                    alarmModel.alarmType,
-                    alarmModel.id,
-                    stringDateToDate("${convertDateDayString("${alarmModel.finishDate}")}").toString(),
-                    calculateTime("${convertDateDayString("${alarmModel.finishDate}")}"),
-                    false
-                )
-                mainViewModel.changeAlarmList(newAlarmData, i)
-                unregisterAlarmOneTime(binding.root.context, alarmModel.id)
-                PreferencesManager.putAlarmList(binding.root.context, mainViewModel.alarmList.value as ArrayList<AlarmModel>)
-            } else {
-                /**
-                 * 알람이 꺼져있는 경우 on으로 만들어야한다.
-                 * 알람을 on 시킬 때는 2가지로 경우로 나뉘게 된다.
-                 * */
-                Log.i("MYTAG", "이거뭐임? ${alarmModel.finishDate}") // Wed Mar 29 21:11:00 GMT+09:00 2023
-                Log.i("MYTAG", "${convertDateDayString("${alarmModel.finishDate}")}") // 2023-03-30 21:11:00
+            when(alarmModel.alarmType) {
+                AlarmType.ONE_TIME_ALARM_PER_DAY, AlarmType.REPEAT_ALARM_PER_DAY -> {
+                    if(alarmModel.isSwitch) {
+                        /**
+                         * 알람이 켜져있는 경우 off로 만들어야한다.
+                         * 이 알람이 울리는 날짜 상관없이 시간만 잘 저장하고 isSwitch off 해주면 된다.
+                         * id를 이용해 알람 등록을 해제한다.
+                         * */
+                        val newAlarmData = AlarmModel(
+                            alarmModel.alarmType,
+                            alarmModel.id,
+                            stringDateToDate(convertDateDayString(alarmModel.finishDate)).toString(),
+                            calculateTime(convertDateDayString(alarmModel.finishDate)),
+                            false
+                        )
+                        mainViewModel.changeAlarmList(newAlarmData, i)
+                        if(alarmModel.alarmType == AlarmType.ONE_TIME_ALARM_PER_DAY) {
+                            unregisterAlarm(binding.root.context, alarmModel.id)
+                        } else if(alarmModel.alarmType == AlarmType.REPEAT_ALARM_PER_DAY) {
+                            unregisterAlarm(binding.root.context, alarmModel.id)
+                        }
 
-                if(calculateTime("${convertDateDayString("${alarmModel.finishDate}")}") > 0) {
-                    /**
-                     * 시간이 현재 시간보다 뒤에 있는 경우
-                     * 저장되어 있는 Date를 이용하여 알람을 등록해주면 된다.
-                     * */
-                    newAlarmData = AlarmModel(
-                        alarmModel.alarmType,
-                        alarmModel.id,
-                        stringDateToDate("${convertDateDayString("${alarmModel.finishDate}")}").toString(),
-                        calculateTime("${convertDateDayString("${alarmModel.finishDate}")}"),
-                        true
-                    )
-                } else {
-                    /**
-                     * 시간이 현재 시간보다 앞에 있을 경우
-                     * 다음날을 이 시간을 계산해서 알람을 등록해준다.
-                     * */
-                    val date = convertDatePlusDayString("${alarmModel.finishDate}")
-                    newAlarmData = AlarmModel(
-                        alarmModel.alarmType,
-                        alarmModel.id,
-                        stringDateToDate("${date}").toString(),
-                        calculateTime("${date}"),
-                        true
-                    )
+                        PreferencesManager.putAlarmList(binding.root.context, mainViewModel.alarmList.value as ArrayList<AlarmModel>)
+                    } else {
+                        /**
+                         * 알람이 꺼져있는 경우 on으로 만들어야한다.
+                         * 알람을 on 시킬 때는 2가지로 경우로 나뉘게 된다.
+                         * */
+                        Log.i("MYTAG", "이거뭐임? ${alarmModel.finishDate}") // Wed Mar 29 21:11:00 GMT+09:00 2023
+                        Log.i("MYTAG", convertDateDayString(alarmModel.finishDate)) // 2023-03-30 21:11:00
+
+                        if(calculateTime(convertDateDayString(alarmModel.finishDate)) > 0) {
+                            /**
+                             * 시간이 현재 시간보다 뒤에 있는 경우
+                             * 저장되어 있는 Date를 이용하여 알람을 등록해주면 된다.
+                             * */
+                            newAlarmData = AlarmModel(
+                                alarmModel.alarmType,
+                                alarmModel.id,
+                                stringDateToDate(convertDateDayString(alarmModel.finishDate)).toString(),
+                                calculateTime(convertDateDayString(alarmModel.finishDate)),
+                                true
+                            )
+                        } else {
+                            /**
+                             * 시간이 현재 시간보다 앞에 있을 경우
+                             * 다음날을 이 시간을 계산해서 알람을 등록해준다.
+                             * */
+                            val date = convertDatePlusDayString(alarmModel.finishDate)
+                            newAlarmData = AlarmModel(
+                                alarmModel.alarmType,
+                                alarmModel.id,
+                                stringDateToDate(date).toString(),
+                                calculateTime(date),
+                                true
+                            )
+                        }
+
+                        mainViewModel.changeAlarmList(newAlarmData, i)
+
+                        if(alarmModel.alarmType == AlarmType.ONE_TIME_ALARM_PER_DAY) {
+                            registerAlarmOneTimePerDay(binding.root.context, alarmModel.id, calculateTime(convertDateDayString(alarmModel.finishDate)))
+                        } else if(alarmModel.alarmType == AlarmType.REPEAT_ALARM_PER_DAY) {
+                            registerAlarmRepeatPerDay(binding.root.context, alarmModel.id, calculateTime(convertDateDayString(alarmModel.finishDate)))
+                        }
+
+                        PreferencesManager.putAlarmList(binding.root.context, mainViewModel.alarmList.value as ArrayList<AlarmModel>)
+                    }
                 }
+                AlarmType.ONE_TIME_ALARM_PER_TIME -> {
+                    if(alarmModel.isSwitch) {
+                        val newAlarmData = AlarmModel(
+                            alarmModel.alarmType,
+                            alarmModel.id,
+                            alarmModel.finishDate,
+                            alarmModel.remainingTime,
+                            false,
+                            alarmModel.repeatTime
+                        )
+                        mainViewModel.changeAlarmList(newAlarmData, i)
+                        unregisterAlarm(binding.root.context, alarmModel.id)
 
-                mainViewModel.changeAlarmList(newAlarmData, i)
+                        PreferencesManager.putAlarmList(binding.root.context, mainViewModel.alarmList.value as ArrayList<AlarmModel>)
+                    } else {
+                        newAlarmData = AlarmModel(
+                            alarmModel.alarmType,
+                            alarmModel.id,
+                            alarmModel.finishDate,
+                            System.currentTimeMillis(),
+                            true,
+                            alarmModel.repeatTime
+                        )
 
-                registerAlarmOneTime(binding.root.context, alarmModel.id, calculateTime("${convertDateDayString("${alarmModel.finishDate}")}"))
-                PreferencesManager.putAlarmList(binding.root.context, mainViewModel.alarmList.value as ArrayList<AlarmModel>)
+                        mainViewModel.changeAlarmList(newAlarmData, i)
+
+                        registerAlarmOneTimePerTime(binding.root.context, alarmModel.id, alarmModel.repeatTime)
+
+                        PreferencesManager.putAlarmList(binding.root.context, mainViewModel.alarmList.value as ArrayList<AlarmModel>)
+                    }
+                }
+                else -> {
+
+                }
             }
         }
     }
@@ -152,27 +204,85 @@ class MainActivity : AppCompatActivity() {
         mainViewModel.alarmSaveObserver.observe(this as LifecycleOwner) {
             Log.i("MYTAG", "${SystemClock.elapsedRealtime()}")
 
-            mainViewModel.apply {
-                val time = calculateTime("${year}-${month}-${day} ${hour}:${minute}:${seconds}")
+            when(it) {
+                AlarmType.ONE_TIME_ALARM_PER_DAY -> {
+                    mainViewModel.apply {
+                        val time = calculateTime("${year}-${month}-${day} ${hour}:${minute}:${seconds}")
 
-                while(true) {
-                    val randomId = mainViewModel.rand(0, 10000)
-                    val a = isNumberInArrayList(randomId, mainViewModel.alarmList.value as ArrayList<AlarmModel>)
-                    if(a) {
+                        while(true) {
+                            val randomId = mainViewModel.rand(0, 10000)
+                            val a = isNumberInArrayList(randomId, mainViewModel.alarmList.value as ArrayList<AlarmModel>)
+                            if(a) {
 
-                    } else {
-                        id = randomId
-                        break
+                            } else {
+                                id = randomId
+                                break
+                            }
+                        }
+
+                        Log.i("MYTAG", "${id} / ${time}")
+
+                        addAlarmList(AlarmModel(AlarmType.ONE_TIME_ALARM_PER_DAY, id, stringDateToDate("${year}-${month}-${day} ${hour}:${minute}:${seconds}").toString(), time, true))
+                        registerAlarmOneTimePerDay(binding.root.context, id, time)
+
+                        PreferencesManager.putAlarmList(binding.root.context, alarmList.value as ArrayList<AlarmModel>)
                     }
                 }
+                AlarmType.REPEAT_ALARM_PER_DAY -> {
+                    mainViewModel.apply {
+                        val time = calculateTime("${year}-${month}-${day} ${hour}:${minute}:${seconds}")
 
-                Log.i("MYTAG", "${id} / ${time}")
+                        while(true) {
+                            val randomId = mainViewModel.rand(0, 10000)
+                            val a = isNumberInArrayList(randomId, mainViewModel.alarmList.value as ArrayList<AlarmModel>)
+                            if(a) {
 
-                addAlarmList(AlarmModel(AlarmType.ONE_TIME_ALARM, id, stringDateToDate("${year}-${month}-${day} ${hour}:${minute}:${seconds}").toString(), time, true))
-                registerAlarmOneTime(binding.root.context, id, time)
+                            } else {
+                                id = randomId
+                                break
+                            }
+                        }
 
-                PreferencesManager.putAlarmList(binding.root.context, alarmList.value as ArrayList<AlarmModel>)
+                        Log.i("MYTAG", "${id} / ${time}")
+
+                        addAlarmList(AlarmModel(AlarmType.REPEAT_ALARM_PER_DAY, id, stringDateToDate("${year}-${month}-${day} ${hour}:${minute}:${seconds}").toString(), time, true))
+                        registerAlarmRepeatPerDay(binding.root.context, id, time)
+
+                        PreferencesManager.putAlarmList(binding.root.context, alarmList.value as ArrayList<AlarmModel>)
+                    }
+                }
+                AlarmType.ONE_TIME_ALARM_PER_TIME -> {
+                    mainViewModel.apply {
+                        val time = secondsTime.toLong()
+
+                        while(true) {
+                            val randomId = mainViewModel.rand(0, 10000)
+                            val a = isNumberInArrayList(randomId, mainViewModel.alarmList.value as ArrayList<AlarmModel>)
+                            if(a) {
+
+                            } else {
+                                id = randomId
+                                break
+                            }
+                        }
+
+                        Log.i("MYTAG", "${id} / ${time} / ${System.currentTimeMillis()}")
+                        /**
+                         * 여기서 finishDate: String 과 remainingTime: Long 은 이름하고 다른 용도로 사용됌
+                         * finishDate는 최초 설정한 시간(초)을 가지고 있음
+                         * remainingTime은 시작시간을 가지고 있음
+                         * */
+                        addAlarmList(AlarmModel(AlarmType.ONE_TIME_ALARM_PER_TIME, id, time.toString(), System.currentTimeMillis(), true, time))
+                        registerAlarmOneTimePerTime(binding.root.context, id, time)
+
+                        PreferencesManager.putAlarmList(binding.root.context, alarmList.value as ArrayList<AlarmModel>)
+                    }
+                }
+                else -> {
+
+                }
             }
+
         }
 
         mainViewModel.alarmList.observe(this as LifecycleOwner) {

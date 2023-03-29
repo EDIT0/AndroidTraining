@@ -24,9 +24,15 @@ class AlarmListAdapter() : ListAdapter<AlarmModel, AlarmListAdapter.ViewHolder>(
         fun bind(alarmModel: AlarmModel) {
 
             binding.tvId.text = "알람 고유 번호: " + alarmModel.id.toString()
-            binding.tvFinishDate.text = "${Alarm.convertDateDayString(alarmModel.finishDate)}"
-            binding.tvTime.text = alarmModel.time.toString()
+            try {
+                binding.tvFinishDate.text = "${Alarm.convertDateDayString(alarmModel.finishDate)}"
+            } catch (e: Exception) {
+
+            }
+
+            binding.tvTime.text = alarmModel.remainingTime.toString()
             binding.tbSwitch.setChecked(alarmModel.isSwitch)
+            binding.tvRepeatTime.text = alarmModel.repeatTime.toString()
 
             binding.root.setOnClickListener {
                 onItemClickListener?.let {

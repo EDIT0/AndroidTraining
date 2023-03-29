@@ -19,13 +19,13 @@ object Alarm {
         alarmManager = context.getSystemService(AppCompatActivity.ALARM_SERVICE) as AlarmManager
     }
 
-    fun registerAlarmRepeat(context: Context, requestCode: Int, time: Long){
+    fun registerAlarmRepeatPerDay(context: Context, requestCode: Int, time: Long){
         if(!::alarmManager.isInitialized) {
             makeAlarmManager(context)
         }
 
         val intent1 = Intent(context, AlarmBroadcastReceiver::class.java).apply {
-            putExtra("alarmType", AlarmType.REPEAT_ALARM.toString())
+            putExtra("alarmType", AlarmType.REPEAT_ALARM_PER_DAY.toString())
             putExtra("id", requestCode)
             putExtra("time", time)
         }
@@ -38,24 +38,13 @@ object Alarm {
 //        Toast.makeText(context, "Exact periodic Alarm On", Toast.LENGTH_SHORT).show()
     }
 
-    fun unregisterAlarmRepeat(context: Context, requestCode: Int) {
-        if(!::alarmManager.isInitialized) {
-            makeAlarmManager(context)
-        }
-
-        pendingIntent = PendingIntent.getBroadcast(context, requestCode, Intent(context, AlarmBroadcastReceiver::class.java), PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE)
-
-        alarmManager.cancel(pendingIntent)
-//        Toast.makeText(context, "Exact periodic Alarm Off", Toast.LENGTH_SHORT).show()
-    }
-
-    fun registerAlarmOneTime(context: Context, requestCode: Int, time: Long){
+    fun registerAlarmOneTimePerTime(context: Context, requestCode: Int, time: Long){
         if(!::alarmManager.isInitialized) {
             makeAlarmManager(context)
         }
 
         val intent1 = Intent(context, AlarmBroadcastReceiver::class.java).apply {
-            putExtra("alarmType", AlarmType.ONE_TIME_ALARM.toString())
+            putExtra("alarmType", AlarmType.ONE_TIME_ALARM_PER_TIME.toString())
             putExtra("id", requestCode)
             putExtra("time", time)
         }
@@ -68,7 +57,7 @@ object Alarm {
 //        Toast.makeText(context, "Exact periodic Alarm On", Toast.LENGTH_SHORT).show()
     }
 
-    fun unregisterAlarmOneTime(context: Context, requestCode: Int) {
+    fun unregisterAlarm(context: Context, requestCode: Int) {
         if(!::alarmManager.isInitialized) {
             makeAlarmManager(context)
         }
@@ -78,6 +67,37 @@ object Alarm {
         alarmManager.cancel(pendingIntent)
 //        Toast.makeText(context, "Exact periodic Alarm Off", Toast.LENGTH_SHORT).show()
     }
+
+    fun registerAlarmOneTimePerDay(context: Context, requestCode: Int, time: Long){
+        if(!::alarmManager.isInitialized) {
+            makeAlarmManager(context)
+        }
+
+        val intent1 = Intent(context, AlarmBroadcastReceiver::class.java).apply {
+            putExtra("alarmType", AlarmType.ONE_TIME_ALARM_PER_DAY.toString())
+            putExtra("id", requestCode)
+            putExtra("time", time)
+        }
+        pendingIntent = PendingIntent.getBroadcast(context, requestCode, intent1, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE)
+
+        val repeatInterval: Long = time * 1000
+        val triggerTime = (SystemClock.elapsedRealtime() + repeatInterval)
+        Log.i("MYTAG", "트리거 타임 : ${triggerTime}")
+        alarmManager.setExactAndAllowWhileIdle(AlarmManager.ELAPSED_REALTIME_WAKEUP, triggerTime, pendingIntent)
+
+//        Toast.makeText(context, "Exact periodic Alarm On", Toast.LENGTH_SHORT).show()
+    }
+
+//    fun unregisterAlarmOneTime(context: Context, requestCode: Int) {
+//        if(!::alarmManager.isInitialized) {
+//            makeAlarmManager(context)
+//        }
+//
+//        pendingIntent = PendingIntent.getBroadcast(context, requestCode, Intent(context, AlarmBroadcastReceiver::class.java), PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE)
+//
+//        alarmManager.cancel(pendingIntent)
+////        Toast.makeText(context, "Exact periodic Alarm Off", Toast.LENGTH_SHORT).show()
+//    }
 
 
     private val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
