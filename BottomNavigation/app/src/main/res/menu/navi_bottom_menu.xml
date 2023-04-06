@@ -5,14 +5,27 @@
     <item
         android:id="@+id/oneFragment"
         android:enabled="true"
+        android:icon="@drawable/ic_baseline_home_24"
         android:title="1첫번째" />
 
     <item
         android:id="@+id/twoFragment"
         android:enabled="true"
+        android:icon="@drawable/ic_baseline_music_note_24"
         android:title="2두번째" />
+
+    <item android:id="@+id/blank"
+        android:enabled="false"/>
+
     <item
         android:id="@+id/threeFragment"
         android:enabled="true"
+        android:icon="@drawable/ic_baseline_local_airport_24"
         android:title="3세번째" />
+
+    <item
+        android:id="@+id/fourFragment"
+        android:enabled="true"
+        android:icon="@drawable/ic_baseline_local_airport_24"
+        android:title="4네번째" />
 </menu>

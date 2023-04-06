@@ -33,6 +33,7 @@ class OneFragment : Fragment() {
 
         fragmentOneBinding.tvOne.setOnClickListener {
             (requireActivity() as MainActivity).showToast("${TAG}")
+            fragmentOneBinding.tvOne.text = "One"
         }
     }
 
