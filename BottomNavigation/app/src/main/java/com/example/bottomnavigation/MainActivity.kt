@@ -1,11 +1,14 @@
 package com.example.bottomnavigation
 
+import android.graphics.Color
 import android.os.Bundle
+import android.view.Gravity
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentManager
 import com.example.bottomnavigation.databinding.ActivityMainBinding
+import com.google.android.material.badge.BadgeDrawable
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.shape.CornerFamily
 import com.google.android.material.shape.MaterialShapeDrawable
@@ -23,6 +26,8 @@ class MainActivity : AppCompatActivity() {
     private var threeFragment: ThreeFragment? = null
 
     private var toast: Toast? = null
+
+    private lateinit var badgeDrawable: BadgeDrawable
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -77,6 +82,13 @@ class MainActivity : AppCompatActivity() {
         activityMainBinding.fab.setOnClickListener {
             showToast("Clicked Fab")
         }
+
+        badgeDrawable = activityMainBinding.bottomNavigation.getOrCreateBadge(R.id.threeFragment)
+        badgeDrawable.isVisible = true
+        badgeDrawable.number = 10
+        badgeDrawable.backgroundColor = Color.parseColor("#5BFFB0")
+        badgeDrawable.badgeGravity = BadgeDrawable.TOP_START
+
 
     }
 
