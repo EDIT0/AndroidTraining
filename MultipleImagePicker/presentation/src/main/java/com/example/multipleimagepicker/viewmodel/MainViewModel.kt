@@ -3,6 +3,7 @@ package com.example.multipleimagepicker.viewmodel
 import android.app.Application
 import android.database.Cursor
 import android.graphics.Bitmap
+import android.media.MediaScannerConnection
 import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
@@ -39,6 +40,11 @@ class MainViewModel(
     var photoURIList: ArrayList<Uri> = ArrayList()
     var imagePathList = ArrayList<String>()
     lateinit var deleteFile: File
+
+    // 미디어 데이터베이스에서 해당 파일 정보 삭제
+    val resolver = app.contentResolver
+    val deleteUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+    val selection = MediaStore.Images.Media.DATA + "=?"
 
     fun setSelectedImageItemList(list: ArrayList<ImagePickerModel>) {
         _selectedImageItemList.value = list.toMutableList()
@@ -125,6 +131,11 @@ class MainViewModel(
              * */
             deleteFile = File(imagePath) // 1. 사진 찍으면 생성된 이미지 파일 삭제
             deleteFile.delete()
+
+            val selectionArgs = arrayOf(imagePath)
+            resolver.delete(deleteUri, selection, selectionArgs)
+            // 삭제된 파일이 앨범 등에서 보이지 않도록 미디어 스캐닝
+            MediaScannerConnection.scanFile(app, arrayOf(imagePath), null, null)
         }
 
         // 가져온 이미지 해상도 리사이즈 후 만들기
@@ -143,6 +154,10 @@ class MainViewModel(
              * */
             deleteFile = File(imagePath) // 1. 사진 찍으면 생성된 이미지 파일 삭제
             deleteFile.delete()
+            val selectionArgs = arrayOf(imagePath)
+            resolver.delete(deleteUri, selection, selectionArgs)
+            // 삭제된 파일이 앨범 등에서 보이지 않도록 미디어 스캐닝
+            MediaScannerConnection.scanFile(app, arrayOf(imagePath), null, null)
         }
 
         for(i in 0 until _selectedImageItemList.value?.size!!) {
@@ -203,6 +218,10 @@ class MainViewModel(
             Log.i("MYTAG", "삭제${i}")
             deleteFile = File(imagePathList[i])
             deleteFile.delete()
+            val selectionArgs = arrayOf(imagePathList[i])
+            resolver.delete(deleteUri, selection, selectionArgs)
+            // 삭제된 파일이 앨범 등에서 보이지 않도록 미디어 스캐닝
+            MediaScannerConnection.scanFile(app, arrayOf(imagePathList[i]), null, null)
         }
         imagePathList.clear()
         photoURIList.clear()

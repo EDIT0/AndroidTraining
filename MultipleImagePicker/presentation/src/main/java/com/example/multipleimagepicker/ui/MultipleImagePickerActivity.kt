@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.ContentValues
 import android.content.Intent
 import android.graphics.Bitmap
+import android.media.MediaScannerConnection
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -14,10 +15,8 @@ import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
-import androidx.exifinterface.media.ExifInterface
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
-import com.example.data.util.FLAG_REQ_CAMERA
 import com.example.data.util.FLAG_REQ_CAMERA_CROP
 import com.example.data.util.MessageSet
 import com.example.data.util.Utility
@@ -32,9 +31,8 @@ import com.example.multipleimagepicker.viewmodel.ImagePickerViewModelFactory
 import com.theartofdev.edmodo.cropper.CropImage
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
-import java.io.IOException
 import javax.inject.Inject
-import kotlin.collections.ArrayList
+
 
 @AndroidEntryPoint
 class MultipleImagePickerActivity : ViewBindingBaseActivity<ActivityMultipleImagePickerBinding>() {
@@ -225,6 +223,15 @@ class MultipleImagePickerActivity : ViewBindingBaseActivity<ActivityMultipleImag
 
                 deleteFile = File(imagePath) // 1. 사진 찍으면 생성된 이미지 파일 삭제
                 deleteFile.delete()
+
+                // 미디어 데이터베이스에서 해당 파일 정보 삭제
+                val resolver = contentResolver
+                val uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+                val selection = MediaStore.Images.Media.DATA + "=?"
+                val selectionArgs = arrayOf(imagePath)
+                resolver.delete(uri, selection, selectionArgs)
+                // 삭제된 파일이 앨범 등에서 보이지 않도록 미디어 스캐닝
+                MediaScannerConnection.scanFile(this, arrayOf(imagePath), null, null)
 
                 val intent = Intent(binding.root.context, MainActivity::class.java).apply {
                     val a = ArrayList<ImagePickerModel>()
