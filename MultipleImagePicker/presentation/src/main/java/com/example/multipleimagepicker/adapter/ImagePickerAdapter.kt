@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.domain.model.ImagePickerModel
 import com.example.domain.model.ViewType
+import com.example.multipleimagepicker.R
 import com.example.multipleimagepicker.databinding.CameraItemBinding
 import com.example.multipleimagepicker.databinding.ImagePickerItemBinding
 import com.example.multipleimagepicker.viewmodel.ImagePickerViewModel
@@ -51,6 +52,11 @@ class ImagePickerAdapter() : ListAdapter<ImagePickerModel, RecyclerView.ViewHold
     inner class CameraViewHolder(val binding: CameraItemBinding) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(imagePickerModel: ImagePickerModel) {
+            Glide.with(binding.root.context)
+                .load(R.drawable.ic_baseline_photo_camera_72)
+                .override(1000, 1000)
+                .into(binding.ivCamera)
+
             binding.root.setOnClickListener {
                 onItemClickListener?.let {
                     it(adapterPosition, imagePickerModel)
@@ -66,7 +72,7 @@ class ImagePickerAdapter() : ListAdapter<ImagePickerModel, RecyclerView.ViewHold
 //            Log.i("MYTAG", "uri: ${imagePickerModel.uri}")
             Glide.with(binding.root.context)
                 .load(imagePickerModel.uri)
-                .override(1000, 1000)
+                .override(300, 300)
                 .into(binding.ivImage)
 
             if(imagePickerModel.isChecked) {

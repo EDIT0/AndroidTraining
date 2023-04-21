@@ -11,6 +11,7 @@ import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
 import android.util.Log
+import androidx.core.content.FileProvider
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -157,7 +158,7 @@ object Utility {
     }
 
     // Bitmap To Uri
-    fun getBitmapToUri(context: Context, inImage: Bitmap): Uri {
+    fun getBitmapToUriExternalStorage(context: Context, inImage: Bitmap): Uri {
         val bytes = ByteArrayOutputStream()
         inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
         val path = MediaStore.Images.Media.insertImage(context.contentResolver, inImage, "IMG_" + System.currentTimeMillis(), null)
@@ -165,7 +166,7 @@ object Utility {
     }
 
     // uri 절대 경로
-    fun absolutelyPath(context: Context, path: Uri): String {
+    fun absolutelyPathExternalStorage(context: Context, path: Uri): String {
 
         var proj: Array<String> = arrayOf(MediaStore.Images.Media.DATA)
         var c: Cursor? = context.contentResolver.query(path, proj, null, null, null)
@@ -177,7 +178,7 @@ object Utility {
         return result!!
     }
 
-    fun fileUriToContentUri(context: Context, file: File): Uri? {
+    fun fileUriToContentUriExternalStorage(context: Context, file: File): Uri? {
 
         //Uri localImageUri = Uri.fromFile(localImageFile); // Not suitable as it's not a content Uri
         val cr = context.contentResolver
@@ -237,5 +238,133 @@ object Utility {
         } else {
             false
         }
+    }
+
+
+    fun saveUriToInternalStorage(context: Context, uri: Uri): Bitmap {
+        val dirPath: String = "${context.filesDir}/PickerImage"
+        val filePath: String = "${dirPath}/${System.currentTimeMillis()}.png"
+
+        // 디렉토리 생성
+        val makeDir = File(dirPath)
+        if(!makeDir.exists()) {
+            makeDir.mkdirs()
+        }
+
+        val inputStream = context.contentResolver.openInputStream(uri)
+        val mBitmap = BitmapFactory.decodeStream(inputStream)
+        Log.i("MYTAG", "이미지 파일명: ${System.currentTimeMillis()}")
+        val file = File(dirPath, "${System.currentTimeMillis()}.png")
+        val fos = FileOutputStream(file)
+        mBitmap.compress(Bitmap.CompressFormat.PNG, 100, fos)
+        fos.flush()
+        fos.close()
+
+        return mBitmap
+    }
+
+    // 사진 찍기 후 각도 맞추기
+    fun rotateBitmapInternalStorage(bitmap: Bitmap, orientation: Int): Bitmap? {
+        val matrix = Matrix()
+        when (orientation) {
+            ExifInterface.ORIENTATION_NORMAL -> return bitmap
+            ExifInterface.ORIENTATION_FLIP_HORIZONTAL -> matrix.setScale(-1f, 1f)
+            ExifInterface.ORIENTATION_ROTATE_180 -> matrix.setRotate(180f)
+            ExifInterface.ORIENTATION_FLIP_VERTICAL -> {
+                matrix.setRotate(180f)
+                matrix.postScale(-1f, 1f)
+            }
+            ExifInterface.ORIENTATION_TRANSPOSE -> {
+                matrix.setRotate(90f)
+                matrix.postScale(-1f, 1f)
+            }
+            ExifInterface.ORIENTATION_ROTATE_90 -> matrix.setRotate(90f)
+            ExifInterface.ORIENTATION_TRANSVERSE -> {
+                matrix.setRotate(-90f)
+                matrix.postScale(-1f, 1f)
+            }
+            ExifInterface.ORIENTATION_ROTATE_270 -> matrix.setRotate(-90f)
+            else -> return bitmap
+        }
+        return try {
+//            val bmRotated = Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true)
+            val mBitmapRoted = Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true)
+            bitmap.recycle()
+            mBitmapRoted
+        } catch (e: OutOfMemoryError) {
+            e.printStackTrace()
+            null
+        }
+    }
+
+    fun setDirEmpty(dirPath: String) {
+        val dir = File(dirPath)
+        val childFileList = dir.listFiles()
+        if (dir.exists()) {
+            for (childFile in childFileList) {
+                if (childFile.isDirectory) {
+                    setDirEmpty(childFile.absolutePath) //하위 디렉토리
+                } else {
+                    childFile.delete() //하위 파일
+                }
+            }
+            dir.delete()
+        }
+    }
+
+    fun saveBitmapToInternalStorage(context: Context, bitmap: Bitmap) {
+        val dirPath: String = "${context.filesDir}/PickerImage"
+        val fileName = "${System.currentTimeMillis()}.png"
+        val filePath: String = "${dirPath}/${fileName}"
+
+        // 디렉토리 생성
+        val makeDir = File(dirPath)
+        if(!makeDir.exists()) {
+            makeDir.mkdirs()
+        }
+
+//        val inputStream = context.contentResolver.openInputStream(uri)
+//        val mBitmap = BitmapFactory.decodeStream(inputStream)
+
+//        val file = File(dirPath, "${System.currentTimeMillis()}.png")
+//        val fos = FileOutputStream(file)
+//        bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos)
+//        fos.flush()
+//        fos.close()
+
+        try {
+            val fos = FileOutputStream(filePath)
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos)
+            fos.close()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+
+        Log.i("MYTAG", "이미지 만들기 성공")
+    }
+
+    // Bitmap To Uri
+    fun bitmapToUriInternalStorage(context: Context, bitmap: Bitmap, fileName: String): Uri {
+        val dirPath: String = "${context.filesDir}/PickerImage"
+        val filePath: String = "${dirPath}/${fileName}"
+
+        // 디렉토리 생성
+        val makeDir = File(dirPath)
+        if(!makeDir.exists()) {
+            makeDir.mkdirs()
+        }
+
+        val file = File(dirPath, fileName)
+        val fos = FileOutputStream(file)
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos)
+        fos.flush()
+        fos.close()
+
+        val uri = FileProvider.getUriForFile(context, "com.example.multipleimagepicker.fileprovider", file)
+
+        // Android 7.0 이상에서 보안 위험
+//        Uri.fromFile(file)
+
+        return uri
     }
 }

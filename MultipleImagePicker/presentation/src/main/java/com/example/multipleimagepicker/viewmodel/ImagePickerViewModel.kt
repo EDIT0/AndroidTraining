@@ -14,6 +14,7 @@ import com.example.domain.usecase.GetAlbumImageListUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.io.File
 
 class ImagePickerViewModel (
     private val getAlbumImageListUseCase: GetAlbumImageListUseCase
@@ -27,6 +28,11 @@ class ImagePickerViewModel (
 
     private val _imageItemList = MutableLiveData<MutableList<ImagePickerModel>>(mutableListOf())
     val imageItemList: LiveData<MutableList<ImagePickerModel>> = _imageItemList
+
+    lateinit var cameraResultUri: Uri
+
+    lateinit var deleteFile: File
+    var imagePath = ""
 
     fun addCameraItem(list: ArrayList<ImagePickerModel>) {
         list.add(0, ImagePickerModel(Uri.parse("") ,false, ViewType.CAMERA))

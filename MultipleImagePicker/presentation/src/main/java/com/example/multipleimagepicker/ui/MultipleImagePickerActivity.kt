@@ -44,11 +44,6 @@ class MultipleImagePickerActivity : ViewBindingBaseActivity<ActivityMultipleImag
     private val selectedImageAdapter = SelectedImageAdapter()
     private val imagePickerAdapter = ImagePickerAdapter()
 
-    private lateinit var cameraResultUri: Uri
-
-    lateinit var deleteFile: File
-    private var imagePath = ""
-
     override fun getBinding(): ActivityMultipleImagePickerBinding = ActivityMultipleImagePickerBinding.inflate(layoutInflater)
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -112,9 +107,9 @@ class MultipleImagePickerActivity : ViewBindingBaseActivity<ActivityMultipleImag
             if(imagePickerModel.type == ViewType.CAMERA) {
                 val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
                 createImageUri(mActivity, "PictureCameraImageFolder"+ System.currentTimeMillis(), "image/jpeg")?.let { uri ->
-                    cameraResultUri = uri
-                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, cameraResultUri)
-                    Log.i("MYTAG", "카메라 이미지 uri ${cameraResultUri}")
+                    imagePickerViewModel.cameraResultUri = uri
+                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, imagePickerViewModel.cameraResultUri)
+                    Log.i("MYTAG", "카메라 이미지 uri ${imagePickerViewModel.cameraResultUri}")
                     cameraLauncher.launch(takePictureIntent)
 //                    startActivityForResult(takePictureIntent, FLAG_REQ_CAMERA)
                 }
@@ -196,18 +191,19 @@ class MultipleImagePickerActivity : ViewBindingBaseActivity<ActivityMultipleImag
         if (result.resultCode == RESULT_OK) {
 //            val data: Intent = result.data!!
 
-            CropImage.activity(cameraResultUri)
+            CropImage.activity(imagePickerViewModel.cameraResultUri)
                 .setAutoZoomEnabled(false)
                 .setOutputCompressFormat(Bitmap.CompressFormat.PNG)
                 .start(mActivity)
 
 
-            val bitmap = Utility.loadBitmapFromMediaStoreBy(mActivity, cameraResultUri)
-            Log.i("MYTAG", "이미지 비트맵: ${bitmap}")
+//            val bitmap = Utility.loadBitmapFromMediaStoreBy(mActivity, imagePickerViewModel.cameraResultUri)
+//            Log.i("MYTAG", "이미지 비트맵: ${bitmap}")
 
-            imagePath = Utility.absolutelyPath(mActivity, cameraResultUri) // 파일 경로 얻기
+            // 촬영된 사진 삭제
+            imagePickerViewModel.imagePath = Utility.absolutelyPathExternalStorage(mActivity, imagePickerViewModel.cameraResultUri) // 파일 경로 얻기
 
-            Log.i("MYTAG", "${cameraResultUri}")
+            Log.i("MYTAG", "${imagePickerViewModel.cameraResultUri}")
         }
     }
 
@@ -217,25 +213,25 @@ class MultipleImagePickerActivity : ViewBindingBaseActivity<ActivityMultipleImag
         if(requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
             val result: CropImage.ActivityResult = CropImage.getActivityResult(data)
             if(resultCode == RESULT_OK) {
-                cameraResultUri = result.uri as Uri
+                imagePickerViewModel.cameraResultUri = result.uri as Uri
                 Log.i("MYTAG", "크롭된 이미지 ${result.uri as Uri}")
-                cameraResultUri = Utility.fileUriToContentUri(mActivity, File(cameraResultUri.path))!!
-
-                deleteFile = File(imagePath) // 1. 사진 찍으면 생성된 이미지 파일 삭제
-                deleteFile.delete()
+//                imagePickerViewModel.cameraResultUri = Utility.fileUriToContentUriExternalStorage(mActivity, File(imagePickerViewModel.cameraResultUri.path))!!
+//
+                imagePickerViewModel.deleteFile = File(imagePickerViewModel.imagePath) // 1. 사진 찍으면 생성된 이미지 파일 삭제
+                imagePickerViewModel.deleteFile.delete()
 
                 // 미디어 데이터베이스에서 해당 파일 정보 삭제
                 val resolver = contentResolver
                 val uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
                 val selection = MediaStore.Images.Media.DATA + "=?"
-                val selectionArgs = arrayOf(imagePath)
+                val selectionArgs = arrayOf(imagePickerViewModel.imagePath)
                 resolver.delete(uri, selection, selectionArgs)
                 // 삭제된 파일이 앨범 등에서 보이지 않도록 미디어 스캐닝
-                MediaScannerConnection.scanFile(this, arrayOf(imagePath), null, null)
+                MediaScannerConnection.scanFile(this, arrayOf(imagePickerViewModel.imagePath), null, null)
 
                 val intent = Intent(binding.root.context, MainActivity::class.java).apply {
                     val a = ArrayList<ImagePickerModel>()
-                    a.add(ImagePickerModel(cameraResultUri, false, ViewType.CAMERA))
+                    a.add(ImagePickerModel(imagePickerViewModel.cameraResultUri, false, ViewType.CAMERA))
                     putParcelableArrayListExtra("uris", a as ArrayList)
                 }
                 setResult(FLAG_REQ_CAMERA_CROP, intent)
