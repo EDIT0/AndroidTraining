@@ -4,8 +4,10 @@ import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Message
 import android.util.Log
 import android.view.View
+import android.webkit.JsResult
 import android.webkit.WebChromeClient
 import android.webkit.WebSettings
 import android.webkit.WebView
@@ -13,9 +15,10 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import com.edit.webviewexample1.databinding.ActivityMainBinding
 
-class MainActivity : AppCompatActivity(), MyWebViewClientCallback, EventWVInterfaceCallback {
+class MainActivity : AppCompatActivity(), MyWebViewChromeClientCallback, MyWebViewClientCallback, EventWVInterfaceCallback {
 
     private lateinit var binding: ActivityMainBinding
+    private val myWebViewChromeClient = MyWebViewChromeClient()
     private val myWebViewClient = MyWebViewClient()
     private val eventWVInterface = EventWVInterface()
     private val baseUrl = BuildConfig.BASE_URL + "web_event_js.php"
@@ -36,7 +39,8 @@ class MainActivity : AppCompatActivity(), MyWebViewClientCallback, EventWVInterf
         binding.wvEvent.apply {
             addJavascriptInterface(eventWVInterface, EventWVInterface.EventWVInterface)
             webViewClient = myWebViewClient
-            webChromeClient = WebChromeClient()
+            webChromeClient = myWebViewChromeClient
+//            webChromeClient = WebChromeClient()
         }
 
         binding.wvEvent.settings.apply {
@@ -57,8 +61,11 @@ class MainActivity : AppCompatActivity(), MyWebViewClientCallback, EventWVInterf
             defaultTextEncodingName = "UTF-8"
             loadWithOverviewMode = true // 컨텐츠가 웹뷰보다 클때 스크린크기에 맞추기
             layoutAlgorithm = WebSettings.LayoutAlgorithm.SINGLE_COLUMN
+            WebView.setWebContentsDebuggingEnabled(true) // WebView에서 디버그 가능하도록 설정
+            setSupportMultipleWindows(true) // WebView가 multiple 윈도를 지원하도록 설정
         }
 
+        myWebViewChromeClient.setMyWVChromeClientCallback(this)
         myWebViewClient.setMyWebViewClientCallback(this)
         eventWVInterface.setEventWVInterfaceCallback(this)
 
@@ -75,6 +82,20 @@ class MainActivity : AppCompatActivity(), MyWebViewClientCallback, EventWVInterf
         binding.ibBack.setOnClickListener {
             onBackPressed()
         }
+    }
+
+    override fun onCreateWindow(view: WebView?, isDialog: Boolean, isUserGesture: Boolean, resultMsg: Message?): Boolean {
+        toast?.cancel()
+        toast = Toast.makeText(binding.root.context, "onCreateWindow()", Toast.LENGTH_SHORT)
+        toast?.show()
+        return false
+    }
+
+    override fun onJsAlert(view: WebView?, url: String?, message: String?, result: JsResult?): Boolean {
+        toast?.cancel()
+        toast = Toast.makeText(binding.root.context, "onJsAlert()", Toast.LENGTH_SHORT)
+        toast?.show()
+        return true
     }
 
     override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
