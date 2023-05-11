@@ -7,10 +7,7 @@ import android.os.Bundle
 import android.os.Message
 import android.util.Log
 import android.view.View
-import android.webkit.JsResult
-import android.webkit.WebChromeClient
-import android.webkit.WebSettings
-import android.webkit.WebView
+import android.webkit.*
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import com.edit.webviewexample1.databinding.ActivityMainBinding
@@ -106,6 +103,10 @@ class MainActivity : AppCompatActivity(), MyWebViewChromeClientCallback, MyWebVi
         binding.loadingLayout.visibility = View.GONE
     }
 
+    override fun onReceivedError(view: WebView?, request: WebResourceRequest?, error: WebResourceError?) {
+        Log.i("MYTAG", "Error Code: ${error?.errorCode} / ${error?.description}")
+    }
+
     override fun showToast(message: String) {
         toast?.cancel()
         toast = Toast.makeText(binding.root.context, message, Toast.LENGTH_SHORT)
@@ -117,7 +118,12 @@ class MainActivity : AppCompatActivity(), MyWebViewChromeClientCallback, MyWebVi
     }
 
     override fun onDestroy() {
-        binding.wvEvent.removeJavascriptInterface(EventWVInterface.EventWVInterface)
+        binding.wvEvent?.let {
+            it.removeJavascriptInterface(EventWVInterface.EventWVInterface)
+            it.clearCache(true)
+            it.stopLoading()
+            it.destroy()
+        }
         super.onDestroy()
     }
 
