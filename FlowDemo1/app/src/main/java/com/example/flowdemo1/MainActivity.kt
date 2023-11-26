@@ -7,6 +7,7 @@ import android.util.Log
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.lifecycle.withStarted
@@ -31,7 +32,7 @@ class MainActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
-        mainViewModel = MainViewModel()
+        mainViewModel = ViewModelProvider(this).get(MainViewModel::class.java)
 
         binding.btn1.setOnClickListener {
             startActivity(Intent(binding.root.context, MainActivity2::class.java))
@@ -41,16 +42,18 @@ class MainActivity : AppCompatActivity() {
             Log.d("MYTAG", "LifeData1: ${it}")
         })
 
+
+        // 1. StateFlow / launch + repeatOnLifecycle
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 mainViewModel.mStateFlow1
                     .collect {
                     if(it == "init") {
-                        Log.d("MYTAG", "StateFlow1: ${it}")
+                        Log.d("MYTAG", "1. StateFlow1 / launch + repeatOnLifecycle: ${it}")
                     } else {
-                        Log.d("MYTAG", "StateFlow1: ${it}")
+                        Log.d("MYTAG", "1. StateFlow1 / launch + repeatOnLifecycle: ${it}")
 //                        for (i in 0..10) {
-//                            Log.d("MYTAG", "StateFlow1: ${i}")
+//                            Log.d("MYTAG", "1. StateFlow1 / launch + repeatOnLifecycle: ${i}")
 //                            delay(1000L)
 //                        }
                     }
@@ -59,46 +62,49 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        // 2. StateFlow / launch
         lifecycleScope.launch {
             mainViewModel.mStateFlow2.collect {
                 if(it == "init") {
-                    Log.d("MYTAG", "launch StateFlow2: ${it}")
+                    Log.d("MYTAG", "2. StateFlow2 / launch: ${it}")
                 } else {
-                    Log.d("MYTAG", "launch StateFlow2: ${it}")
-                    for (i in 0..10) {
-                        Log.d("MYTAG", "launch StateFlow2: ${i}")
-                        delay(1000L)
-                    }
+                    Log.d("MYTAG", "2. StateFlow2 / launch: ${it}")
+//                    for (i in 0..10) {
+//                        Log.d("MYTAG", "2. StateFlow2 / launch: ${i}")
+//                        delay(1000L)
+//                    }
                 }
             }
         }
 
+        // 3. StateFlow / launchWhenStarted
         lifecycleScope.launchWhenStarted {
             mainViewModel.mStateFlow2.collect {
                 if(it == "init") {
-                    Log.d("MYTAG", "launchWhenStarted StateFlow2: ${it}")
+                    Log.d("MYTAG", "3. StateFlow2 / launchWhenStarted: ${it}")
                 } else {
-                    Log.d("MYTAG", "launchWhenStarted StateFlow2: ${it}")
-                    for (i in 0..10) {
-                        Log.d("MYTAG", "launchWhenStarted StateFlow2: ${i}")
-                        delay(1000L)
-                    }
+                    Log.d("MYTAG", "3. StateFlow2 / launchWhenStarted: ${it}")
+//                    for (i in 0..10) {
+//                        Log.d("MYTAG", "3. StateFlow2 / launchWhenStarted: ${i}")
+//                        delay(1000L)
+//                    }
                 }
             }
         }
 
+        // 4. StateFlow / launch + withStarted + launch
         lifecycleScope.launch {
             withStarted {
                 lifecycleScope.launch {
                     mainViewModel.mStateFlow2.collect {
                         if(it == "init") {
-                            Log.d("MYTAG", "withStarted StateFlow2: ${it}")
+                            Log.d("MYTAG", "4. StateFlow2 / launch + withStarted + launch: ${it}")
                         } else {
-                            Log.d("MYTAG", "withStarted StateFlow2: ${it}")
-                            for (i in 0..10) {
-                                Log.d("MYTAG", "withStarted StateFlow2: ${i}")
-                                delay(1000L)
-                            }
+                            Log.d("MYTAG", "4. StateFlow2 / launch + withStarted + launch: ${it}")
+//                            for (i in 0..10) {
+//                                Log.d("MYTAG", "4. StateFlow2 / launch + withStarted + launch: ${i}")
+//                                delay(1000L)
+//                            }
                         }
                     }
                 }
@@ -106,28 +112,50 @@ class MainActivity : AppCompatActivity() {
         }
 
 
-
-//        lifecycleScope.launch {
-//            repeatOnLifecycle(Lifecycle.State.STARTED) {
-//                mSharedFlow1.collect {
-//                    Log.d("MYTAG", "SharedFlow1: ${it}")
+        // 5. SharedFlow / launch + repeatOnLifecycle
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                mainViewModel.mSharedFlow1.collect {
+                    Log.d("MYTAG", "5. SharedFlow1 / launch + repeatOnLifecycle: ${it}")
 //                    for (i in 0..10) {
-//                        Log.d("MYTAG", "SharedFlow1: ${i}")
+//                        Log.d("MYTAG", "5. SharedFlow1 / launch + repeatOnLifecycle: ${i}")
 //                        delay(1000L)
 //                    }
-//                }
-//            }
-//        }
-//
-//        lifecycleScope.launchWhenStarted {
-//            mSharedFlow2.collect {
-//                Log.d("MYTAG", "SharedFlow2: ${it}")
+                }
+            }
+        }
+
+        // 6. SharedFlow / launch + repeatOnLifecycle
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                mainViewModel.mSharedFlow1.collect {
+                    Log.d("MYTAG", "6. SharedFlow1 / launch + repeatOnLifecycle: ${it}")
+//                    for (i in 0..10) {
+//                        Log.d("MYTAG", "6. SharedFlow1 / launch + repeatOnLifecycle: ${i}")
+//                        delay(1000L)
+//                    }
+                }
+            }
+        }
+
+        // 7. SharedFlow / launchWhenStarted
+        lifecycleScope.launchWhenStarted {
+            mainViewModel.mSharedFlow2.collect {
+                Log.d("MYTAG", "7. SharedFlow2 / launchWhenStarted: ${it}")
 //                for(i in 0..10) {
-//                    Log.d("MYTAG", "SharedFlow2: ${i}")
+//                    Log.d("MYTAG", "7. SharedFlow2 / launchWhenStarted: ${i}")
 //                    delay(1000L)
 //                }
-//            }
-//        }
+            }
+        }
+
+        lifecycleScope.launchWhenStarted {
+            mainViewModel.numberStateFlow
+                .collect {
+                    Log.d("MYTAG", "numberStateFlow : ${it}")
+                    binding.tvText.text = it.toString() + "!!"
+                }
+        }
 
 
         lifecycleScope.launch {
@@ -135,18 +163,19 @@ class MainActivity : AppCompatActivity() {
             mainViewModel.mLiveData1.postValue("Emit")
             mainViewModel.mStateFlow1.emit("Emit")
             mainViewModel.mStateFlow2.emit("Emit")
-            delay(3000L)
-            mainViewModel.mSharedFlow1.emit("Emit")
-            mainViewModel.mSharedFlow2.emit("Emit")
+//            delay(3000L)
+//            mainViewModel.mSharedFlow1.emit("Emit")
+//            mainViewModel.mSharedFlow2.emit("Emit")
         }
 
         binding.tvText.setOnClickListener {
+            mainViewModel.plusNumber()
             lifecycleScope.launch {
-                mainViewModel.mLiveData1.postValue("Clicked Emit")
-                mainViewModel.mStateFlow1.emit("Clicked Emit")
-                mainViewModel.mStateFlow2.emit("Clicked Emit")
-                mainViewModel.mSharedFlow1.emit("Clicked Emit")
-                mainViewModel.mSharedFlow2.emit("Clicked Emit")
+//                mainViewModel.mLiveData1.postValue("Clicked Emit")
+//                mainViewModel.mStateFlow1.emit("Clicked Emit")
+//                mainViewModel.mStateFlow2.emit("Clicked Emit")
+//                mainViewModel.mSharedFlow1.emit("Clicked Emit")
+//                mainViewModel.mSharedFlow2.emit("Clicked Emit")
             }
         }
     }
