@@ -24,7 +24,6 @@ class RemoteDataSourceImpl(
              *
              * prefetchDistance:
              *  PagedList 의 최상단/최하단에 도달하기 얼마 전에 추가 로딩을 수행하지에 대한 설정
-             *  최소 pageSize + (2 * prefetchDistance) 보다 높게 설정
              *
              * enablePlaceholders:
              *  true - 아직 로드되지 않은 콘텐츠의 placeholder로 null 반환
@@ -32,6 +31,7 @@ class RemoteDataSourceImpl(
              *
              * maxSize:
              *  PagingData 객체에서 로드하고 있는 항목의 최대 갯수
+             *  최소 pageSize + (2 * prefetchDistance) 보다 높게 설정
              *
              * jumpThreshold:
              *  잘 모르겠음

@@ -2,6 +2,8 @@ package com.example.pagingdemo1.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.LifecycleOwner
@@ -17,6 +19,7 @@ import com.example.pagingdemo1.model.MovieModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -53,12 +56,33 @@ class MainActivity : AppCompatActivity() {
         }
 
         // 페이징 결과 관찰 (LiveData)
-        mainViewModel.result.observe(this as LifecycleOwner) {
-            try {
-                movieAdapter.submitData(this.lifecycle, it)
-            } catch (e: Exception) {
-                Log.i("MYTAG", "${e.message}")
+//        mainViewModel.result.observe(this as LifecycleOwner) {
+//            try {
+//                movieAdapter.submitData(this.lifecycle, it)
+//            } catch (e: Exception) {
+//                Log.i("MYTAG", "${e.message}")
+//            }
+//        }
+
+        binding.etInput.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
             }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                mainViewModel.emitEtInput(p0?.toString()?:"")
+            }
+
+            override fun afterTextChanged(p0: Editable?) {
+            }
+        })
+
+        lifecycleScope.launchWhenStarted {
+            mainViewModel.resultStateFlow
+                .collectLatest {
+                    if(it == null) return@collectLatest
+
+                    movieAdapter.submitData(this@MainActivity.lifecycle, it)
+                }
         }
 
         // 페이징 결과 관찰 (Flow)
@@ -70,9 +94,17 @@ class MainActivity : AppCompatActivity() {
 //        }
 
         // 검색어 바뀔 때 마다 기존 검색된 데이터 삭제
-        mainViewModel.etInput.observe(this as LifecycleOwner) {
-            movieAdapter.submitData(lifecycle, PagingData.empty())
+//        mainViewModel.etInput.observe(this as LifecycleOwner) {
+//            movieAdapter.submitData(lifecycle, PagingData.empty())
+//        }
+
+        lifecycleScope.launchWhenStarted {
+            mainViewModel.etInputStateFlow
+                .collectLatest {
+                    movieAdapter.submitData(lifecycle, PagingData.empty())
+                }
         }
+
 
         // 리스트 새로고침
         binding.swipeRefresh.setOnRefreshListener {
@@ -83,7 +115,8 @@ class MainActivity : AppCompatActivity() {
 
         // 리스트 새로고침
         binding.btnRefresh.setOnClickListener {
-            Log.i("MYTAG", "${mainViewModel.etInput.value}")
+//            Log.i("MYTAG", "${mainViewModel.etInput.value}")
+            Log.i("MYTAG", "${mainViewModel.etInputStateFlow.value}")
             movieAdapter.refresh()
         }
 

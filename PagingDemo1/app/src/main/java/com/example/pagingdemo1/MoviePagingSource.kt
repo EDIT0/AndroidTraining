@@ -87,12 +87,16 @@ class MoviePagingSource(
 
     // 데이터가 새로고침되거나 첫 로드 후 무효화되었을 때 키를 반환하여 load()로 전달
     override fun getRefreshKey(state: PagingState<Int, MovieModel.MovieModelResult>): Int? {
-        return state.anchorPosition?.let {
-            Log.i("MYTAG", "getRefreshKey() ${state.anchorPosition} ${state.closestPageToPosition(it)?.prevKey} ${state.closestPageToPosition(it)?.nextKey}")
-            Log.i("MYTAG", "getRefreshKey() ${state.closestPageToPosition(it)?.prevKey?.plus(1)?: state.closestPageToPosition(it)?.nextKey?.minus(1)}")
-//            state.closestPageToPosition(it)?.prevKey?.plus(1)?: state.closestPageToPosition(it)?.nextKey?.minus(1)
-            STARTING_PAGE_INDEX
+        return state.anchorPosition?.let { anchorPosition ->
+            state.closestPageToPosition(anchorPosition)?.prevKey?.plus(1)?:
+            state.closestPageToPosition(anchorPosition)?.nextKey?.minus(1)
         }
+//        return state.anchorPosition?.let {
+//            Log.i("MYTAG", "getRefreshKey() ${state.anchorPosition} ${state.closestPageToPosition(it)?.prevKey} ${state.closestPageToPosition(it)?.nextKey}")
+//            Log.i("MYTAG", "getRefreshKey() ${state.closestPageToPosition(it)?.prevKey?.plus(1)?: state.closestPageToPosition(it)?.nextKey?.minus(1)}")
+////            state.closestPageToPosition(it)?.prevKey?.plus(1)?: state.closestPageToPosition(it)?.nextKey?.minus(1)
+//            STARTING_PAGE_INDEX
+//        }
     }
 
 }
