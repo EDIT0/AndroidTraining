@@ -132,6 +132,22 @@ class MainActivity : AppCompatActivity() {
             if(it.source.refresh !is LoadState.Loading) {
                 binding.swipeRefresh.isRefreshing = false
             }
+
+            if(it.source.refresh is LoadState.Loading) {
+                Log.d("MYTAG", "첫 로딩 중 일 때")
+            } else {
+                Log.d("MYTAG", "로딩 중이 아닐 때")
+
+                val errorState = when {
+                    it.prepend is LoadState.Error -> it.prepend as LoadState.Error
+                    it.append is LoadState.Error -> it.append as LoadState.Error
+                    it.refresh is LoadState.Error -> it.refresh as LoadState.Error
+                    else -> null
+                }
+
+                Log.d("MYTAG", "페이징 에러: ${errorState?.error?.message}")
+                val errorMessage = errorState?.error?.message
+            }
         }
 
         // retry 말그대로 실패 후 재시도
