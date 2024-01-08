@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="grey_blue">#6386a6</color>
+    <color name="color_27afe9">#27afe9</color>
+    <color name="permission_point">#fe7210</color>
+    <color name="color_ffd600">#ffd600</color>
+    <color name="color_99_ee4b55">#99ee4b55</color>
+    <color name="color_80_000000">#80000000</color>
+    <color name="safety_driving_info_good">#70C054</color>
+    <color name="color_ffee8d">#ffee8d</color>
+    <color name="color_e6_538fc3">#e6538fc3</color>
+    <color name="dte_gauge_red">#C41A1A</color>
+</resources>

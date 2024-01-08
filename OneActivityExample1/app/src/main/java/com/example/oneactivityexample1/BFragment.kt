@@ -103,6 +103,15 @@ class BFragment : Fragment() {
         }
     }
 
+    override fun onStart() {
+        super.onStart()
+        Log.d("MYTAG", "BFragment onStart")
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Log.d("MYTAG", "BFragment onResume")
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()

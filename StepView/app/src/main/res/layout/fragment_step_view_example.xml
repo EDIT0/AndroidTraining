@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/rootLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".carpay.presentation.ui.stepview.ExStepViewFragment">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.example.stepview.view.StepView
+                android:id="@+id/stepView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toTopOf="@+id/btnStepUp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0"
+                app:layout_constraintVertical_chainStyle="packed" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnStepUp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="단계 올리기"
+                app:layout_constraintBottom_toTopOf="@+id/btnStepDown"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/stepView" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnStepDown"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="단계 내리기"
+                app:layout_constraintBottom_toTopOf="@+id/btnStepCountUp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/btnStepUp" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnStepCountUp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="단계 수 늘리기"
+                app:layout_constraintBottom_toTopOf="@+id/btnStepCountDown"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/btnStepDown" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnStepCountDown"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="단계 수 줄이기"
+                app:layout_constraintBottom_toTopOf="@+id/btnCurrentStep"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/btnStepCountUp" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnCurrentStep"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="현재 단계"
+                app:layout_constraintBottom_toTopOf="@+id/openStepView"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/btnStepCountDown" />
+
+            <TextView
+                android:id="@+id/tvCurrentStep"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="@+id/btnCurrentStep"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/btnCurrentStep"
+                app:layout_constraintTop_toTopOf="@+id/btnCurrentStep" />
+
+            <com.shuhart.stepview.StepView
+                android:id="@+id/openStepView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/btnCurrentStep" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnOpenStepUp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="단계 올리기"
+                app:layout_constraintBottom_toTopOf="@+id/btnOpenStepDown"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/openStepView"
+                app:layout_constraintVertical_bias="0"
+                app:layout_constraintVertical_chainStyle="packed" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnOpenStepDown"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="단계 내리기"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/btnOpenStepUp" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+</layout>
