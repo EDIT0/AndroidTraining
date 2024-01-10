@@ -16,11 +16,12 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.selectionTabView1.apply {
-            setTabLayoutHeight(50)
+            setTabLayoutHeight(40)
             setTabLayoutBackground(R.drawable.tab_layout_shape_1)
             setTabIndicatorShape(R.drawable.tab_indicator_shape_1)
             setTabIndicatorColor(R.color.blue)
             setTabTextColor(R.color.white, R.color.black)
+            setIsWrapContent(true)
             onTabChangeListener(object : SelectionTabView.TabChangeListener {
                 override fun onTabSelected(tabTitle: String) {
                     Log.d("MYTAG", "onTabSelected() selectionTabView1 ${tabTitle}")
@@ -39,6 +40,7 @@ class MainActivity : AppCompatActivity() {
             setTabIndicatorShape(R.drawable.tab_indicator_shape_2)
             setTabIndicatorColor(R.color.gray)
             setTabTextColor(R.color.yellow, R.color.pink)
+            setIsWrapContent(true)
             onTabChangeListener(object : SelectionTabView.TabChangeListener {
                 override fun onTabSelected(tabTitle: String) {
                     Log.d("MYTAG", "onTabSelected() selectionTabView2 ${tabTitle}")
@@ -58,6 +60,7 @@ class MainActivity : AppCompatActivity() {
             setTabIndicatorColor(R.color.pink)
             setTabTextColor(R.color.blue, R.color.black)
             setTabBackground(R.drawable.tab_background_3)
+            setIsWrapContent(false)
             onTabChangeListener(object : SelectionTabView.TabChangeListener {
                 override fun onTabSelected(tabTitle: String) {
                     Log.d("MYTAG", "onTabSelected() selectionTabView3 ${tabTitle}")
@@ -76,6 +79,7 @@ class MainActivity : AppCompatActivity() {
             setTabIndicatorShape(R.drawable.tab_indicator_shape_4)
             setTabIndicatorColor(R.color.pink)
             setTabTextColor(R.color.blue, R.color.black)
+            setIsWrapContent(false)
             onTabChangeListener(object : SelectionTabView.TabChangeListener {
                 override fun onTabSelected(tabTitle: String) {
                     Log.d("MYTAG", "onTabSelected() selectionTabView4 ${tabTitle}")
@@ -94,6 +98,7 @@ class MainActivity : AppCompatActivity() {
             setTabIndicatorShape(R.drawable.tab_indicator_shape_5)
             setTabIndicatorColor(R.color.gray)
             setTabTextColor(R.color.yellow, R.color.pink)
+            setIsWrapContent(false)
             onTabChangeListener(object : SelectionTabView.TabChangeListener {
                 override fun onTabSelected(tabTitle: String) {
                     Log.d("MYTAG", "onTabSelected() selectionTabView5 ${tabTitle}")
@@ -113,6 +118,7 @@ class MainActivity : AppCompatActivity() {
             setTabIndicatorColor(R.color.gray)
             setTabTextColor(R.color.yellow, R.color.pink)
             setTabBackground(R.drawable.tab_background_6)
+            setIsWrapContent(false)
             onTabChangeListener(object : SelectionTabView.TabChangeListener {
                 override fun onTabSelected(tabTitle: String) {
                     Log.d("MYTAG", "onTabSelected() selectionTabView6 ${tabTitle}")
@@ -123,6 +129,25 @@ class MainActivity : AppCompatActivity() {
                 }
             })
             setList(mutableListOf("On", "Off", "OnOff"))
+        }
+
+        binding.selectionTabView7.apply {
+            setTabLayoutHeight(30)
+            setTabLayoutBackground(R.drawable.tab_layout_shape_7)
+            setTabIndicatorShape(R.drawable.tab_indicator_shape_7)
+            setTabIndicatorColor(R.color.blue)
+            setTabTextColor(R.color.white, R.color.black)
+            setIsWrapContent(true)
+            onTabChangeListener(object : SelectionTabView.TabChangeListener {
+                override fun onTabSelected(tabTitle: String) {
+                    Log.d("MYTAG", "onTabSelected() selectionTabView1 ${tabTitle}")
+                }
+
+                override fun onTabReselected(tabTitle: String) {
+                    Log.d("MYTAG", "onTabReselected() selectionTabView1 ${tabTitle}")
+                }
+            })
+            setList(mutableListOf("거리순", "저가순", "거리저가순"))
         }
     }
 }

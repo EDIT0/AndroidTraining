@@ -8,5 +8,6 @@ interface BaseSelectionTabView {
     fun setTabIndicatorColor(indicatorColor: Int)
     fun setTabTextColor(selectedTabColor: Int, unselectedTabColor: Int)
     fun setTabBackground(tabBg: Int?)
+    fun setIsWrapContent(isWrapContent: Boolean)
     fun setList(list: List<String>)
 }

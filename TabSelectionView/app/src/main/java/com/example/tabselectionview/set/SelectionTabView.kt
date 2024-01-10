@@ -2,6 +2,7 @@ package com.example.tabselectionview.set
 
 import android.content.Context
 import android.util.AttributeSet
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,7 +25,8 @@ class SelectionTabView @JvmOverloads constructor(
 
     private var currentTab = Integer.MIN_VALUE
 
-    private var tvTabTitle: TextView? = null
+    private var eachTabList = ArrayList<TabLayout.Tab>()
+    private var tabTextList = ArrayList<TextView>()
 
     // 사용자 설정
     private var tabList = ArrayList<String>()
@@ -35,6 +37,7 @@ class SelectionTabView @JvmOverloads constructor(
     private var selectedTabTextColor: Int = R.color.white
     private var unselectedTabTextColor: Int = R.color.black
     private var tabBackground: Int? = null
+    private var isWrapContent: Boolean = false
 
 
     override fun setTabLayoutHeight(heightDp: Int) {
@@ -60,6 +63,14 @@ class SelectionTabView @JvmOverloads constructor(
 
     override fun setTabBackground(tabBg: Int?) {
         tabBackground = tabBg
+    }
+
+    /**
+     * View의 width가 wrap_content 또는 길이가 고정일 때 (100dp, 200dp 등): true
+     * View의 width가 match_parent 또는 0dp 일 때: false
+     * */
+    override fun setIsWrapContent(isWrapContent: Boolean) {
+        this.isWrapContent = isWrapContent
     }
 
     override fun setList(list: List<String>) {
@@ -125,26 +136,28 @@ class SelectionTabView @JvmOverloads constructor(
                 }
 //                background = ContextCompat.getDrawable(context, R.drawable.tab_selection_background)
                 customView = createTabView()
-                tvTabTitle = customView?.findViewById<TextView>(R.id.tvTabTitle)
+                val tvTabTitle: TextView = customView!!.findViewById<TextView>(R.id.tvTabTitle)
                 tvTabTitle?.let {
                     // Tab 타이틀 설정
                     it.text = tabList[i]
                     // Tab 텍스트 색 설정
                     it.setTextColor(CommonUtil.getColorSelectedStateList(context, selectedTabTextColor, unselectedTabTextColor))
                     // Tab 텍스트 Padding 설정
-//                    it.setPadding(
-//                        CommonUtil.dpToPx(context, 0f),
-//                        CommonUtil.dpToPx(context, 0f),
-//                        CommonUtil.dpToPx(context, 0f),
-//                        CommonUtil.dpToPx(context, 0f)
-//                    )
+                    it.setPadding(
+                        CommonUtil.dpToPx(context, 0f),
+                        CommonUtil.dpToPx(context, 0f),
+                        CommonUtil.dpToPx(context, 0f),
+                        CommonUtil.dpToPx(context, 0f)
+                    )
                 }
+
+                tabTextList.add(tvTabTitle)
 //                customView!!.background = CommonUtil.getDrawableSelectedStateList(context, selectedTabDrawable, unselectedTabDrawable)
 //                background = CommonUtil.getDrawableSelectedStateList(context, selectedTabDrawable, unselectedTabDrawable)
 //                background = ContextCompat.getDrawable(context, R.drawable.tab_indicator_background)
 //                customView!!.background = ContextCompat.getDrawable(context, R.drawable.tab_selection_background)
             }
-
+            eachTabList.add(tab)
             binding.tabLayout.addTab(tab)
         }
 
@@ -158,11 +171,29 @@ class SelectionTabView @JvmOverloads constructor(
 
         binding.tabLayout.viewTreeObserver.addOnGlobalLayoutListener(object: ViewTreeObserver.OnGlobalLayoutListener {
             override fun onGlobalLayout() {
-                val tabWidthPx = binding.tabLayout.getTabAt(0)?.view?.width ?: 0 // 탭 너비 (px)
-                val layoutParams = tvTabTitle?.layoutParams
-                layoutParams?.width = CommonUtil.dpToPx(context, ((tabWidthPx)).toFloat())
-                tvTabTitle?.layoutParams = layoutParams
+                // 사용 시 뷰의 width가 wrap_content인지 아닌지에 따라 설정이 다르다.
+                if(isWrapContent) {
+                    for(i in 0 until tabTextList.size) {
+                        val tabTextPx = tabTextList[i].width ?: 0 // 탭 너비 (px)
+//                    val layoutParams = tabTextList[i].layoutParams
+//                    layoutParams?.width = tabWidthPx
+//                    tabTextList[i].layoutParams = layoutParams
+                        wrapTabIndicatorToTitle(binding.tabLayout, 0, 0, 0)
+                        Log.d("MYTAG", "text width: ${tabTextPx}")
+                        val params = binding.tabLayout.getTabAt(i)?.view?.layoutParams
+                        params?.width = tabTextPx * 2
+                        binding.tabLayout.getTabAt(i)?.view?.layoutParams = params
+                    }
+                    Log.d("MYTAG", "---------")
+                } else {
 
+                }
+
+//                for(i in 0 until tabTextList.size) {
+//                    val tabWidthPx = binding.tabLayout.getTabAt(i)?.view?.width ?: 0 // 탭 너비 (px)
+//                    wrapTabIndicatorToTitle(binding.tabLayout, 0, 0, tabWidthPx/tabList.size)
+//                    Log.d("MYTAG","탭 너비: ${tabWidthPx}")
+//                }
                 binding.tabLayout.viewTreeObserver.removeOnGlobalLayoutListener(this)
             }
         })
@@ -171,18 +202,19 @@ class SelectionTabView @JvmOverloads constructor(
     private fun wrapTabIndicatorToTitle(
         tabLayout: TabLayout,
         externalMargin: Int,
-        internalMargin: Int
+        internalMargin: Int,
+        minimumWidth: Int
     ) {
         val tabStrip = tabLayout.getChildAt(0)
         if (tabStrip is ViewGroup) {
             val childCount = tabStrip.childCount
             for (i in 0 until childCount) {
                 val tabView = tabStrip.getChildAt(i)
-                tabView.minimumWidth = 0
+                tabView.minimumWidth = CommonUtil.dpToPx(context, minimumWidth.toFloat())
                 tabView.setPadding(
-                    CommonUtil.dpToPx(context, 0f),
+                    CommonUtil.dpToPx(context, 5f),
                     tabView.paddingTop,
-                    CommonUtil.dpToPx(context, 0f),
+                    CommonUtil.dpToPx(context, 5f),
                     tabView.paddingBottom
                 )
                 if (tabView.layoutParams is MarginLayoutParams) {
