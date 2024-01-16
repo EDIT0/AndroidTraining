@@ -17,7 +17,7 @@ import com.bumptech.glide.Glide
 import com.example.accordioninfoviewrv.R
 import com.example.accordioninfoviewrv.databinding.ItemAccordionTextInfoBinding
 
-class AccordionTextInfoAdapter: ListAdapter<AccordionTextInfoModel, AccordionTextInfoAdapter.TextInfoViewHolder>(diffUtil), BaseAccordionTextInfoView {
+class AccordionTextInfoAdapter: ListAdapter<AccordionTextInfoModel, AccordionTextInfoAdapter.TextInfoViewHolder>(diffUtil), BaseAccordionTextInfoView.AccordionTextInfoAdapter {
 
     private val expandableViewRealHeight = ArrayList<Int>()
 
@@ -25,9 +25,15 @@ class AccordionTextInfoAdapter: ListAdapter<AccordionTextInfoModel, AccordionTex
     private var contentsTextSize : Int = 15
     private var titleTextColor : Int = R.color.black
     private var contentsTextColor : Int = R.color.black
+    private var contentsTextBackgroundColor : Int = android.R.color.transparent
     private var iconWidth: Int? = null
     private var iconHeight: Int? = null
+    private var isShowLine: Boolean = false
+    private var lineColor: Int = R.color.black
+    private var lineHeight: Float = 1f
     private var icon : Int = R.drawable.ic_arrow_right_40
+
+    private val maxIconSize = 30
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AccordionTextInfoAdapter.TextInfoViewHolder {
         return TextInfoViewHolder(ItemAccordionTextInfoBinding.inflate(LayoutInflater.from(parent.context), parent, false))
@@ -44,6 +50,38 @@ class AccordionTextInfoAdapter: ListAdapter<AccordionTextInfoModel, AccordionTex
     inner class TextInfoViewHolder(val binding: ItemAccordionTextInfoBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(data: AccordionTextInfoModel) {
             binding.apply {
+                // edgeView의 Top 라인 높이 및 색깔 설정
+                val topLineParams = topLine.layoutParams as ConstraintLayout.LayoutParams
+                topLineParams.height = Util.dpToPx(topLine.context, lineHeight)
+                topLine.layoutParams = topLineParams
+                topLine.setBackgroundColor(ContextCompat.getColor(topLine.context, lineColor))
+
+                // edgeView의 Bottom 라인 높이 및 색깔 설정
+                val bottomLineParams = bottomLine.layoutParams as ConstraintLayout.LayoutParams
+                bottomLineParams.height = Util.dpToPx(bottomLine.context, lineHeight)
+                bottomLine.layoutParams = bottomLineParams
+                bottomLine.setBackgroundColor(ContextCompat.getColor(topLine.context, lineColor))
+
+                // 가장 하단 Last 라인 높이 및 색깔 설정
+                val lastLineParams = lastLine.layoutParams as ConstraintLayout.LayoutParams
+                lastLineParams.height = Util.dpToPx(lastLine.context, lineHeight)
+                lastLine.layoutParams = lastLineParams
+                lastLine.setBackgroundColor(ContextCompat.getColor(topLine.context, lineColor))
+
+                // 라인 Visible 컨트롤
+                // 아이템 위치에 따라 Visible, Gone
+                if(isShowLine && absoluteAdapterPosition == 0) {
+                    topLine.visibility = View.VISIBLE
+                } else {
+                    topLine.visibility = View.GONE
+                }
+                if(isShowLine && absoluteAdapterPosition == itemCount - 1) {
+                    lastLine.visibility = View.VISIBLE
+                } else {
+                    lastLine.visibility = View.GONE
+                }
+                bottomLine.visibility = View.GONE
+
                 tvCollapsedTitle.apply {
                     text = data.title
                     setTextSize(TypedValue.COMPLEX_UNIT_SP, titleTextSize.toFloat())
@@ -53,6 +91,7 @@ class AccordionTextInfoAdapter: ListAdapter<AccordionTextInfoModel, AccordionTex
                     text = data.contents
                     setTextSize(TypedValue.COMPLEX_UNIT_SP, contentsTextSize.toFloat())
                     setTextColor(ContextCompat.getColor(context, contentsTextColor))
+                    setBackgroundColor(ContextCompat.getColor(context, contentsTextBackgroundColor))
                 }
 
                 if (iconWidth != null) {
@@ -77,11 +116,25 @@ class AccordionTextInfoAdapter: ListAdapter<AccordionTextInfoModel, AccordionTex
 
                 edgeView.setOnClickListener {
                     if(binding.expandableView.visibility == View.VISIBLE) {
+                        // 접기
                         ToggleAnimation.toggleArrow(binding.ivCollapsedDirection, false)
                         toggleLayout(false, binding.rootLayout, binding.expandableView, absoluteAdapterPosition)
+                        if(isShowLine) {
+                            bottomLine.visibility = View.GONE
+                            if(absoluteAdapterPosition == itemCount - 1) {
+                                lastLine.visibility = View.VISIBLE
+                            } else {
+                                lastLine.visibility = View.GONE
+                            }
+                        }
                     } else {
+                        // 펼치기
                         ToggleAnimation.toggleArrow(binding.ivCollapsedDirection, true)
                         toggleLayout(true, binding.rootLayout, binding.expandableView, absoluteAdapterPosition)
+                        if(isShowLine) {
+                            bottomLine.visibility = View.VISIBLE
+                            lastLine.visibility = View.GONE
+                        }
                     }
                 }
             }
@@ -122,6 +175,18 @@ class AccordionTextInfoAdapter: ListAdapter<AccordionTextInfoModel, AccordionTex
         }
     }
 
+    override fun getLineHeight(): Float {
+        return lineHeight
+    }
+
+    override fun getLineColor(): Int {
+        return lineColor
+    }
+
+    override fun getShowLine(): Boolean {
+        return isShowLine
+    }
+
     override fun setTitleTextSize(sizeSp: Int) {
         titleTextSize = sizeSp
     }
@@ -138,10 +203,14 @@ class AccordionTextInfoAdapter: ListAdapter<AccordionTextInfoModel, AccordionTex
         contentsTextColor = color
     }
 
+    override fun setContentsTextBackgroundColor(color: Int) {
+        contentsTextBackgroundColor = color
+    }
+
     override fun setIconSize(widthDp: Int?, heightDp: Int?) {
         widthDp?.let {
-            if(it > 40) {
-                iconWidth = 40
+            if(it > maxIconSize) {
+                iconWidth = maxIconSize
             } else if(it <= 0) {
                 iconWidth = null
             } else {
@@ -149,8 +218,8 @@ class AccordionTextInfoAdapter: ListAdapter<AccordionTextInfoModel, AccordionTex
             }
         }
         heightDp?.let {
-            if(it > 40) {
-                iconHeight = 40
+            if(it > maxIconSize) {
+                iconHeight = maxIconSize
             } else if(it <= 0) {
                 iconHeight = null
             } else {
@@ -161,5 +230,17 @@ class AccordionTextInfoAdapter: ListAdapter<AccordionTextInfoModel, AccordionTex
 
     override fun setIcon(imgDrawable: Int) {
         icon = imgDrawable
+    }
+
+    override fun setShowLine(isShow: Boolean) {
+        isShowLine = isShow
+    }
+
+    override fun setLineColor(color: Int) {
+        lineColor = color
+    }
+
+    override fun setLineHeight(heightDp: Float) {
+        lineHeight = heightDp
     }
 }

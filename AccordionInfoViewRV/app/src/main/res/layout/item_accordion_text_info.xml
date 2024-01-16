@@ -17,6 +17,26 @@
         app:layout_constraintVertical_bias="0"
         app:layout_constraintVertical_chainStyle="packed">
 
+        <View
+            android:id="@+id/topLine"
+            android:layout_width="0dp"
+            android:layout_height="0.5dp"
+            android:layout_marginHorizontal="20dp"
+            android:background="@color/black"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:id="@+id/bottomLine"
+            android:layout_width="0dp"
+            android:layout_height="0.5dp"
+            android:layout_marginHorizontal="20dp"
+            android:background="@color/black"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
         <TextView
             android:id="@+id/tvCollapsedTitle"
             android:layout_width="0dp"
@@ -24,7 +44,6 @@
             android:layout_marginVertical="10dp"
             android:layout_marginStart="20dp"
             android:layout_marginEnd="10dp"
-            android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/ivCollapsedDirection"
             app:layout_constraintStart_toStartOf="parent"
@@ -35,16 +54,16 @@
             android:id="@+id/ivCollapsedDirection"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="15dp"
+            android:layout_marginEnd="20dp"
             android:adjustViewBounds="true"
             android:background="@null"
-            android:maxWidth="40dp"
-            android:maxHeight="40dp"
+            android:maxWidth="30dp"
+            android:maxHeight="30dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/tvCollapsedTitle"
             app:layout_constraintTop_toTopOf="parent"
-            tools:src="@drawable/ic_arrow_right_40"/>
+            tools:src="@drawable/ic_arrow_right_40" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -52,6 +71,8 @@
         android:id="@+id/expandableView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginVertical="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -61,9 +82,8 @@
             android:id="@+id/tvContents"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:paddingHorizontal="20dp"
-            android:paddingVertical="10dp"
-            android:textSize="15sp"
+            android:lineSpacingExtra="3dp"
+            android:padding="5dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -71,5 +91,15 @@
             tools:text="텍스트" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <View
+        android:id="@+id/lastLine"
+        android:layout_width="0dp"
+        android:layout_height="0.5dp"
+        android:layout_marginHorizontal="20dp"
+        android:background="@color/black"
+        app:layout_constraintTop_toBottomOf="@+id/expandableView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

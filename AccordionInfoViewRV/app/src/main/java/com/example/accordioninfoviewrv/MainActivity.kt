@@ -25,8 +25,12 @@ class MainActivity : AppCompatActivity() {
             setTitleTextColor(R.color.blue)
             setContentsTextSize(18)
             setContentsTextColor(R.color.green)
+            setContentsTextBackgroundColor(R.color.black)
             setIconSize(0, 20)
             setIcon(R.drawable.ic_arrow_forward_ios_40)
+            setShowLine(true)
+            setLineHeight(1f)
+            setLineColor(R.color.black)
             initializeAndSetList(arr)
         }
         binding.rvAccordion2.apply {
@@ -35,6 +39,7 @@ class MainActivity : AppCompatActivity() {
             setContentsTextSize(14)
             setContentsTextColor(R.color.red)
             setIconSize(0, null)
+            setShowLine(false)
             initializeAndSetList(arr)
         }
 

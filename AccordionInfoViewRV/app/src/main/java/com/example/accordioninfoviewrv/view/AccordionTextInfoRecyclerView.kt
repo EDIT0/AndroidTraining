@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.LinearLayout
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.accordioninfoviewrv.R
 import com.example.accordioninfoviewrv.databinding.AccordionTextInfoRecyclerviewBinding
@@ -34,6 +35,10 @@ class AccordionTextInfoRecyclerView @JvmOverloads constructor(
         accordionTextInfoAdapter.setContentsTextColor(color)
     }
 
+    override fun setContentsTextBackgroundColor(color: Int) {
+        accordionTextInfoAdapter.setContentsTextBackgroundColor(color)
+    }
+
     override fun setIconSize(widthDp: Int?, height: Int?) {
         accordionTextInfoAdapter.setIconSize(widthDp, height)
     }
@@ -42,15 +47,37 @@ class AccordionTextInfoRecyclerView @JvmOverloads constructor(
         accordionTextInfoAdapter.setIcon(imgDrawable)
     }
 
+    override fun setShowLine(isShow: Boolean) {
+        accordionTextInfoAdapter.setShowLine(isShow)
+    }
+
+    override fun setLineColor(color: Int) {
+        accordionTextInfoAdapter.setLineColor(color)
+    }
+
+    override fun setLineHeight(heightDp: Float) {
+        accordionTextInfoAdapter.setLineHeight(heightDp)
+    }
+
     override fun initializeAndSetList(list: List<AccordionTextInfoModel>) {
         binding.rv.apply {
             adapter = accordionTextInfoAdapter
-            layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+            if(accordionTextInfoAdapter.getShowLine()) {
+                addItemDecoration(FoldTextInfoItemDecoration(Util.dpToPx(context,20f).toFloat(), Util.dpToPx(context, accordionTextInfoAdapter.getLineHeight()).toFloat(), ContextCompat.getColor(context, accordionTextInfoAdapter.getLineColor())))
+            }
+//            layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+            layoutManager = object : LinearLayoutManager(context) {
+                override fun canScrollVertically(): Boolean {
+                    return false
+                }
+
+                override fun canScrollHorizontally(): Boolean {
+                    return false
+                }
+            }
         }
 
-        accordionTextInfoAdapter.submitList(list) {
-            accordionTextInfoAdapter.notifyDataSetChanged()
-        }
+        accordionTextInfoAdapter.submitList(list)
     }
 
 }
