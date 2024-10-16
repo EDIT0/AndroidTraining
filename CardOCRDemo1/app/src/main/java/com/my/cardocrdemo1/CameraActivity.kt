@@ -34,21 +34,22 @@ class CameraActivity : AppCompatActivity() {
             insets
         }
 
+        // 카드 인식 프리뷰 크기 셋팅
         val (width, height) = cardPreviewResizing()
         val layoutParams = binding.preview.layoutParams
-//        layoutParams.width = width
-//        layoutParams.height = height
-//        binding.preview.layoutParams = layoutParams
+        layoutParams.width = width
+        layoutParams.height = height
+        binding.preview.layoutParams = layoutParams
 
+        // 가로 꽉차게 FILL_CENTER -> 이에 따라 Height가 임의로 정해짐
+        // 틀 비율에 맞춰 FIT_CENTER
         binding.preview.scaleType = PreviewView.ScaleType.FILL_CENTER
 
         lifecycleScope.launch {
             binding.progressBar.visibility = View.VISIBLE
             cameraViewModel.initCamera(
                 view = binding.preview,
-                lifecycleOwner = this@CameraActivity,
-                previewWidth = width,
-                previewHeight = height
+                lifecycleOwner = this@CameraActivity
             )
                 .catch {
                     binding.progressBar.visibility = View.GONE
@@ -56,7 +57,7 @@ class CameraActivity : AppCompatActivity() {
                 }
                 .collect {
                     binding.progressBar.visibility = View.GONE
-                    cameraViewModel.takePicture(it, width, height)
+                    cameraViewModel.takePicture(it)
                     Log.d("MYTAG", "Preview Size: ${binding.preview.width} / ${binding.preview.height}")
                 }
         }
@@ -77,20 +78,29 @@ class CameraActivity : AppCompatActivity() {
     private fun cardPreviewResizing(): Pair<Int, Int> {
         val (width, height) = ScreenUtil.getScreenWidthHeight(this)
 
-        Log.d("MYTAG", "스크린 크기: ${width} / ${height}")
+        Log.d("MYTAG", "휴대폰 스크린 크기: ${width} / ${height}")
 
         val calWidth: Int = (width / 1.8).toInt()
         val calHeight: Int = (height / 1).toInt()
 
         if(calWidth >= calHeight) {
-            val previewWidth = ((calHeight * 1.8).toInt() / 1.5).toInt()
-            val previewHeight = ((calHeight * 1).toInt() / 1.5).toInt()
+            val previewWidth = ((calHeight * 1.8).toInt() / PREVIEW_MARGIN).toInt()
+            val previewHeight = ((calHeight * 1).toInt() / PREVIEW_MARGIN).toInt()
             return Pair<Int, Int>(previewWidth, previewHeight)
         } else {
-            val previewWidth = ((calWidth * 1.8).toInt() / 1.5).toInt()
-            val previewHeight = ((calWidth * 1).toInt() / 1.5).toInt()
+            val previewWidth = ((calWidth * 1.8).toInt() / PREVIEW_MARGIN).toInt()
+            val previewHeight = ((calWidth * 1).toInt() / PREVIEW_MARGIN).toInt()
             return Pair<Int, Int>(previewWidth, previewHeight)
         }
     }
-}
 
+    override fun onPause() {
+        super.onPause()
+
+        finish()
+    }
+
+    companion object {
+        const val PREVIEW_MARGIN = 1.2
+    }
+}

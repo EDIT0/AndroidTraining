@@ -48,7 +48,7 @@ dependencies {
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
 
-    val camerax_version = "1.1.0-beta01"
+    val camerax_version = "1.3.4"
     implementation ("androidx.camera:camera-core:${camerax_version}")
     implementation ("androidx.camera:camera-camera2:${camerax_version}")
     implementation ("androidx.camera:camera-lifecycle:${camerax_version}")

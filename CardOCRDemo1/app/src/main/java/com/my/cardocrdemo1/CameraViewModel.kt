@@ -6,7 +6,6 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Matrix
 import android.util.Log
-import android.util.Size
 import android.view.View
 import androidx.annotation.OptIn
 import androidx.camera.core.AspectRatio
@@ -33,7 +32,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
-import java.io.ByteArrayOutputStream
 import java.nio.ByteBuffer
 import java.util.LinkedList
 import java.util.regex.Pattern
@@ -56,19 +54,19 @@ class CameraViewModel(val app: Application) : AndroidViewModel(app) {
     var cardDate = ""
 
     @SuppressLint("RestrictedApi")
-    fun initCamera(view: View, lifecycleOwner: LifecycleOwner, previewWidth: Int, previewHeight: Int) = flow<ImageCapture> {
+    fun initCamera(view: View, lifecycleOwner: LifecycleOwner) = flow<ImageCapture> {
         val cameraProvider = app.getCameraProvider()
 
         val buildTakePicture: ImageCapture = ImageCapture.Builder()
 //            .setTargetResolution(Size(previewWidth, previewHeight - ((previewHeight / 3) * 2)))
-//            .setTargetResolution(Size(previewWidth, previewHeight))
-            .setMaxResolution(Size(1000, 1000))
-            .setTargetAspectRatio(AspectRatio.RATIO_16_9)
+//            .setTargetResolution(Size(500, 100))
+//            .setMaxResolution(Size(rootWidth, rootHeight))
+//            .setTargetAspectRatio(aspectRatio(rootWidth, rootHeight))
             .setTargetRotation(view.display.rotation)
             .setCaptureMode(ImageCapture.CAPTURE_MODE_MINIMIZE_LATENCY)
             .build()
         try {
-            val preview = buildPreview(view as PreviewView, previewWidth, previewHeight)
+            val preview = buildPreview(view as PreviewView)
             val cameraSelector = buildCameraSelector()
 
             cameraProvider.bindToLifecycle(
@@ -88,11 +86,11 @@ class CameraViewModel(val app: Application) : AndroidViewModel(app) {
     }
 
     @SuppressLint("RestrictedApi")
-    private fun buildPreview(previewView: PreviewView, previewWidth: Int, previewHeight: Int): Preview = Preview.Builder()
+    private fun buildPreview(previewView: PreviewView): Preview = Preview.Builder()
 //        .setTargetResolution(Size(previewWidth, previewHeight - ((previewHeight / 3) * 2)))
-//        .setTargetResolution(Size(previewWidth, previewHeight))
-        .setMaxResolution(Size(1000, 1000))
-        .setTargetAspectRatio(AspectRatio.RATIO_16_9)
+//        .setTargetResolution(Size(500, 100))
+//        .setMaxResolution(Size(rootWidth, rootHeight))
+//        .setTargetAspectRatio(aspectRatio(rootWidth, rootHeight))
         .build()
         .apply {
             setSurfaceProvider(previewView.surfaceProvider)
@@ -102,7 +100,7 @@ class CameraViewModel(val app: Application) : AndroidViewModel(app) {
         .requireLensFacing(CameraSelector.LENS_FACING_BACK)
         .build()
 
-    fun takePicture(buildTakePicture: ImageCapture, previewWidth: Int, previewHeight: Int) {
+    fun takePicture(buildTakePicture: ImageCapture) {
         buildTakePicture.takePicture(
             app.executor,
             object : OnImageCapturedCallback() {
@@ -110,18 +108,21 @@ class CameraViewModel(val app: Application) : AndroidViewModel(app) {
                 override fun onCaptureSuccess(image: ImageProxy) {
                     super.onCaptureSuccess(image)
 
-//                    val bitmap = imageProxyToBitmap(image)?.rotate(image.imageInfo.rotationDegrees.toFloat())
-//                    val resizedBitmap = cropBitmapToCenter(bitmap!!, previewWidth, previewHeight)
-//                    BitmapUtils.saveBitmapToFile(app.applicationContext, bitmap!!)
+                    val bitmap = imageProxyToBitmap(image)?.rotate(image.imageInfo.rotationDegrees.toFloat())
+                    // 틀에 맞게 리사이징
+                    val resizedBitmap = cropExact(bitmap!!)
+                    // 이미지 저장 storage -> self or emulated -> Android -> package name -> files -> Pictures
+//                    BitmapUtils.saveBitmapToFile(app.applicationContext, resizedBitmap!!)
 
                     var number = ""
                     var date = ""
 
                     viewModelScope.launch {
-                        val imageInput = InputImage.fromMediaImage(
-                            image.image!!,
-                            image.imageInfo.rotationDegrees
-                        )
+                        val imageInput = InputImage.fromBitmap(resizedBitmap, image.imageInfo.rotationDegrees)
+//                        val imageInput = InputImage.fromMediaImage(
+//                            image.image!!,
+//                            image.imageInfo.rotationDegrees
+//                        )
                         val text = textRecognizer.process(imageInput).await().text
 
 //                        Log.d("MYTAG", "${text}\n")
@@ -148,10 +149,10 @@ class CameraViewModel(val app: Application) : AndroidViewModel(app) {
                             if(areAllElementsEqual(dataQueue)) {
                                 _isTakePicture.value = false
                             } else {
-                                takePicture(buildTakePicture, previewWidth, previewHeight)
+                                takePicture(buildTakePicture)
                             }
                         } else {
-                            takePicture(buildTakePicture, previewWidth, previewHeight)
+                            takePicture(buildTakePicture)
                         }
                     }
                     image.close()
@@ -208,5 +209,57 @@ class CameraViewModel(val app: Application) : AndroidViewModel(app) {
 
         // 크롭된 비트맵 반환
         return Bitmap.createBitmap(bitmap, startX, startY, targetWidth, targetHeight)
+    }
+
+    private fun cropExact(bitmap: Bitmap): Bitmap {
+        val bitmapWidth = bitmap.width
+        val bitmapHeight = bitmap.height
+
+        val (width, height) = cardCaptureImageResizing(bitmapWidth, bitmapHeight)
+
+//        Log.d("MYTAG", "${bitmapWidth}/${bitmapHeight}/${rootWidth}/${rootHeight}/${targetWidth}/${targetHeight}")
+
+        // 자를 크기 계산
+        val cropX = 0
+        val cropY = (bitmapHeight / 2) - (height / 2)
+        val cropWidth = bitmapWidth
+        val cropHeight = height
+
+        Log.d("MYTAG", "Crop: x: ${cropX} y: ${cropY} width: ${cropWidth} height: ${cropHeight}")
+
+        // 자르기
+        return Bitmap.createBitmap(bitmap, cropX, cropY, cropWidth, cropHeight)
+    }
+
+//    private fun aspectRatio(width: Int, height: Int): Int {
+//        val previewRatio = max(width, height).toDouble() / min(width, height)
+//        if (abs(previewRatio - RATIO_4_3_VALUE) <= abs(previewRatio - RATIO_16_9_VALUE)) {
+//            return AspectRatio.RATIO_4_3
+//        }
+//        return AspectRatio.RATIO_16_9
+//    }
+//
+//    companion object {
+//        const val RATIO_4_3_VALUE = 4.0 / 3.0
+//        const val RATIO_16_9_VALUE = 16.0 / 9.0
+//    }
+
+    private fun cardCaptureImageResizing(width: Int, height: Int): Pair<Int, Int> {
+//        val (width, height) = ScreenUtil.getScreenWidthHeight(app)
+
+        Log.d("MYTAG", "스크린 크기: ${width} / ${height}")
+
+        val calWidth: Int = (width / 1.8).toInt()
+        val calHeight: Int = (height / 1).toInt()
+
+        if(calWidth >= calHeight) {
+            val previewWidth = ((calHeight * 1.8).toInt() / 1).toInt()
+            val previewHeight = ((calHeight * 1).toInt() / 1).toInt()
+            return Pair<Int, Int>(previewWidth, previewHeight)
+        } else {
+            val previewWidth = ((calWidth * 1.8).toInt() / 1).toInt()
+            val previewHeight = ((calWidth * 1).toInt() / 1).toInt()
+            return Pair<Int, Int>(previewWidth, previewHeight)
+        }
     }
 }

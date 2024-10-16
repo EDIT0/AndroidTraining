@@ -9,9 +9,12 @@
     tools:context=".CameraActivity">
 
     <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cardView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:cardCornerRadius="10dp"
+        android:layout_marginTop="50dp"
+        app:layout_constraintVertical_bias="0"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -30,6 +33,16 @@
 
     </com.google.android.material.card.MaterialCardView>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="카드를 틀 안에 인식시켜주세요."
+        android:textSize="20sp"
+        android:textColor="@color/white"
+        android:layout_marginTop="30dp"
+        app:layout_constraintStart_toStartOf="@+id/cardView"
+        app:layout_constraintEnd_toEndOf="@+id/cardView"
+        app:layout_constraintTop_toBottomOf="@+id/cardView"/>
 
 
     <ProgressBar
