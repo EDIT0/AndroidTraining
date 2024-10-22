@@ -1,4 +1,4 @@
-package com.example.bottomnavigation
+package com.example.bottomnavigation.view.fragment
 
 import android.os.Bundle
 import android.util.Log
@@ -6,14 +6,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import com.example.bottomnavigation.databinding.FragmentOneBinding
-import com.example.bottomnavigation.databinding.FragmentThreeBinding
+import com.example.bottomnavigation.view.activity.MainActivity
 import com.example.bottomnavigation.databinding.FragmentTwoBinding
 
 class TwoFragment : Fragment() {
 
-    private val TAG = TwoFragment::class.java.simpleName
+    private val TAG = "MYTAG"
 
     private var _fragmentTwoBinding: FragmentTwoBinding? = null
     private val fragmentTwoBinding get() = _fragmentTwoBinding!!

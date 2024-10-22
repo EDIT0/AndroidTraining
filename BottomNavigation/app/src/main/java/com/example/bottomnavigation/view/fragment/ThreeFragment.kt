@@ -1,6 +1,5 @@
-package com.example.bottomnavigation
+package com.example.bottomnavigation.view.fragment
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -8,15 +7,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
-import android.widget.Toast
+import com.example.bottomnavigation.R
+import com.example.bottomnavigation.view.activity.MainActivity
 import com.example.bottomnavigation.databinding.FragmentThreeBinding
-import com.example.bottomnavigation.databinding.FragmentTwoBinding
 import com.google.android.material.badge.BadgeDrawable
 import com.google.android.material.badge.BadgeUtils
 
 class ThreeFragment : Fragment() {
 
-    private val TAG = ThreeFragment::class.java.simpleName
+    private val TAG = "MYTAG"
 
     private var _fragmentThreeBinding: FragmentThreeBinding? = null
     private val fragmentThreeBinding get() = _fragmentThreeBinding!!

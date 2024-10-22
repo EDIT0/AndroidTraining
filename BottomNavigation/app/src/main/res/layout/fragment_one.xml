@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".OneFragment">
+    tools:context=".view.fragment.OneFragment">
 
 
     <ScrollView
@@ -24,7 +24,7 @@
                 android:id="@+id/tvOne"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="OneFragment\nOneFragment\nOneFragment\nOneFragment\nOneFragment\nOneFragment\nOneFragment\nOneFragment\nOneFragment\nOneFragment\nOneFragment\nOneFragment\nOneFragment\nOneFragment\nOneFragment\nOneFragment\nOneFragment\nOneFragment\n"
+                android:text=""
                 android:textSize="50sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
