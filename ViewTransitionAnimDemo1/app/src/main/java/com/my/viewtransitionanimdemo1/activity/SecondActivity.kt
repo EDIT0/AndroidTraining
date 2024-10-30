@@ -15,6 +15,8 @@ class SecondActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySecondBinding
 
+    private lateinit var backPressCallback: OnBackPressedCallback
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -37,15 +39,21 @@ class SecondActivity : AppCompatActivity() {
                 backPressedInvoke()
             }
         } else {
-            onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            backPressCallback = object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
                     backPressedInvoke()
                 }
-            })
+            }
+            onBackPressedDispatcher.addCallback(this, backPressCallback)
         }
     }
 
     private fun backPressedInvoke() {
         finishAfterTransition()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        backPressCallback.remove()
     }
 }
