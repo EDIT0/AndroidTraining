@@ -22,7 +22,11 @@ class SecondFragment : Fragment() {
     private var _binding: FragmentSecondBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var backPressCallback: OnBackPressedCallback
+    private val activity by lazy {
+        requireActivity() as FragmentActivity
+    }
+
+    private var backPressCallback: OnBackPressedCallback? = null
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -37,7 +41,7 @@ class SecondFragment : Fragment() {
                 (requireActivity() as FragmentActivity).fragmentNavController?.popBackStack()
             }
         }
-        requireActivity().onBackPressedDispatcher.addCallback(this, backPressCallback)
+        requireActivity().onBackPressedDispatcher.addCallback(this, backPressCallback!!)
 
     }
 
@@ -70,7 +74,7 @@ class SecondFragment : Fragment() {
     }
 
     override fun onDetach() {
+        backPressCallback?.remove()
         super.onDetach()
-        backPressCallback.remove()
     }
 }

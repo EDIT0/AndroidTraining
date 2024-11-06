@@ -1,7 +1,9 @@
 package com.my.viewtransitionanimdemo1.activity
 
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.window.OnBackInvokedDispatcher
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.enableEdgeToEdge
@@ -15,7 +17,7 @@ class SecondActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySecondBinding
 
-    private lateinit var backPressCallback: OnBackPressedCallback
+    private var backPressCallback: OnBackPressedCallback? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,12 +30,17 @@ class SecondActivity : AppCompatActivity() {
             insets
         }
 
+        Log.d("MYTAG", "From FirstActivity, ${intent.getStringExtra("key1")} / ${intent.getIntExtra("key2", 0)}")
 
         backPressed()
 
     }
 
     private fun backPressed() {
+        val intent = Intent()
+        intent.putExtra("Data", "KO, US, UK")
+        setResult(155, intent)
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             onBackInvokedDispatcher.registerOnBackInvokedCallback(OnBackInvokedDispatcher.PRIORITY_DEFAULT) {
                 backPressedInvoke()
@@ -44,7 +51,7 @@ class SecondActivity : AppCompatActivity() {
                     backPressedInvoke()
                 }
             }
-            onBackPressedDispatcher.addCallback(this, backPressCallback)
+            onBackPressedDispatcher.addCallback(this, backPressCallback!!)
         }
     }
 
@@ -53,7 +60,7 @@ class SecondActivity : AppCompatActivity() {
     }
 
     override fun onDestroy() {
+        backPressCallback?.remove()
         super.onDestroy()
-        backPressCallback.remove()
     }
 }
