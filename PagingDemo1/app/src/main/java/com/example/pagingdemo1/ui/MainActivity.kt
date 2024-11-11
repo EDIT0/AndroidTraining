@@ -6,22 +6,16 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
 import androidx.paging.PagingData
-import androidx.paging.map
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.pagingdemo1.R
 import com.example.pagingdemo1.databinding.ActivityMainBinding
-import com.example.pagingdemo1.model.MovieModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.onCompletion
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -29,11 +23,9 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding : ActivityMainBinding
 
-    private lateinit var mainViewModel: MainViewModel
+    private lateinit var mainVM: MainViewModel
     @Inject
     lateinit var mainViewModelFactory: MainViewModelFactory
-
-    var movieAdapter: MovieAdapter = MovieAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,17 +33,24 @@ class MainActivity : AppCompatActivity() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         binding.lifecycleOwner = this
 
-        mainViewModel = ViewModelProvider(this, mainViewModelFactory).get(MainViewModel::class.java)
-        binding.mainViewModel = mainViewModel
+        mainVM = ViewModelProvider(this, mainViewModelFactory).get(MainViewModel::class.java)
+        binding.mainViewModel = mainVM
 
         binding.rvMovie.apply {
-            adapter = movieAdapter
+            adapter = mainVM.movieAdapter
             layoutManager = LinearLayoutManager(binding.root.context)
 //            addOnScrollListener(onScrollListener)
         }
+        Log.d("MYTAG", "MovieAdapter Count : ${mainVM.movieAdapter.itemCount}")
+
+        // 첫 로드될 때만 호출
+        if(mainVM.isStart) {
+            mainVM.isStart = false
+            mainVM.fetchPagingData()
+        }
 
         // 아이템 클릭 리스너
-        movieAdapter.setOnItemClickListener { position, movieModelResult ->
+        mainVM.movieAdapter.setOnItemClickListener { position, movieModelResult ->
             Log.i("MYTAG", "${position} ${movieModelResult}")
         }
 
@@ -69,7 +68,7 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                mainViewModel.emitEtInput(p0?.toString()?:"")
+                mainVM.emitEtInput(p0?.toString()?:"")
             }
 
             override fun afterTextChanged(p0: Editable?) {
@@ -77,11 +76,12 @@ class MainActivity : AppCompatActivity() {
         })
 
         lifecycleScope.launchWhenStarted {
-            mainViewModel.resultStateFlow
+            mainVM.pagingDataFlow
                 .collectLatest {
+                    Log.d("MYTAG", "업데이트 호출")
                     if(it == null) return@collectLatest
-
-                    movieAdapter.submitData(this@MainActivity.lifecycle, it)
+                    delay(100L)
+                    mainVM.movieAdapter.submitData(this@MainActivity.lifecycle, it)
                 }
         }
 
@@ -99,16 +99,16 @@ class MainActivity : AppCompatActivity() {
 //        }
 
         lifecycleScope.launchWhenStarted {
-            mainViewModel.etInputStateFlow
+            mainVM.etInputStateFlow
                 .collectLatest {
-                    movieAdapter.submitData(lifecycle, PagingData.empty())
+                    mainVM.movieAdapter.submitData(lifecycle, PagingData.empty())
                 }
         }
 
 
         // 리스트 새로고침
         binding.swipeRefresh.setOnRefreshListener {
-            movieAdapter.refresh()
+            mainVM.movieAdapter.refresh()
 
 //            binding.swipeRefresh.isRefreshing = false
         }
@@ -116,14 +116,14 @@ class MainActivity : AppCompatActivity() {
         // 리스트 새로고침
         binding.btnRefresh.setOnClickListener {
 //            Log.i("MYTAG", "${mainViewModel.etInput.value}")
-            Log.i("MYTAG", "${mainViewModel.etInputStateFlow.value}")
-            movieAdapter.refresh()
+            Log.i("MYTAG", "${mainVM.etInputStateFlow.value}")
+            mainVM.movieAdapter.refresh()
         }
 
         /*
         * 상태 변화 리스너
         * */
-        movieAdapter.addLoadStateListener {
+        mainVM.movieAdapter.addLoadStateListener {
             Log.i("MYTAG", "prepend Loading ${it.source.prepend is LoadState.Loading}")
             Log.i("MYTAG", "append Loading ${it.source.append is LoadState.Loading}")
             Log.i("MYTAG", "refresh Loading ${it.source.refresh is LoadState.Loading}")
@@ -154,9 +154,9 @@ class MainActivity : AppCompatActivity() {
         binding.apply {
             rvMovie.setHasFixedSize(true) // 사이즈 고정
             // header, footer 설정
-            rvMovie.adapter = movieAdapter.withLoadStateHeaderAndFooter(
-                header = MovieLoadStateAdapter { movieAdapter.retry() },
-                footer = MovieLoadStateAdapter { movieAdapter.retry() }
+            rvMovie.adapter = mainVM.movieAdapter.withLoadStateHeaderAndFooter(
+                header = MovieLoadStateAdapter { mainVM.movieAdapter.retry() },
+                footer = MovieLoadStateAdapter { mainVM.movieAdapter.retry() }
             )
         }
 
