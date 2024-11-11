@@ -6,6 +6,7 @@ import androidx.paging.PagingState
 import com.example.pagingdemo1.model.MovieModel
 import com.example.pagingdemo1.network.Service
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableSharedFlow
 import retrofit2.HttpException
 import java.io.IOException
 import java.util.*
@@ -14,7 +15,8 @@ private const val STARTING_PAGE_INDEX = 1
 
 class MoviePagingSource(
     service: Service,
-    query: String
+    query: String,
+    private val movieModel: MutableSharedFlow<MovieModel>
 ) : PagingSource<Int, MovieModel.MovieModelResult>() {
 
     private var apiService: Service
@@ -43,8 +45,8 @@ class MoviePagingSource(
 
 //            val response = simpleApi.getCustomPost()
 
-            val post = response?.body()
-            Log.i("MYTAG", "${post?.totalPages} / ${post?.page} / ${post?.movieModelResults}")
+            val post: MovieModel? = response.body()
+            Log.i("MYTAG", "${post?.totalResults} / ${post?.totalPages} / ${post?.page} / ${post?.movieModelResults}")
             if(post == null || post.totalPages == 0) {
                 throw IOException()
             }
@@ -58,6 +60,8 @@ class MoviePagingSource(
                 }
             }
 
+            movieModel.emit(post)
+
             /* 로드에 성공 시 LoadResult.Page 반환
             data : 전송되는 데이터
             prevKey : 이전 값 (위 스크롤 방향)
@@ -65,7 +69,7 @@ class MoviePagingSource(
             itemsBefore, itemsAfter : 리스트 앞, 뒤에 표시할 placeholder 수
              */
             LoadResult.Page(
-                data = post!!.movieModelResults,
+                data = post.movieModelResults,
                 prevKey = if (position == STARTING_PAGE_INDEX) null else position - 1,
                 nextKey = if (position == post.totalPages) null else position + 1,
                 itemsBefore = 0,

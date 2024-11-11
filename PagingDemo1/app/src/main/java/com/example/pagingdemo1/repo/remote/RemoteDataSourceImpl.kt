@@ -9,6 +9,7 @@ import com.example.pagingdemo1.model.MovieModel
 import com.example.pagingdemo1.MoviePagingSource
 import com.example.pagingdemo1.network.Service
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 
 class RemoteDataSourceImpl(
     private val service: Service
@@ -16,7 +17,7 @@ class RemoteDataSourceImpl(
     //    override suspend fun getPopularMovies(language: String, page: Int): Response<MovieModel> {
 //        return service.getPopularMovies(BuildConfig.API_KEY, language, page)
 //    }
-    override fun getPopularMovies(query: String, language: String, page: Int): Flow<PagingData<MovieModel.MovieModelResult>> {
+    override fun getPopularMovies(movieModel: MutableSharedFlow<MovieModel>, query: String, language: String, page: Int): Flow<PagingData<MovieModel.MovieModelResult>> {
         return Pager(
             /**
              * pageSize:
@@ -46,7 +47,7 @@ class RemoteDataSourceImpl(
             ),
 
             // 사용할 메소드 선언
-            pagingSourceFactory = { MoviePagingSource(service, query)}
+            pagingSourceFactory = { MoviePagingSource(service, query, movieModel)}
         ).flow
 
     }

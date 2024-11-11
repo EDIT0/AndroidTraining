@@ -16,6 +16,7 @@ import com.example.pagingdemo1.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -103,6 +104,12 @@ class MainActivity : AppCompatActivity() {
                 .collectLatest {
                     mainVM.movieAdapter.submitData(lifecycle, PagingData.empty())
                 }
+        }
+
+        lifecycleScope.launch {
+            mainVM.movieModel.collect {
+                Log.d("MYTAG", "전체 데이터 Collect : ${it}")
+            }
         }
 
 

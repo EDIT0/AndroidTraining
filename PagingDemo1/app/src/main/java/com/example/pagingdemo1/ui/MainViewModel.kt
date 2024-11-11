@@ -7,8 +7,10 @@ import androidx.paging.cachedIn
 import androidx.paging.map
 import com.example.pagingdemo1.model.MovieModel
 import com.example.pagingdemo1.usecase.GetPopularMovieUseCase
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.map
@@ -45,6 +47,15 @@ class MainViewModel(
         }
     }
 
+    /**
+     * 전체 데이터 처리 변수
+     */
+    private val _movieModel = MutableSharedFlow<MovieModel>()
+    val movieModel = _movieModel.asSharedFlow()
+
+    /**
+     * 페이징 데이터 처리 변수
+     */
     private val _pagingDataFlow = MutableStateFlow<PagingData<MovieModel.MovieModelResult>>(PagingData.empty())
     val pagingDataFlow: StateFlow<PagingData<MovieModel.MovieModelResult>> = _pagingDataFlow.asStateFlow()
 
@@ -56,7 +67,7 @@ class MainViewModel(
     fun fetchPagingData() {
         viewModelScope.launch {
             etInputStateFlow.collectLatest { input ->
-                getPopularMovieUseCase.execute(input, "", 0)
+                getPopularMovieUseCase.execute(_movieModel, input, "", 0)
                     .cachedIn(viewModelScope)
                     .map { a ->
                         a.map { model ->
