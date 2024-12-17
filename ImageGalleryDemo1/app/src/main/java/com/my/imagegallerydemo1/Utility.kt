@@ -1,6 +1,7 @@
 package com.my.imagegallerydemo1
 
 import android.app.Activity
+import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
 import android.graphics.Bitmap
@@ -9,10 +10,13 @@ import android.graphics.ImageDecoder
 import android.graphics.Matrix
 import android.net.Uri
 import android.os.Build
+import android.os.Environment
 import android.provider.MediaStore
 import androidx.exifinterface.media.ExifInterface
 import java.io.ByteArrayOutputStream
+import java.io.File
 import java.io.FileNotFoundException
+import java.io.FileOutputStream
 import java.io.IOException
 import java.io.InputStream
 
@@ -36,10 +40,61 @@ object Utility {
 
     // Bitmap To Uri
     fun getBitmapToUri(activity: Activity, inImage: Bitmap): Uri {
-        val bytes = ByteArrayOutputStream()
-        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
-        val path = MediaStore.Images.Media.insertImage(activity.contentResolver, inImage, "IMG_" + System.currentTimeMillis(), null)
-        return Uri.parse(path)
+        // 원본 코드
+//        val bytes = ByteArrayOutputStream()
+//        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
+//        val path = MediaStore.Images.Media.insertImage(activity.contentResolver, inImage, "IMG_" + System.currentTimeMillis(), null)
+//        return Uri.parse(path)
+
+        // 경로 수정 코드
+        val filename = "IMG_${System.currentTimeMillis()}.jpg"
+        var uri: Uri? = null
+
+        try {
+            // Android 10 (Q) 이상
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                val contentValues = ContentValues()
+                contentValues.apply {
+                    put(MediaStore.MediaColumns.DISPLAY_NAME, filename)
+                    put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg")
+                    put(MediaStore.MediaColumns.RELATIVE_PATH, "${Environment.DIRECTORY_PICTURES}/imagegallery")
+                }
+
+                uri = activity.contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
+                uri?.let { uri ->
+                    activity.contentResolver.openOutputStream(uri)?.use { outputStream ->
+                        inImage.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
+                    }
+                }
+            }
+            // Android 9 (Pie) 이하
+            else {
+                val imagesDir = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "imagegallery")
+                if (!imagesDir.exists()) {
+                    imagesDir.mkdirs()
+                }
+
+                val image = File(imagesDir, filename)
+                FileOutputStream(image).use { outputStream ->
+                    inImage.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
+                }
+
+                uri = Uri.fromFile(image)
+
+                // MediaStore에 등록하여 갤러리에서 보이게 하기
+                val values = ContentValues()
+                values.apply {
+                    put(MediaStore.Images.Media.DATA, image.absolutePath)
+                    put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg")
+                }
+
+                activity.contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
+            }
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+
+        return uri ?: Uri.EMPTY
     }
 
     // uri 절대 경로
@@ -95,8 +150,7 @@ object Utility {
             else -> return bitmap
         }
         return try {
-            val bmRotated =
-                Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true)
+            val bmRotated = Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true)
             bitmap.recycle()
             bmRotated
         } catch (e: OutOfMemoryError) {
@@ -110,7 +164,7 @@ object Utility {
         val options = BitmapFactory.Options()
         try {
             BitmapFactory.decodeStream(
-                context.getContentResolver().openInputStream(uri),
+                context.contentResolver.openInputStream(uri),
                 null,
                 options
             ) // 1번
@@ -125,7 +179,7 @@ object Utility {
             }
             options.inSampleSize = samplesize
             val bitmap = BitmapFactory.decodeStream(
-                context.getContentResolver().openInputStream(uri),
+                context.contentResolver.openInputStream(uri),
                 null,
                 options
             ) //3번

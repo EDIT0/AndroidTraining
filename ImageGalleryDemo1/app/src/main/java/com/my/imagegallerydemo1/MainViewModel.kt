@@ -2,8 +2,8 @@ package com.my.imagegallerydemo1
 
 import android.app.Activity
 import android.content.ContentValues
-import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.provider.MediaStore
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModel
@@ -57,17 +57,54 @@ class MainViewModel: ViewModel() {
     }
 
     /**
+     * 권한 설정 확인
+     *
+     * @return 모두 승인: true, 하나라도 거절: false
+     */
+    fun isGrantedPermissions(): Boolean {
+        val version = Build.VERSION.SDK_INT
+        LogUtil.d_dev("Android version: ${version}")
+
+        return pm.isGrantedPermissions(
+            if (version >= Build.VERSION_CODES.TIRAMISU) {
+                arrayListOf(
+                    pm.permissionOfPostNotifications,
+                    pm.permissionOfReadMediaImages,
+        //                pm.permissionOfReadMediaVisualUserSelected
+                )
+            } else if (version >= Build.VERSION_CODES.O) {
+                arrayListOf(
+                    pm.permissionOfReadExternalStorage,
+                )
+            } else {
+                arrayListOf()
+            }
+        )
+    }
+
+    /**
      * 권한 요청
      * 리스트에 필요한 권한 넣기
      */
     fun requestPermissions() {
-        pm.requestPermissions(
-            arrayListOf(
-                pm.permissionOfPostNotifications,
-                pm.permissionOfReadMediaImages,
+        val version = Build.VERSION.SDK_INT
+        LogUtil.d_dev("Android version: ${version}")
+
+        if (version >= Build.VERSION_CODES.TIRAMISU) {
+            pm.requestPermissions(
+                arrayListOf(
+                    pm.permissionOfPostNotifications,
+                    pm.permissionOfReadMediaImages,
 //                pm.permissionOfReadMediaVisualUserSelected
+                )
             )
-        )
+        } else if (version >= Build.VERSION_CODES.O) {
+            pm.requestPermissions(
+                arrayListOf(
+                    pm.permissionOfReadExternalStorage,
+                )
+            )
+        }
     }
 
     /**

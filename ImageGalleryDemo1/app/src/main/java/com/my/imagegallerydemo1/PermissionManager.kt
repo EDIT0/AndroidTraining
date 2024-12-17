@@ -21,6 +21,7 @@ class PermissionManager(
     // 선택
     val permissionOfReadMediaImages = Manifest.permission.READ_MEDIA_IMAGES
 //    val permissionOfReadMediaVisualUserSelected = Manifest.permission.READ_MEDIA_VISUAL_USER_SELECTED
+    val permissionOfReadExternalStorage = Manifest.permission.READ_EXTERNAL_STORAGE
 
     /**
      * 필수 권한 리스트 반환
@@ -36,9 +37,7 @@ class PermissionManager(
                 permissionOfPostNotifications
             )
         } else if(version >= Build.VERSION_CODES.O) {
-            return arrayListOf(
-                permissionOfPostNotifications
-            )
+            return arrayListOf()
         }
 
         return arrayListOf()

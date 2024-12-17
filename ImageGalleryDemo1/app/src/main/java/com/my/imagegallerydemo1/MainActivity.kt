@@ -51,18 +51,28 @@ class MainActivity : AppCompatActivity() {
                 }
         }
 
-        mainVM.requestPermissions()
-
         binding.layoutOpenCamera.setOnClickListener {
-            mainVM.openCamera(this@MainActivity)
+            if(mainVM.isGrantedPermissions()) {
+                mainVM.openCamera(this@MainActivity)
+            } else {
+                mainVM.requestPermissions()
+            }
         }
 
         binding.layoutOpenGallery.setOnClickListener {
-            mainVM.openGallery(this@MainActivity)
+            if(mainVM.isGrantedPermissions()) {
+                mainVM.openGallery(this@MainActivity)
+            } else {
+                mainVM.requestPermissions()
+            }
         }
 
         binding.layoutOpenMultiGallery.setOnClickListener {
-            mainVM.openMultiGallery(this@MainActivity)
+            if(mainVM.isGrantedPermissions()) {
+                mainVM.openMultiGallery(this@MainActivity)
+            } else {
+                mainVM.requestPermissions()
+            }
         }
     }
 
