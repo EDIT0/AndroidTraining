@@ -1,6 +1,8 @@
 package com.my.customviewdemo1
 
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.background
@@ -30,14 +32,28 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.ListAdapter
+import androidx.recyclerview.widget.RecyclerView
 import com.my.customviewdemo1.databinding.ActivityMainBinding
-import com.my.customviewdemo1.view.BatteryView
-import com.my.customviewdemo1.view.LogoView
+import com.my.customviewdemo1.databinding.ItemViewBinding
+import com.my.customviewdemo1.view.compose.BatteryView
+import com.my.customviewdemo1.view.compose.LogoView
+import com.my.customviewdemo1.view.xml.ProgressIconButtonView
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding : ActivityMainBinding
+
+    private lateinit var viewGroupAdapter: ViewGroupAdapter
+    private var xmlViewList = listOf(
+        XmlViewGroup.ProgressIconButtonView
+    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,9 +66,11 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
+        layoutVisibleGone()
+
         binding.layoutComposeView1.setContent {
             val selectedView = remember {
-                mutableStateOf(ViewGroup.BatteryView)
+                mutableStateOf(ComposeViewGroup.BatteryView)
             }
             Column(
                 modifier = Modifier
@@ -67,11 +85,81 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        viewGroupAdapter = ViewGroupAdapter (
+            onItemClick = {
+                when(it) {
+                    XmlViewGroup.ProgressIconButtonView -> {
+                        binding.layoutInflateView.removeAllViews()
+                        val inflater = LayoutInflater.from(binding.layoutInflateView.context)
+                        val newLayout = inflater.inflate(R.layout.progress_icon_button_view, binding.layoutInflateView, false)
+                        binding.layoutInflateView.addView(newLayout)
+
+                        controlProgressIconButtonView()
+                    }
+                }
+            }
+        )
+
+        binding.rvXmlViewGroup.apply {
+            layoutManager = LinearLayoutManager(binding.rvXmlViewGroup.context, LinearLayoutManager.VERTICAL, false)
+            adapter = viewGroupAdapter
+            addItemDecoration(DividerItemDecoration(binding.rvXmlViewGroup.context, LinearLayoutManager.VERTICAL))
+        }
+
+        viewGroupAdapter.submitList(xmlViewList)
+    }
+
+    private fun layoutVisibleGone() {
+        binding.btnCompose.setOnClickListener {
+            binding.layoutComposeView1.visibility = View.VISIBLE
+            binding.layoutXmlView1.visibility = View.GONE
+        }
+
+        binding.btnXml.setOnClickListener {
+            binding.layoutComposeView1.visibility = View.GONE
+            binding.layoutXmlView1.visibility = View.VISIBLE
+        }
+
+        binding.layoutXmlView1.visibility = View.GONE
+    }
+
+    private fun controlProgressIconButtonView() {
+        val progressIconButtonView = binding.layoutInflateView.findViewById<ProgressIconButtonView>(R.id.progressIconButtonView)
+
+        // 직접 percentage 설정
+        progressIconButtonView.apply {
+            setIcon(R.drawable.ic_rounded_lock_24, R.drawable.ic_rounded_lock_white_24)
+            setIconSize(48f)
+            setOnClickListener {
+                if(getPercentage().toInt() != 0) {
+                    return@setOnClickListener
+                }
+                lifecycleScope.launch {
+                    for(i in 0 until 101) {
+                        delay(50L)
+                        setPercentage(i)
+                    }
+                    setPercentage(0)
+                }
+            }
+        }
+
+        // 일정시간 동안 애니메이션
+//        progressIconButtonView.apply {
+//            setIcon(R.drawable.ic_rounded_lock_open_24, R.drawable.ic_rounded_lock_open_white_24)
+//            setIconSize(36f)
+//            setOnClickListener {
+//                if(getPercentage().toInt() != 0) {
+//                    return@setOnClickListener
+//                }
+//                setAutoPercentage()
+//            }
+//        }
     }
 }
 
 @Composable
-fun LayoutCustomView(viewGroup: ViewGroup) {
+fun LayoutCustomView(composeViewGroup: ComposeViewGroup) {
     Card(
         colors = CardDefaults.cardColors(
             containerColor = Color.White,
@@ -81,21 +169,21 @@ fun LayoutCustomView(viewGroup: ViewGroup) {
             defaultElevation = 5.dp
         ),
     ) {
-        Views(viewGroup)
+        Views(composeViewGroup)
     }
 
 }
 
 @Composable
-fun LayoutListView(onItemClick: (ViewGroup) -> Unit) {
-    val viewList = listOf(ViewGroup.BatteryView, ViewGroup.LogoView)
+fun LayoutListView(onItemClick: (ComposeViewGroup) -> Unit) {
+    val viewList = listOf(ComposeViewGroup.BatteryView, ComposeViewGroup.LogoView)
     
     val state = LazyListState()
 
     LazyColumn(
         state = state
     ) {
-        itemsIndexed(viewList) { index: Int, item: ViewGroup ->
+        itemsIndexed(viewList) { index: Int, item: ComposeViewGroup ->
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -116,9 +204,9 @@ fun LayoutListView(onItemClick: (ViewGroup) -> Unit) {
 }
 
 @Composable
-fun Views(vg: ViewGroup) {
-    when(vg.name) {
-        ViewGroup.BatteryView.name -> {
+fun Views(cvg: ComposeViewGroup) {
+    when(cvg.name) {
+        ComposeViewGroup.BatteryView.name -> {
             var percentage by remember { mutableStateOf(0) }
 
             LaunchedEffect(Unit) {
@@ -134,7 +222,7 @@ fun Views(vg: ViewGroup) {
                 percentage = percentage
             )
         }
-        ViewGroup.LogoView.name -> {
+        ComposeViewGroup.LogoView.name -> {
             return LogoView(
                 modifier = Modifier
                     .aspectRatio(1f),
@@ -147,7 +235,7 @@ fun Views(vg: ViewGroup) {
 @Preview
 @Composable
 fun LayoutCustomViewPreview() {
-    LayoutCustomView(ViewGroup.BatteryView)
+    LayoutCustomView(ComposeViewGroup.BatteryView)
 }
 
 @Preview(showBackground = true)
@@ -158,6 +246,56 @@ fun LayoutListViewPreview() {
     )
 }
 
-enum class ViewGroup {
+enum class ComposeViewGroup {
     BatteryView, LogoView
+}
+
+enum class XmlViewGroup {
+    ProgressIconButtonView
+}
+
+class ViewGroupAdapter(
+    private val onItemClick: (XmlViewGroup) -> Unit
+) : ListAdapter<XmlViewGroup, ViewGroupAdapter.ViewGroupViewHolder>(DiffCallback) {
+
+    override fun onCreateViewHolder(
+        parent: android.view.ViewGroup,
+        viewType: Int
+    ): ViewGroupViewHolder {
+        return ViewGroupViewHolder(
+            ItemViewBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent,
+                false
+            ), onItemClick
+        )
+    }
+
+    override fun onBindViewHolder(holder: ViewGroupViewHolder, position: Int) {
+        getItem(position)?.let {
+            holder.bind(it)
+        }
+    }
+
+    inner class ViewGroupViewHolder(
+        private val binding: ItemViewBinding,
+        private val listener: (XmlViewGroup) -> Unit
+    ) : RecyclerView.ViewHolder(binding.root) {
+        fun bind(item: XmlViewGroup) {
+            binding.root.setOnClickListener {
+                listener.invoke(item)
+            }
+            binding.tvTitle.text = item.name
+        }
+    }
+
+    object DiffCallback : DiffUtil.ItemCallback<XmlViewGroup>() {
+        override fun areItemsTheSame(oldItem: XmlViewGroup, newItem: XmlViewGroup): Boolean {
+            return oldItem.name == newItem.name
+        }
+
+        override fun areContentsTheSame(oldItem: XmlViewGroup, newItem: XmlViewGroup): Boolean {
+            return oldItem == newItem
+        }
+    }
 }

@@ -1,4 +1,4 @@
-package com.my.customviewdemo1.view
+package com.my.customviewdemo1.view.compose
 
 import android.graphics.Paint
 import androidx.compose.animation.core.animateFloatAsState
