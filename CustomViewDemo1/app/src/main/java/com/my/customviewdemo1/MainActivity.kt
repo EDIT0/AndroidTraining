@@ -3,6 +3,7 @@ package com.my.customviewdemo1
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.background
@@ -43,8 +44,21 @@ import com.my.customviewdemo1.databinding.ItemViewBinding
 import com.my.customviewdemo1.view.compose.BatteryView
 import com.my.customviewdemo1.view.compose.LogoView
 import com.my.customviewdemo1.view.xml.ProgressIconButtonView
+import com.my.customviewdemo1.view.xml.SliderChangeListener
+import com.my.customviewdemo1.view.xml.SliderView1
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlin.math.floor
+
+enum class ComposeViewGroup {
+    BatteryView,
+    LogoView
+}
+
+enum class XmlViewGroup {
+    ProgressIconButtonView,
+    SliderView1
+}
 
 class MainActivity : AppCompatActivity() {
 
@@ -52,7 +66,8 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var viewGroupAdapter: ViewGroupAdapter
     private var xmlViewList = listOf(
-        XmlViewGroup.ProgressIconButtonView
+        XmlViewGroup.ProgressIconButtonView,
+        XmlViewGroup.SliderView1
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -95,6 +110,14 @@ class MainActivity : AppCompatActivity() {
                         binding.layoutInflateView.addView(newLayout)
 
                         controlProgressIconButtonView()
+                    }
+                    XmlViewGroup.SliderView1 -> {
+                        binding.layoutInflateView.removeAllViews()
+                        val inflater = LayoutInflater.from(binding.layoutInflateView.context)
+                        val newLayout = inflater.inflate(R.layout.slider_view_1, binding.layoutInflateView, false)
+                        binding.layoutInflateView.addView(newLayout)
+
+                        controlSliderView1()
                     }
                 }
             }
@@ -155,6 +178,34 @@ class MainActivity : AppCompatActivity() {
 //                setAutoPercentage()
 //            }
 //        }
+    }
+
+    private fun controlSliderView1() {
+        val sliderView1 = binding.layoutInflateView.findViewById<SliderView1>(R.id.sliderView1)
+        val tvCurrentValue = binding.layoutInflateView.findViewById<TextView>(R.id.tvCurrentValue)
+        val tvFrom = binding.layoutInflateView.findViewById<TextView>(R.id.tvFrom)
+        val tvTo = binding.layoutInflateView.findViewById<TextView>(R.id.tvTo)
+
+        sliderView1.setRange(from = 16f, to = 32.5f)
+        sliderView1.setLine(color = R.color.amber_100, heightDp = 15, lineCornerDp = 10)
+        sliderView1.setControlCircleStroke(color = R.color.blue_300, sizeDp = 2f)
+        sliderView1.setControlCircleColor(color = R.color.blue_100)
+        sliderView1.setLineChargingColor(isEnable = true, color = R.color.teal_200)
+        sliderView1.setControlCircleRadius(dp = 10)
+
+        tvFrom.text = "${16}"
+        tvTo.text = "${32.5}"
+
+        sliderView1.sliderChangeListener = object : SliderChangeListener {
+            override fun onValueChanged(value: Float) {
+                val v = String.format("%.1f", value % 1).toFloat()
+                if(v < 0.5f) {
+                    tvCurrentValue.text = floor(String.format("%.1f", value).toFloat()).toString()
+                } else if(v >= 0.5f) {
+                    tvCurrentValue.text = (floor(String.format("%.1f", value).toFloat()) + 0.5f).toString()
+                }
+            }
+        }
     }
 }
 
@@ -244,14 +295,6 @@ fun LayoutListViewPreview() {
     LayoutListView(
         onItemClick = { }
     )
-}
-
-enum class ComposeViewGroup {
-    BatteryView, LogoView
-}
-
-enum class XmlViewGroup {
-    ProgressIconButtonView
 }
 
 class ViewGroupAdapter(
