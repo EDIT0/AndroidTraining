@@ -307,7 +307,7 @@ class SliderView1 @JvmOverloads constructor(
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         setMeasuredDimension(
             widthMeasureSpec,
-            ViewSizeUtil.dpToPx(context, controlCircleRadius).toInt()
+            controlCircleRadius.toInt() * 3
         )
     }
 }
