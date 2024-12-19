@@ -3,6 +3,7 @@ package com.my.customviewdemo1
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.Button
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -43,6 +44,7 @@ import com.my.customviewdemo1.databinding.ActivityMainBinding
 import com.my.customviewdemo1.databinding.ItemViewBinding
 import com.my.customviewdemo1.view.compose.BatteryView
 import com.my.customviewdemo1.view.compose.LogoView
+import com.my.customviewdemo1.view.xml.ProgressBarView1
 import com.my.customviewdemo1.view.xml.ProgressIconButtonView
 import com.my.customviewdemo1.view.xml.SliderChangeListener
 import com.my.customviewdemo1.view.xml.SliderView1
@@ -57,7 +59,8 @@ enum class ComposeViewGroup {
 
 enum class XmlViewGroup {
     ProgressIconButtonView,
-    SliderView1
+    SliderView1,
+    ProgressBarView1
 }
 
 class MainActivity : AppCompatActivity() {
@@ -67,7 +70,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var viewGroupAdapter: ViewGroupAdapter
     private var xmlViewList = listOf(
         XmlViewGroup.ProgressIconButtonView,
-        XmlViewGroup.SliderView1
+        XmlViewGroup.SliderView1,
+        XmlViewGroup.ProgressBarView1
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -119,6 +123,14 @@ class MainActivity : AppCompatActivity() {
 
                         controlSliderView1()
                     }
+                    XmlViewGroup.ProgressBarView1 -> {
+                        binding.layoutInflateView.removeAllViews()
+                        val inflater = LayoutInflater.from(binding.layoutInflateView.context)
+                        val newLayout = inflater.inflate(R.layout.progress_bar_view_1, binding.layoutInflateView, false)
+                        binding.layoutInflateView.addView(newLayout)
+
+                        controlProgressBarView1()
+                    }
                 }
             }
         )
@@ -148,11 +160,14 @@ class MainActivity : AppCompatActivity() {
 
     private fun controlProgressIconButtonView() {
         val progressIconButtonView = binding.layoutInflateView.findViewById<ProgressIconButtonView>(R.id.progressIconButtonView)
+        val btnBack = binding.layoutInflateView.findViewById<Button>(R.id.btnBack)
 
         // 직접 percentage 설정
         progressIconButtonView.apply {
             setIcon(R.drawable.ic_rounded_lock_24, R.drawable.ic_rounded_lock_white_24)
             setIconSize(48f)
+            setIconRectColor(R.color.teal_500)
+            setProgressColor(proBgRectColor = R.color.pink_300, proRectColor = R.color.cyan_500)
             setOnClickListener {
                 if(getPercentage().toInt() != 0) {
                     return@setOnClickListener
@@ -162,7 +177,7 @@ class MainActivity : AppCompatActivity() {
                         delay(50L)
                         setPercentage(i)
                     }
-                    setPercentage(0)
+//                    setPercentage(0)
                 }
             }
         }
@@ -171,6 +186,8 @@ class MainActivity : AppCompatActivity() {
 //        progressIconButtonView.apply {
 //            setIcon(R.drawable.ic_rounded_lock_open_24, R.drawable.ic_rounded_lock_open_white_24)
 //            setIconSize(36f)
+//            setIconRectColor(R.color.teal_500)
+//            setProgressColor(proBgRectColor = R.color.pink_300, proRectColor = R.color.cyan_500)
 //            setOnClickListener {
 //                if(getPercentage().toInt() != 0) {
 //                    return@setOnClickListener
@@ -178,6 +195,10 @@ class MainActivity : AppCompatActivity() {
 //                setAutoPercentage()
 //            }
 //        }
+
+        btnBack.setOnClickListener {
+            progressIconButtonView.setInitState()
+        }
     }
 
     private fun controlSliderView1() {
@@ -187,9 +208,9 @@ class MainActivity : AppCompatActivity() {
         val tvTo = binding.layoutInflateView.findViewById<TextView>(R.id.tvTo)
 
         sliderView1.setRange(from = 16f, to = 32.5f)
-        sliderView1.setLine(color = R.color.amber_100, heightDp = 15, lineCornerDp = 10)
+        sliderView1.setLine(color = R.color.amber_100, heightDp = 10, lineCornerDp = 10)
         sliderView1.setControlCircleStroke(color = R.color.blue_300, sizeDp = 2f)
-        sliderView1.setControlCircleColor(color = R.color.blue_100)
+        sliderView1.setControlCircleColor(color = R.color.white)
         sliderView1.setLineChargingColor(isEnable = true, color = R.color.teal_200)
         sliderView1.setControlCircleRadius(dp = 10)
 
@@ -204,6 +225,24 @@ class MainActivity : AppCompatActivity() {
                 } else if(v >= 0.5f) {
                     tvCurrentValue.text = (floor(String.format("%.1f", value).toFloat()) + 0.5f).toString()
                 }
+            }
+        }
+    }
+
+    private fun controlProgressBarView1() {
+        val progressBarView1 = binding.layoutInflateView.findViewById<ProgressBarView1>(R.id.progressBarView1)
+
+        progressBarView1.apply {
+            setLineCorner(3)
+            setLineHeight(10)
+            setLineColor(lineBackgroundColor = R.color.grey_300, chargingLineBackgroundColor = R.color.grey_800)
+        }
+
+        lifecycleScope.launch {
+            for(i in 1 until 101) {
+                delay(300L)
+                LogUtil.d_dev("i값: ${i}")
+                progressBarView1.setChargingValue(i.toFloat())
             }
         }
     }
