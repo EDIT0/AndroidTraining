@@ -227,6 +227,8 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+
+        sliderView1.setCurrentValue(30.3f)
     }
 
     private fun controlProgressBarView1() {

@@ -128,20 +128,6 @@ class SliderView1 @JvmOverloads constructor(
         }
     }
 
-    private fun updateValue() {
-        val lineWidth = lineXRight - lineXLeft
-        val relativeControlCirclePosition = controlCircleXCenter - lineXLeft
-        val oldValue = currentValue
-        currentValue = 1.0f * relativeControlCirclePosition / lineWidth
-        val calValue: Float = (currentValue * (rangeTo - rangeFrom) + rangeFrom)
-        LogUtil.d_dev("currentValue: ${currentValue} calValue: ${calValue}")
-        if (currentValue != oldValue) {
-            sliderChangeListener?.onValueChanged(calValue.toFloat())
-            updateControlCirclePosition()
-            invalidate()
-        }
-    }
-
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
 
@@ -178,11 +164,6 @@ class SliderView1 @JvmOverloads constructor(
         }
 
         updateControlCirclePosition()
-    }
-
-    private fun updateControlCirclePosition() {
-        controlCircleXCenter = lineXLeft + currentValue * (lineXRight - lineXLeft) // ex) 2 - 9 사이, 2 + 0.5(변경값) * (9 - 2) = 5.5
-        controlCircleYCenter = lineYPos
     }
 
     override fun onDraw(canvas: Canvas) {
@@ -251,6 +232,28 @@ class SliderView1 @JvmOverloads constructor(
         rangeTo = to
     }
 
+    private fun updateValue() {
+        val lineWidth = lineXRight - lineXLeft
+        val relativeControlCirclePosition = controlCircleXCenter - lineXLeft
+        val oldValue = currentValue
+        currentValue = 1.0f * relativeControlCirclePosition / lineWidth
+        val calValue: Float = (currentValue * (rangeTo - rangeFrom) + rangeFrom)
+        LogUtil.d_dev("currentValue: ${currentValue} calValue: ${calValue}")
+        if (currentValue != oldValue) {
+            sliderChangeListener?.onValueChanged(calValue.toFloat())
+            updateControlCirclePosition()
+            invalidate()
+        }
+    }
+
+    /**
+     * 컨트롤 원 위치 업데이트
+     */
+    private fun updateControlCirclePosition() {
+        controlCircleXCenter = lineXLeft + currentValue * (lineXRight - lineXLeft) // ex) 2 - 9 사이, 2 + 0.5(변경값) * (9 - 2) = 5.5
+        controlCircleYCenter = lineYPos
+    }
+
     /**
      * 막대 설정
      *
@@ -302,6 +305,18 @@ class SliderView1 @JvmOverloads constructor(
      */
     fun setControlCircleRadius(dp: Int) {
         controlCircleRadius = ViewSizeUtil.dpToPx(context, dp.toFloat()).toFloat()
+    }
+
+    /**
+     * 현재 값 설정
+     *
+     * @param value
+     */
+    fun setCurrentValue(value: Float) {
+        currentValue = value / ((rangeTo - rangeFrom) + rangeFrom) // 컨트롤 원 위치 계산
+        sliderChangeListener?.onValueChanged(value)
+        updateControlCirclePosition()
+        invalidate()
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
