@@ -34,7 +34,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -44,10 +43,14 @@ import com.my.customviewdemo1.databinding.ActivityMainBinding
 import com.my.customviewdemo1.databinding.ItemViewBinding
 import com.my.customviewdemo1.view.compose.BatteryView
 import com.my.customviewdemo1.view.compose.LogoView
+import com.my.customviewdemo1.view.xml.GaugeView1
 import com.my.customviewdemo1.view.xml.ProgressBarView1
 import com.my.customviewdemo1.view.xml.ProgressIconButtonView
 import com.my.customviewdemo1.view.xml.SliderChangeListener
 import com.my.customviewdemo1.view.xml.SliderView1
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.math.floor
@@ -60,7 +63,8 @@ enum class ComposeViewGroup {
 enum class XmlViewGroup {
     ProgressIconButtonView,
     SliderView1,
-    ProgressBarView1
+    ProgressBarView1,
+    GaugeView1
 }
 
 class MainActivity : AppCompatActivity() {
@@ -71,8 +75,14 @@ class MainActivity : AppCompatActivity() {
     private var xmlViewList = listOf(
         XmlViewGroup.ProgressIconButtonView,
         XmlViewGroup.SliderView1,
-        XmlViewGroup.ProgressBarView1
+        XmlViewGroup.ProgressBarView1,
+        XmlViewGroup.GaugeView1
     )
+
+    private var progressBarView1Job1: Job? = null
+    private var progressIconButtonViewJob1: Job? = null
+    private var gaugeView1Job1: Job? = null
+    private var scope = CoroutineScope(Dispatchers.Main)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -106,6 +116,10 @@ class MainActivity : AppCompatActivity() {
 
         viewGroupAdapter = ViewGroupAdapter (
             onItemClick = {
+                progressBarView1Job1?.cancel()
+                progressIconButtonViewJob1?.cancel()
+                gaugeView1Job1?.cancel()
+
                 when(it) {
                     XmlViewGroup.ProgressIconButtonView -> {
                         binding.layoutInflateView.removeAllViews()
@@ -130,6 +144,14 @@ class MainActivity : AppCompatActivity() {
                         binding.layoutInflateView.addView(newLayout)
 
                         controlProgressBarView1()
+                    }
+                    XmlViewGroup.GaugeView1 -> {
+                        binding.layoutInflateView.removeAllViews()
+                        val inflater = LayoutInflater.from(binding.layoutInflateView.context)
+                        val newLayout = inflater.inflate(R.layout.gauge_view_1, binding.layoutInflateView, false)
+                        binding.layoutInflateView.addView(newLayout)
+
+                        controlGaugeView1()
                     }
                 }
             }
@@ -172,12 +194,11 @@ class MainActivity : AppCompatActivity() {
                 if(getPercentage().toInt() != 0) {
                     return@setOnClickListener
                 }
-                lifecycleScope.launch {
+                progressIconButtonViewJob1 = scope.launch {
                     for(i in 0 until 101) {
                         delay(50L)
                         setPercentage(i)
                     }
-//                    setPercentage(0)
                 }
             }
         }
@@ -240,13 +261,32 @@ class MainActivity : AppCompatActivity() {
             setLineColor(lineBackgroundColor = R.color.grey_300, chargingLineBackgroundColor = R.color.grey_800)
         }
 
-        lifecycleScope.launch {
+        progressBarView1Job1 = scope.launch(Dispatchers.IO) {
             for(i in 1 until 101) {
-                delay(300L)
-                LogUtil.d_dev("i값: ${i}")
+                delay(30L)
+                LogUtil.d_dev("${Thread.currentThread()} i값: ${i}")
                 progressBarView1.setChargingValue(i.toFloat())
             }
         }
+    }
+
+    private fun controlGaugeView1() {
+        val gaugeView1 = binding.layoutInflateView.findViewById<GaugeView1>(R.id.gaugeView1)
+
+        gaugeView1.setCenterBottomText(
+            text1 = "90점",
+            text2 = "전날 대비",
+            text3 = " +23점"
+        )
+
+        gaugeView1Job1 = scope.launch {
+            for(i in 0 until 91) {
+                delay(30L)
+                LogUtil.d_dev("${Thread.currentThread()} i값: ${i}")
+                gaugeView1.setGaugePercentage(i.toFloat())
+            }
+        }
+
     }
 }
 
