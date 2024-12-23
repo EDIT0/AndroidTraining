@@ -10,14 +10,16 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.my.imagegallerydemo1.databinding.ActivityMainBinding
 import kotlinx.coroutines.launch
-import java.util.ArrayList
+import kotlin.collections.ArrayList
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private val mainVM: MainViewModel by viewModels()
+    private lateinit var imageAdapter: ImageAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -73,6 +75,24 @@ class MainActivity : AppCompatActivity() {
             } else {
                 mainVM.requestPermissions()
             }
+        }
+
+        imageAdapter = ImageAdapter(
+            onItemClick = {
+
+            },
+            onItemDeleteClick = {
+                LogUtil.d_dev("=====삭제=====\nuri: ${it.uri}\npath: ${it.path}\n==========")
+                mainVM.deleteCameraImage(it.path, arrayListOf())
+                val tmpList = ArrayList<Image>()
+                tmpList.addAll(imageAdapter.currentList)
+                tmpList.remove(it)
+                imageAdapter.submitList(tmpList.toMutableList())
+            }
+        )
+        binding.rvImage.apply {
+            layoutManager = LinearLayoutManager(binding.rvImage.context, LinearLayoutManager.HORIZONTAL, false)
+            adapter = imageAdapter
         }
     }
 
@@ -133,7 +153,16 @@ class MainActivity : AppCompatActivity() {
                         val resizedImagePath = Utility.absolutelyPath(this@MainActivity, mainVM.photoURI!!)
                         LogUtil.d_dev("리사이즈된 imagePath: ${resizedImagePath}")
 
-                        binding.ivImage.setImageURI(Uri.parse(resizedImagePath))
+//                        binding.ivImage.setImageURI(Uri.parse(resizedImagePath))
+                        imageAdapter.submitList(null)
+                        imageAdapter.submitList(
+                            listOf(
+                                Image(
+                                    uri = Uri.parse(resizedImagePath),
+                                    path = resizedImagePath
+                                )
+                            )
+                        )
                         // 이미지 사용 후 카메라 찍은 이미지 삭제
 //                        mainVM.deleteCameraImage(resizedImagePath, arrayListOf())
                     }
@@ -168,7 +197,16 @@ class MainActivity : AppCompatActivity() {
                     val resizedImagePath = Utility.absolutelyPath(this@MainActivity, mainVM.galleryPhotoURI!!)
                     LogUtil.d_dev("한장 갤러리 리사이즈된 imagePath: ${resizedImagePath}")
 
-                    binding.ivImage.setImageURI(Uri.parse(resizedImagePath))
+//                    binding.ivImage.setImageURI(Uri.parse(resizedImagePath))
+                    imageAdapter.submitList(null)
+                    imageAdapter.submitList(
+                        listOf(
+                            Image(
+                                uri = Uri.parse(resizedImagePath),
+                                path = resizedImagePath
+                            )
+                        )
+                    )
                 }
             }
             GalleryManager.FLAG_REQ_MULTI_GALLERY -> {
@@ -211,6 +249,15 @@ class MainActivity : AppCompatActivity() {
                     resizedImagePathList.add(resizedImagePath)
                     LogUtil.d_dev("여러장 갤러리 리사이즈된 imagePath: ${resizedImagePath}")
                 }
+
+                val imageList = mutableListOf<Image>()
+                for(path in resizedImagePathList) {
+                    imageList.add(
+                        Image(uri = Uri.parse(path), path = path)
+                    )
+                }
+                imageAdapter.submitList(null)
+                imageAdapter.submitList(imageList)
             }
         }
     }
