@@ -22,5 +22,9 @@ class MainActivity : AppCompatActivity() {
         binding.btn2.setOnClickListener {
             startActivity(Intent(this, CoroutineFlowActivity::class.java))
         }
+
+        binding.btn3.setOnClickListener {
+            startActivity(Intent(this, CoroutineErrorActivity::class.java))
+        }
     }
 }

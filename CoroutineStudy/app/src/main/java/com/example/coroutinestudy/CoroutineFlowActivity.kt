@@ -276,6 +276,9 @@ class CoroutineFlowActivity : AppCompatActivity() {
 //                }
 //                .collect {
 //                    Log.i("MYTAG", "${it}")
+////                    it.collect { data ->
+////                        Log.i("MYTAG", "${data}")
+////                    }
 //                }
         }
 
@@ -306,35 +309,13 @@ class CoroutineFlowActivity : AppCompatActivity() {
         // flatMapMerge는 변환이 병렬로 수행된다.
         // 참고 https://kotlinworld.com/263
         lifecycleScope.launch {
-//            val startTime = System.currentTimeMillis() // remember the start time
-//            (1..3)
-//                .asFlow()
-//                .onEach {
-//                    delay(100)
-//                } // a number every 100 ms
-//                .flatMapMerge {
-//                    flow {
-//                        emit("$it: First")
-//                        delay(500) // wait 500 ms
-//                        emit("$it: Second")
-//                        emit("$it: Third")
-//                    }
-//                }
-//                .collect {
-//                    Log.i("MYTAG", "$it at ${System.currentTimeMillis() - startTime} ms from start")
-//                }
-        }
-
-        // flatMapLatest는 이전 데이터가 방출되기 전에 새로운 데이터가 들어오면 이전 데이터에 대한 변환을 취소한다.
-        // 참고 https://kotlinworld.com/262
-        lifecycleScope.launch {
             val startTime = System.currentTimeMillis() // remember the start time
             (1..3)
                 .asFlow()
                 .onEach {
                     delay(100)
                 } // a number every 100 ms
-                .flatMapLatest {
+                .flatMapMerge {
                     flow {
                         emit("$it: First")
                         delay(500) // wait 500 ms
@@ -345,6 +326,28 @@ class CoroutineFlowActivity : AppCompatActivity() {
                 .collect {
                     Log.i("MYTAG", "$it at ${System.currentTimeMillis() - startTime} ms from start")
                 }
+        }
+
+        // flatMapLatest는 이전 데이터가 방출되기 전에 새로운 데이터가 들어오면 이전 데이터에 대한 변환을 취소한다.
+        // 참고 https://kotlinworld.com/262
+        lifecycleScope.launch {
+//            val startTime = System.currentTimeMillis() // remember the start time
+//            (1..3)
+//                .asFlow()
+//                .onEach {
+//                    delay(100)
+//                } // a number every 100 ms
+//                .flatMapLatest {
+//                    flow {
+//                        emit("$it: First")
+//                        delay(500) // wait 500 ms
+//                        emit("$it: Second")
+//                        emit("$it: Third")
+//                    }
+//                }
+//                .collect {
+//                    Log.i("MYTAG", "$it at ${System.currentTimeMillis() - startTime} ms from start")
+//                }
         }
     }
 

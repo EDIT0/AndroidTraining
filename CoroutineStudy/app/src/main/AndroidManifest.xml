@@ -12,6 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CoroutineStudy">
         <activity
+            android:name=".CoroutineErrorActivity"
+            android:exported="false" />
+        <activity
             android:name=".CoroutineFlowActivity"
             android:exported="false" />
         <activity
