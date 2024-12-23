@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 공통 -->
+    <string name="common_alert">알림</string>
+    <string name="common_confirm">확인</string>
+    <string name="common_cancel">취소</string>
+    <string name="common_can_not_start_app">앱을 시작할 수 없습니다.</string>
+    <string name="common_running_maintenance">점검중</string>
+
+    <!-- 네트워크 -->
+    <string name="network_connection_check">네트워크를 확인해주세요.</string>
+
+    <!-- 권한 -->
+    <string name="permission_request_essential_permission_message">필수 권한들을 허용해주세요.</string>
+    <string name="permission_navigate_to_setting_page_message">[앱 설정] - [권한]으로 이동하여 권한을 허용해주세요.</string>
+    
+</resources>

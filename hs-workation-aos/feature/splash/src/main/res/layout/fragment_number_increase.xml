@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".view.fragment.component.NumberIncreaseFragment">
+
+        <androidx.compose.ui.platform.ComposeView
+            android:id="@+id/cvNumberIncrease"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="40dp"
+            tools:background="@color/grey_400"
+            tools:minHeight="40dp" />
+
+    </FrameLayout>
+</layout>

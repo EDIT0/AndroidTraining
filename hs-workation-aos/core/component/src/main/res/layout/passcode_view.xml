@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".passcodeview.PasscodeView">
+
+    <LinearLayout
+        android:id="@+id/layoutInfo"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@id/layoutNumber"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/tvInfoText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textColor="@color/grey_900"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            tools:text="새로운 결제 비밀번호 6자리를\n등록해주세요" />
+
+        <com.hs.workation.core.component.passcodeview.PasscodeIndicatorView
+            android:id="@+id/vPasscodeIndicator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layoutNumber"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@color/grey_500"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/layoutInfo">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tvNumber1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:paddingVertical="20dp"
+                android:textColor="@color/white"
+                android:textSize="25sp"
+                tools:text="1" />
+
+            <TextView
+                android:id="@+id/tvNumber2"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:paddingVertical="20dp"
+                android:textColor="@color/white"
+                android:textSize="25sp"
+                tools:text="2" />
+
+            <TextView
+                android:id="@+id/tvNumber3"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:paddingVertical="20dp"
+                android:textColor="@color/white"
+                android:textSize="25sp"
+                tools:text="3" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tvNumber4"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:paddingVertical="20dp"
+                android:textColor="@color/white"
+                android:textSize="25sp"
+                tools:text="4" />
+
+            <TextView
+                android:id="@+id/tvNumber5"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:paddingVertical="20dp"
+                android:textColor="@color/white"
+                android:textSize="25sp"
+                tools:text="5" />
+
+            <TextView
+                android:id="@+id/tvNumber6"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:paddingVertical="20dp"
+                android:textColor="@color/white"
+                android:textSize="25sp"
+                tools:text="6" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tvNumber7"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:paddingVertical="20dp"
+                android:textColor="@color/white"
+                android:textSize="25sp"
+                tools:text="7" />
+
+            <TextView
+                android:id="@+id/tvNumber8"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:paddingVertical="20dp"
+                android:textColor="@color/white"
+                android:textSize="25sp"
+                tools:text="8" />
+
+            <TextView
+                android:id="@+id/tvNumber9"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:paddingVertical="20dp"
+                android:textColor="@color/white"
+                android:textSize="25sp"
+                tools:text="9" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:paddingVertical="20dp"
+                android:textColor="@color/white"
+                android:textSize="25sp"
+                tools:text="" />
+
+            <TextView
+                android:id="@+id/tvNumber0"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:paddingVertical="20dp"
+                android:textColor="@color/white"
+                android:textSize="25sp"
+                tools:text="0" />
+
+            <TextView
+                android:id="@+id/tvBackText"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:paddingVertical="20dp"
+                android:text="←"
+                android:textColor="@color/white"
+                android:textSize="25sp"
+                tools:text="←" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+

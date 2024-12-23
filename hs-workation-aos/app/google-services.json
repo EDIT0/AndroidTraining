@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "905588438571",
+    "project_id": "smartcity-cb1c3",
+    "storage_bucket": "smartcity-cb1c3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:905588438571:android:b8ab7263330a6951295c6e",
+        "android_client_info": {
+          "package_name": "com.hs.workation"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAOKwMFQITzkQOmVESrPI5fFgooDfqRQwE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
