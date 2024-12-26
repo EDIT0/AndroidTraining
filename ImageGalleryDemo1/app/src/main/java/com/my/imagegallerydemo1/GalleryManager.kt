@@ -47,7 +47,7 @@ class GalleryManager(
      */
     fun openMultiGallery() {
         val intent = Intent(Intent.ACTION_PICK)
-        intent.setType("image/*");
+        intent.setType("image/*")
         intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
         intent.setType(MediaStore.Images.Media.CONTENT_TYPE)
         activity.startActivityForResult(Intent.createChooser(intent,"사용하실 사진 앱을 선택해주세요."), FLAG_REQ_MULTI_GALLERY)

@@ -13,7 +13,10 @@ import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
 import androidx.exifinterface.media.ExifInterface
-import java.io.ByteArrayOutputStream
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.FileOutputStream
@@ -188,5 +191,63 @@ object Utility {
             e.printStackTrace()
         }
         return resizeBitmap
+    }
+
+
+    /**
+     * MultipartBody 1장
+     *
+     * @param file 파일 File(path)
+     * @param fileName 파일 이름
+     * @return
+     */
+    fun makeMultipartBody(file: File, fileName: String): MultipartBody.Part {
+        /**
+         * image/jpg: MIME 타입 지정
+         * .toMediaTypeOrNull(): MediaType 객체로 변환
+         */
+        val requestBody : RequestBody = file.asRequestBody("image/jpg".toMediaTypeOrNull())
+        /**
+         * uploaded_file: 서버에서 이 이름으로 파일을 찾음 (서버와 약속된 키 값)
+         * fileName: 서버에 전달될 실제 파일 이름
+         * requestBody: 실제 파일 데이터
+         */
+        val body : MultipartBody.Part = MultipartBody.Part.createFormData("uploaded_file", fileName, requestBody)
+        return body
+    }
+
+    /**
+     *     @Multipart
+     *     @POST("SendImageToServer.php")
+     *     suspend fun sendImageToServer(
+     *         @Part("fileName") fileName: String,
+     *         @Part imageFile : MultipartBody.Part
+     *     ): Response<IsSuccessSendImageModel>
+     *
+     *     @Multipart
+     *     @POST("SendImagesToServer.php")
+     *     suspend fun sendImagesToServer(
+     *         @Part("fileNameArray") fileNameArray: ArrayList<String>,
+     *         @Part imageFileArray : ArrayList<MultipartBody.Part>
+     *     ): Response<IsSuccessSendImageModel>
+     */
+
+    /**
+     * MultipartBody 1장 이상
+     *
+     * @param fileArray
+     * @param fileNameArray
+     * @return
+     */
+    fun makeMultipartArrayBody(fileArray: ArrayList<File>, fileNameArray: ArrayList<String>) : ArrayList<MultipartBody.Part> {
+        var requestBodyArray : ArrayList<RequestBody> = ArrayList<RequestBody>()
+        for(i in 0 until fileArray.size) {
+            requestBodyArray.add(RequestBody.create("image/jpg".toMediaTypeOrNull(), fileArray.get(i)))
+        }
+        var bodyArray : ArrayList<MultipartBody.Part> = ArrayList<MultipartBody.Part>()
+        for(i in 0 until fileArray.size) {
+            bodyArray.add(MultipartBody.Part.createFormData("uploaded_file${i}", fileNameArray.get(i), requestBodyArray.get(i)))
+        }
+        return bodyArray
     }
 }

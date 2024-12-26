@@ -70,6 +70,8 @@ class MainViewModel: ViewModel() {
                 arrayListOf(
                     pm.permissionOfPostNotifications,
                     pm.permissionOfReadMediaImages,
+                    pm.permissionOfReadMediaVideo,
+                    pm.permissionOfReadMediaAudio
         //                pm.permissionOfReadMediaVisualUserSelected
                 )
             } else if (version >= Build.VERSION_CODES.O) {
@@ -95,6 +97,8 @@ class MainViewModel: ViewModel() {
                 arrayListOf(
                     pm.permissionOfPostNotifications,
                     pm.permissionOfReadMediaImages,
+                    pm.permissionOfReadMediaVideo,
+                    pm.permissionOfReadMediaAudio
 //                pm.permissionOfReadMediaVisualUserSelected
                 )
             )

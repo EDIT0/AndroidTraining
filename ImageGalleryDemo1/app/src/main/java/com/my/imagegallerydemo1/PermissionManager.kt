@@ -23,6 +23,9 @@ class PermissionManager(
 //    val permissionOfReadMediaVisualUserSelected = Manifest.permission.READ_MEDIA_VISUAL_USER_SELECTED
     val permissionOfReadExternalStorage = Manifest.permission.READ_EXTERNAL_STORAGE
 
+    val permissionOfReadMediaVideo = Manifest.permission.READ_MEDIA_VIDEO
+    val permissionOfReadMediaAudio = Manifest.permission.READ_MEDIA_AUDIO
+
     /**
      * 필수 권한 리스트 반환
      *
