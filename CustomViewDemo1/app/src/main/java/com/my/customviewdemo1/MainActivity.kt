@@ -46,6 +46,7 @@ import com.my.customviewdemo1.view.compose.LogoView
 import com.my.customviewdemo1.view.xml.GaugeView1
 import com.my.customviewdemo1.view.xml.ProgressBarView1
 import com.my.customviewdemo1.view.xml.ProgressIconButtonView
+import com.my.customviewdemo1.view.xml.ProgressIconButtonView2
 import com.my.customviewdemo1.view.xml.SliderChangeListener
 import com.my.customviewdemo1.view.xml.SliderView1
 import kotlinx.coroutines.CoroutineScope
@@ -64,7 +65,8 @@ enum class XmlViewGroup {
     ProgressIconButtonView,
     SliderView1,
     ProgressBarView1,
-    GaugeView1
+    GaugeView1,
+    ProgressIconButtonView2
 }
 
 class MainActivity : AppCompatActivity() {
@@ -76,12 +78,14 @@ class MainActivity : AppCompatActivity() {
         XmlViewGroup.ProgressIconButtonView,
         XmlViewGroup.SliderView1,
         XmlViewGroup.ProgressBarView1,
-        XmlViewGroup.GaugeView1
+        XmlViewGroup.GaugeView1,
+        XmlViewGroup.ProgressIconButtonView2
     )
 
     private var progressBarView1Job1: Job? = null
     private var progressIconButtonViewJob1: Job? = null
     private var gaugeView1Job1: Job? = null
+    private var progressIconButtonView2Job1: Job? = null
     private var scope = CoroutineScope(Dispatchers.Main)
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -119,6 +123,7 @@ class MainActivity : AppCompatActivity() {
                 progressBarView1Job1?.cancel()
                 progressIconButtonViewJob1?.cancel()
                 gaugeView1Job1?.cancel()
+                progressIconButtonView2Job1?.cancel()
 
                 when(it) {
                     XmlViewGroup.ProgressIconButtonView -> {
@@ -152,6 +157,14 @@ class MainActivity : AppCompatActivity() {
                         binding.layoutInflateView.addView(newLayout)
 
                         controlGaugeView1()
+                    }
+                    XmlViewGroup.ProgressIconButtonView2 -> {
+                        binding.layoutInflateView.removeAllViews()
+                        val inflater = LayoutInflater.from(binding.layoutInflateView.context)
+                        val newLayout = inflater.inflate(R.layout.progress_icon_button_view_2, binding.layoutInflateView, false)
+                        binding.layoutInflateView.addView(newLayout)
+
+                        controlProgressIconButtonView2()
                     }
                 }
             }
@@ -280,13 +293,25 @@ class MainActivity : AppCompatActivity() {
         )
 
         gaugeView1Job1 = scope.launch {
-            for(i in 0 until 91) {
-                delay(30L)
-                LogUtil.d_dev("${Thread.currentThread()} i값: ${i}")
-                gaugeView1.setGaugePercentage(i.toFloat())
-            }
+            gaugeView1.setGaugePercentage(90f)
+//            for(i in 0 until 91) {
+//                delay(30L)
+//                LogUtil.d_dev("${Thread.currentThread()} i값: ${i}")
+//                gaugeView1.setGaugePercentage(i.toFloat())
+//            }
         }
 
+    }
+
+    private fun controlProgressIconButtonView2() {
+        val progressIconButtonView2 = binding.layoutInflateView.findViewById<ProgressIconButtonView2>(R.id.progressIconButtonView2)
+
+        progressIconButtonView2Job1 = scope.launch {
+            for(i in 0 until 101) {
+                delay(100L)
+                progressIconButtonView2.setProgress(i.toFloat())
+            }
+        }
     }
 }
 
