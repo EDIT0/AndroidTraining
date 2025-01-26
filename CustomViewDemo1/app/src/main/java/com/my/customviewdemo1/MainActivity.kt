@@ -44,6 +44,7 @@ import com.my.customviewdemo1.databinding.ItemViewBinding
 import com.my.customviewdemo1.view.compose.BatteryView
 import com.my.customviewdemo1.view.compose.LogoView
 import com.my.customviewdemo1.view.xml.GaugeView1
+import com.my.customviewdemo1.view.xml.PercentageBarView
 import com.my.customviewdemo1.view.xml.ProgressBarView1
 import com.my.customviewdemo1.view.xml.ProgressIconButtonView
 import com.my.customviewdemo1.view.xml.ProgressIconButtonView2
@@ -66,7 +67,8 @@ enum class XmlViewGroup {
     SliderView1,
     ProgressBarView1,
     GaugeView1,
-    ProgressIconButtonView2
+    ProgressIconButtonView2,
+    PercentageBar
 }
 
 class MainActivity : AppCompatActivity() {
@@ -79,7 +81,8 @@ class MainActivity : AppCompatActivity() {
         XmlViewGroup.SliderView1,
         XmlViewGroup.ProgressBarView1,
         XmlViewGroup.GaugeView1,
-        XmlViewGroup.ProgressIconButtonView2
+        XmlViewGroup.ProgressIconButtonView2,
+        XmlViewGroup.PercentageBar
     )
 
     private var progressBarView1Job1: Job? = null
@@ -165,6 +168,14 @@ class MainActivity : AppCompatActivity() {
                         binding.layoutInflateView.addView(newLayout)
 
                         controlProgressIconButtonView2()
+                    }
+                    XmlViewGroup.PercentageBar -> {
+                        binding.layoutInflateView.removeAllViews()
+                        val inflater = LayoutInflater.from(binding.layoutInflateView.context)
+                        val newLayout = inflater.inflate(R.layout.percentage_bar_view, binding.layoutInflateView, false)
+                        binding.layoutInflateView.addView(newLayout)
+
+                        controlPercentageBarView()
                     }
                 }
             }
@@ -312,6 +323,14 @@ class MainActivity : AppCompatActivity() {
                 progressIconButtonView2.setProgress(i.toFloat())
             }
         }
+    }
+    
+    private fun controlPercentageBarView() {
+        val percentageBarView = binding.layoutInflateView.findViewById<PercentageBarView>(R.id.percentageBarView)
+
+        percentageBarView.setPercentage(90f)
+        percentageBarView.setBarWidth(20f)
+        percentageBarView.setBarColor(R.color.light_blue_400)
     }
 }
 

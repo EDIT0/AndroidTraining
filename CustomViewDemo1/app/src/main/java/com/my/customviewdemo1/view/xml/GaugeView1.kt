@@ -64,7 +64,7 @@ class GaugeView1 @JvmOverloads constructor(
         paint = Paint().apply {
             isAntiAlias = true
             style = Paint.Style.STROKE
-            strokeCap = Paint.Cap.ROUND
+            strokeCap = Paint.Cap.SQUARE
             strokeWidth = gaugeBarStroke
             color = ContextCompat.getColor(context, R.color.teal_200)
         }
@@ -79,7 +79,7 @@ class GaugeView1 @JvmOverloads constructor(
         gaugePaint = Paint().apply {
             isAntiAlias = true
             style = Paint.Style.STROKE
-            strokeCap = Paint.Cap.ROUND
+            strokeCap = Paint.Cap.SQUARE
             strokeWidth = gaugeBarStroke
             color = ContextCompat.getColor(context, R.color.yellow_600)
         }
