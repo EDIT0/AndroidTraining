@@ -43,6 +43,8 @@ import com.my.customviewdemo1.databinding.ActivityMainBinding
 import com.my.customviewdemo1.databinding.ItemViewBinding
 import com.my.customviewdemo1.view.compose.BatteryView
 import com.my.customviewdemo1.view.compose.LogoView
+import com.my.customviewdemo1.view.xml.DaySelectionHorizontalScrollAdapter
+import com.my.customviewdemo1.view.xml.DaySelectionHorizontalScrollView
 import com.my.customviewdemo1.view.xml.GaugeView1
 import com.my.customviewdemo1.view.xml.PercentageBarView
 import com.my.customviewdemo1.view.xml.ProgressBarView1
@@ -68,7 +70,8 @@ enum class XmlViewGroup {
     ProgressBarView1,
     GaugeView1,
     ProgressIconButtonView2,
-    PercentageBar
+    PercentageBar,
+    DaySelectionHorizontalScrollView
 }
 
 class MainActivity : AppCompatActivity() {
@@ -82,7 +85,8 @@ class MainActivity : AppCompatActivity() {
         XmlViewGroup.ProgressBarView1,
         XmlViewGroup.GaugeView1,
         XmlViewGroup.ProgressIconButtonView2,
-        XmlViewGroup.PercentageBar
+        XmlViewGroup.PercentageBar,
+        XmlViewGroup.DaySelectionHorizontalScrollView
     )
 
     private var progressBarView1Job1: Job? = null
@@ -176,6 +180,14 @@ class MainActivity : AppCompatActivity() {
                         binding.layoutInflateView.addView(newLayout)
 
                         controlPercentageBarView()
+                    }
+                    XmlViewGroup.DaySelectionHorizontalScrollView -> {
+                        binding.layoutInflateView.removeAllViews()
+                        val inflater = LayoutInflater.from(binding.layoutInflateView.context)
+                        val newLayout = inflater.inflate(R.layout.layout_day_seletion_horizontal_scroll_view, binding.layoutInflateView, false)
+                        binding.layoutInflateView.addView(newLayout)
+
+                        controlDaySelectionHorizontalScrollView()
                     }
                 }
             }
@@ -331,6 +343,24 @@ class MainActivity : AppCompatActivity() {
         percentageBarView.setPercentage(90f)
         percentageBarView.setBarWidth(20f)
         percentageBarView.setBarColor(R.color.light_blue_400)
+    }
+
+    private fun controlDaySelectionHorizontalScrollView() {
+        val daySelectionHorizontalScrollView = binding.layoutInflateView.findViewById<DaySelectionHorizontalScrollView>(R.id.daySelectionHorizontalScrollView)
+
+        daySelectionHorizontalScrollView.setDayClickCallback(object : DaySelectionHorizontalScrollAdapter.DayClickListener {
+            override fun onDayClicked(year: Int, month: Int, day: Int) {
+                LogUtil.d_dev("Clicked year, month, day: ${year} ${month} ${day}")
+            }
+        })
+
+        daySelectionHorizontalScrollView.setDayBgAndTextColor(
+            R.drawable.bg_day_selection_box_on,
+            R.drawable.bg_day_selection_box_off,
+            R.color.yellow_500,
+            R.color.blue_500
+        )
+        daySelectionHorizontalScrollView.todaySetting()
     }
 }
 
