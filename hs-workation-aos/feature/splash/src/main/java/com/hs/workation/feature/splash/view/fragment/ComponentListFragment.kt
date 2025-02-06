@@ -39,7 +39,8 @@ class ComponentListFragment : BaseDataBindingFragment<FragmentComponentListBindi
         "AccordionListView",
         "RatingStarView",
         "DateTimePickerView",
-        "CommonMap"
+        "CommonMap",
+        "CommonInputFormView"
     )
 
     private var backPressCallback: OnBackPressedCallback? = null
@@ -122,6 +123,9 @@ class ComponentListFragment : BaseDataBindingFragment<FragmentComponentListBindi
 //                        val intent = Intent(this.requireContext(), MapActivity::class.java)
 //                        this.requireActivity().startActivity(intent)
                         findNavController().navigate(R.id.action_componentFragment_to_commonMapFragment, args = null, navOptions = null, navigatorExtras = null)
+                    }
+                    "CommonInputFormView" -> {
+                        findNavController().navigate(R.id.action_componentFragment_to_commonInputFormViewFragment, args = null, navOptions = null, navigatorExtras = null)
                     }
                 }
             }

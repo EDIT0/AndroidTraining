@@ -77,6 +77,9 @@
         <action
             android:id="@+id/action_componentFragment_to_commonMapFragment"
             app:destination="@id/commonMapFragment" />
+        <action
+            android:id="@+id/action_componentFragment_to_commonInputFormViewFragment"
+            app:destination="@id/commonInputFormViewFragment" />
     </fragment>
     <fragment
         android:id="@+id/commonToastFragment"
@@ -150,4 +153,8 @@
         android:id="@+id/commonMapFragment"
         android:name="com.hs.workation.feature.splash.view.fragment.component.CommonMapFragment"
         android:label="CommonMapFragment" />
+    <fragment
+        android:id="@+id/commonInputFormViewFragment"
+        android:name="com.hs.workation.feature.splash.view.fragment.component.CommonInputFormViewFragment"
+        android:label="CommonInputFormViewFragment" />
 </navigation>
