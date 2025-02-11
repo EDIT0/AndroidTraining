@@ -10,14 +10,14 @@ import com.prolificinteractive.materialcalendarview.CalendarDay
 import com.prolificinteractive.materialcalendarview.DayViewFacade
 import org.threeten.bp.DayOfWeek
 
-class SaturdayDecorator(
+class SundayTransparentDecorator(
     private val context: Context
 ): ParentDecorator() {
 
     private var drawable: Drawable? = null
 
     init {
-        drawable = ContextCompat.getDrawable(context, R.drawable.background_base)
+        drawable = ContextCompat.getDrawable(context, R.drawable.background_base_transparent)
     }
 
     override fun shouldDecorate(day: CalendarDay?): Boolean {
@@ -30,13 +30,13 @@ class SaturdayDecorator(
          * 2:월, 3:화, 4:수, 5:목, 6:금, 7:토, 1:일 (월요일 시작 기준)
          * 1:월, 2:화, 3:수, 4:목, 5:금, 6:토, 7:일 (일요일 시작 기준)
          * */
-//        Log.i(MainActivity.TAG_C, "" + day.date + " / " + Calendar.SUNDAY + " / " + dayOfWeekNumber)
-        return dayOfWeekNumber == 6
+//        Log.i(TAG_C, "" + day.date + " / " + Calendar.SUNDAY + " / " + dayOfWeekNumber)
+        return dayOfWeekNumber == 7
     }
 
     override fun decorate(view: DayViewFacade?) {
         view?.let { v ->
-            v.addSpan(ForegroundColorSpan(Color.BLUE))
+            v.addSpan(ForegroundColorSpan(Color.RED))
             drawable?.let { d ->
                 v.setSelectionDrawable(d)
                 v.addSpan(boldSpan)

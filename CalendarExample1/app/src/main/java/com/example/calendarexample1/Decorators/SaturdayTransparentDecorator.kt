@@ -10,14 +10,14 @@ import com.prolificinteractive.materialcalendarview.CalendarDay
 import com.prolificinteractive.materialcalendarview.DayViewFacade
 import org.threeten.bp.DayOfWeek
 
-class SaturdayDecorator(
+class SaturdayTransparentDecorator(
     private val context: Context
 ): ParentDecorator() {
 
     private var drawable: Drawable? = null
 
     init {
-        drawable = ContextCompat.getDrawable(context, R.drawable.background_base)
+        drawable = ContextCompat.getDrawable(context, R.drawable.background_base_transparent)
     }
 
     override fun shouldDecorate(day: CalendarDay?): Boolean {

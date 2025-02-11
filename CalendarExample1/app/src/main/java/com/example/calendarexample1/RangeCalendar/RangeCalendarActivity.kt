@@ -34,7 +34,7 @@ class RangeCalendarActivity : AppCompatActivity() {
         // 첫 시작 요일이 일요일이 되도록 설정
         binding.rangeCalendarView.state()
             .edit()
-            .setFirstDayOfWeek(DayOfWeek.MONDAY)
+            .setFirstDayOfWeek(DayOfWeek.SUNDAY)
             .commit()
 
 

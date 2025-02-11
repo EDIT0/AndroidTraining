@@ -6,6 +6,7 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.example.calendarexample1.Decorators.*
 import com.example.calendarexample1.EventCalendar.EventCalendarActivity
+import com.example.calendarexample1.EventCalendar.EventCalendarNoHeaderActivity
 import com.example.calendarexample1.RangeCalendar.RangeCalendarActivity
 import com.example.calendarexample1.databinding.ActivityMainBinding
 import com.prolificinteractive.materialcalendarview.format.ArrayWeekDayFormatter
@@ -33,6 +34,10 @@ class MainActivity : AppCompatActivity() {
 
         binding.btnEventCalendar.setOnClickListener {
             startActivity(Intent(this, EventCalendarActivity::class.java))
+        }
+
+        binding.btnEventCalendarNoHeader.setOnClickListener {
+            startActivity(Intent(this, EventCalendarNoHeaderActivity::class.java))
         }
     }
 }

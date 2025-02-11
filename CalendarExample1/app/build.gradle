@@ -5,12 +5,12 @@ plugins {
 
 android {
     namespace 'com.example.calendarexample1'
-    compileSdk 33
+    compileSdk 34
 
     defaultConfig {
         applicationId "com.example.calendarexample1"
         minSdk 23
-        targetSdk 33
+        targetSdk 34
         versionCode 1
         versionName "1.0"
 
@@ -44,6 +44,7 @@ dependencies {
 
     implementation 'com.github.prolificinteractive:material-calendarview:2.0.1'
     implementation 'com.jakewharton.threetenabp:threetenabp:1.1.1'
+//    implementation 'androidx.activity:activity:1.10.0'
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
