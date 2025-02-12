@@ -5,7 +5,7 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.example.calendarexample1.Decorators.BaseTransparentDecorator
 import com.example.calendarexample1.Decorators.SaturdayTransparentDecorator
-import com.example.calendarexample1.Decorators.StartPointDecorator
+import com.example.calendarexample1.Decorators.SelectTransparentDecorator
 import com.example.calendarexample1.Decorators.SundayTransparentDecorator
 import com.example.calendarexample1.MainActivity.Companion.TAG_C
 import com.example.calendarexample1.R
@@ -47,6 +47,7 @@ class EventCalendarNoHeaderActivity : AppCompatActivity() {
 
         updateHeaderDate(currentSelectedYear, currentSelectedMonth)
 
+        binding.eventCalendarNoHeaderView.isPagingEnabled = false
         binding.eventCalendarNoHeaderView.topbarVisible = false
 
         binding.eventCalendarNoHeaderView.setWeekDayFormatter(ArrayWeekDayFormatter(resources.getTextArray(R.array.custom_weekdays_2)))
@@ -56,7 +57,7 @@ class EventCalendarNoHeaderActivity : AppCompatActivity() {
 
         binding.eventCalendarNoHeaderView.apply {
             removeDecorators()
-            addDecorators(StartPointDecorator(this@EventCalendarNoHeaderActivity, R.color.purple_500, Collections.singleton(CalendarDay.today())))
+            addDecorators(SelectTransparentDecorator(this@EventCalendarNoHeaderActivity, Collections.singleton(CalendarDay.today())))
             setDateSelected(CalendarDay.today(), true)
         }
         baseDecorators()
@@ -91,7 +92,7 @@ class EventCalendarNoHeaderActivity : AppCompatActivity() {
 
             binding.eventCalendarNoHeaderView.apply {
                 removeDecorators()
-                addDecorators(StartPointDecorator(this@EventCalendarNoHeaderActivity, R.color.purple_500, Collections.singleton(date)))
+                addDecorators(SelectTransparentDecorator(this@EventCalendarNoHeaderActivity, Collections.singleton(date)))
                 setDateSelected(date, true)
             }
             baseDecorators()

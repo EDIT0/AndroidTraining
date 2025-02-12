@@ -3,14 +3,12 @@ package com.example.calendarexample1.shape
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.text.style.LineBackgroundSpan
-import android.util.Log
-import com.example.calendarexample1.MainActivity
 
 
 /**
  * Span to draw a dot centered under a section of text
  */
-class CustomDotSpan : LineBackgroundSpan {
+class CustomSelectSpan : LineBackgroundSpan {
     private val radius: Float
     private val color: Int
 
@@ -76,9 +74,7 @@ class CustomDotSpan : LineBackgroundSpan {
         if (color != 0) {
             paint.setColor(color)
         }
-        Log.i(MainActivity.TAG_C, "left:${left}, top:${top}, right:${right}, bottom:${bottom}")
-        val halfY = bottom / 2f
-        canvas.drawCircle((left + right) / 2f, halfY * 3, radius, paint)
+        canvas.drawCircle((left + right) / 2f, (top + bottom) / 2f, radius, paint)
         paint.setColor(oldColor)
     }
 
