@@ -20,7 +20,7 @@ class GaugeView1 @JvmOverloads constructor(
 
     private var rootWidth = 0f
     private var rootHeight = 0f
-    private var rootPadding = ViewSizeUtil.dpToPx(context, 10f).toFloat()
+    private var rootPadding = ViewSizeUtil.dpToPx(context, 0f).toFloat()
     private var centerX = 0f
     private var centerY = 0f
 
@@ -54,12 +54,24 @@ class GaugeView1 @JvmOverloads constructor(
         rightX = rootWidth - rootPadding - gaugeBarStroke
         rightY = rootHeight * 2f - rootPadding * 2 - gaugeBarStroke * 2 // 2배를 하는 이유는 원의 반만 사용하기 위해
 
+        val strokeWidth1 = gaugeBarStroke
+        val radius = (width / 2f) - (strokeWidth1 / 2)
+        val centerX = width / 2f
+        val centerY = height.toFloat()
+
         rectF = RectF(
-            leftX,
-            leftY,
-            rightX,
-            rightY
+            centerX - radius,
+            strokeWidth1 / 2, // top 위치 조정
+            centerX + radius,
+            radius * 2 + (strokeWidth1 / 2)
         )
+
+//        rectF = RectF(
+//            leftX,
+//            leftY,
+//            rightX,
+//            rightY
+//        )
 
         paint = Paint().apply {
             isAntiAlias = true
@@ -70,11 +82,18 @@ class GaugeView1 @JvmOverloads constructor(
         }
 
         gaugeRectF = RectF(
-            leftX,
-            leftY,
-            rightX,
-            rightY
+            centerX - radius,
+            strokeWidth1 / 2, // top 위치 조정
+            centerX + radius,
+            radius * 2 + (strokeWidth1 / 2)
         )
+
+//        gaugeRectF = RectF(
+//            leftX,
+//            leftY,
+//            rightX,
+//            rightY
+//        )
 
         gaugePaint = Paint().apply {
             isAntiAlias = true
@@ -160,34 +179,40 @@ class GaugeView1 @JvmOverloads constructor(
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        val widthMode = MeasureSpec.getMode(widthMeasureSpec)
+//        val widthMode = MeasureSpec.getMode(widthMeasureSpec)
+//        val widthSize = MeasureSpec.getSize(widthMeasureSpec)
+//        val heightMode = MeasureSpec.getMode(heightMeasureSpec)
+//        val heightSize = MeasureSpec.getSize(heightMeasureSpec)
+//
+//        val width: Int
+//        val height: Int
+//
+//        // width 결정
+//        width = when (widthMode) {
+//            MeasureSpec.EXACTLY -> widthSize // match_parent나 정확한 수치
+//            MeasureSpec.AT_MOST -> widthSize // wrap_content
+//            else -> 400 // 기본값
+//        }
+//
+//        // height 결정 (width의 1/2 비율)
+//        height = when (heightMode) {
+//            MeasureSpec.EXACTLY -> heightSize // match_parent나 정확한 수치
+//            else -> (width / 2) + (rootPadding * 2).toInt() // width의 절반 + 패딩
+//        }
+//
+//        rootWidth = width.toFloat()
+//        rootHeight = width / 2f
+//
+//        setMeasuredDimension(
+//            rootWidth.toInt(),
+//            rootHeight.toInt()
+//        )
+
         val widthSize = MeasureSpec.getSize(widthMeasureSpec)
-        val heightMode = MeasureSpec.getMode(heightMeasureSpec)
-        val heightSize = MeasureSpec.getSize(heightMeasureSpec)
-
-        val width: Int
-        val height: Int
-
-        // width 결정
-        width = when (widthMode) {
-            MeasureSpec.EXACTLY -> widthSize // match_parent나 정확한 수치
-            MeasureSpec.AT_MOST -> widthSize // wrap_content
-            else -> 400 // 기본값
-        }
-
-        // height 결정 (width의 1/2 비율)
-        height = when (heightMode) {
-            MeasureSpec.EXACTLY -> heightSize // match_parent나 정확한 수치
-            else -> (width / 2) + (rootPadding * 2).toInt() // width의 절반 + 패딩
-        }
-
-        rootWidth = width.toFloat()
-        rootHeight = width / 2f
-
-        setMeasuredDimension(
-            rootWidth.toInt(),
-            rootHeight.toInt()
-        )
+        val strokeWidth = gaugeBarStroke
+        val radius = (widthSize / 2f) - (strokeWidth / 2)
+        val desiredHeight = (radius + strokeWidth).toInt() // 반원에 맞게 높이 설정
+        setMeasuredDimension(widthSize, desiredHeight)
     }
 
     /**
