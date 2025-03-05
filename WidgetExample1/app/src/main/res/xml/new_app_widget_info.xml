@@ -6,16 +6,25 @@
     android:previewImage="@drawable/example_appwidget_preview"
     android:previewLayout="@layout/new_app_widget"
     android:resizeMode="horizontal|vertical"
-    android:minWidth="120dp"
-    android:minHeight="160dp"
-    android:targetCellWidth="3"
-    android:targetCellHeight="2"
-    android:maxResizeWidth="250dp"
-    android:maxResizeHeight="250dp"
+    android:minWidth="72dp"
+    android:minHeight="72dp"
+    android:minResizeWidth="72dp"
+    android:minResizeHeight="72dp"
+    android:targetCellWidth="1"
+    android:targetCellHeight="1"
+    android:maxResizeWidth="220dp"
+    android:maxResizeHeight="220dp"
     android:updatePeriodMillis="86400000"
     android:widgetCategory="home_screen"
     android:widgetFeatures="reconfigurable|configuration_optional"/>
 
+<!--
+셀 크기 계산식: (셀 개수 * 74) - 2 (단위: dp)
+
+1셀의 크기 = (1 * 74) - 2 = 72dp
+2셀의 크기 = (2 * 74) - 2 = 146dp
+3셀의 크기 = (3 * 74) - 2 = 220dp
+-->
 <!--
 targetCellWidth = 초기 셀 너비
 targetCellHeight = 초기 셀 높이

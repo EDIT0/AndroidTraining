@@ -1,4 +1,4 @@
-package com.edit.widgetexample1
+package com.edit.widgetexample1.widget
 
 import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
@@ -9,6 +9,9 @@ import android.net.Uri
 import android.util.Log
 import android.widget.RemoteViews
 import android.widget.Toast
+import com.edit.widgetexample1.FirstActivity
+import com.edit.widgetexample1.MainActivity
+import com.edit.widgetexample1.R
 
 
 /**
