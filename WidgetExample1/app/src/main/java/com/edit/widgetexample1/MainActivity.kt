@@ -8,23 +8,45 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.RemoteViews
 import android.widget.TextView
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
+import com.edit.widgetexample1.databinding.ActivityMainBinding
 import com.edit.widgetexample1.widget.NewAppWidget
 
 class MainActivity : AppCompatActivity() {
 
+    private lateinit var binding: ActivityMainBinding
+
+    private val launcher: ActivityResultLauncher<Intent> = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         val fromWidgetToMain = intent.extras?.getString("ACTION", null)
         if(fromWidgetToMain != null) {
-            findViewById<TextView>(R.id.tvText).text = fromWidgetToMain
+            binding.tvText.text = fromWidgetToMain
         }
 
         findViewById<TextView>(R.id.tvText).setOnClickListener {
-            findViewById<TextView>(R.id.tvText).text = "Init"
+            binding.tvText.text = "Init"
             updateWidgetData(this, "Init")
             updateDataAndNotifyWidget(this, "Init")
+        }
+
+        binding.btnDeepLink.setOnClickListener {
+            val intent = Intent(this@MainActivity, DeepLinkActivity::class.java)
+            val dataBundle = Bundle().apply {
+                putString("key1", "value1")
+                putInt("key2", 123)
+            }
+            intent.putExtras(dataBundle)
+            launcher.launch(intent)
         }
     }
 

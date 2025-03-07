@@ -8,6 +8,10 @@ import android.content.Intent
 import android.net.Uri
 import android.util.Log
 import android.widget.RemoteViews
+import com.edit.widgetexample1.DeepLinkActivity.Companion.PATH_INTENT_TYPE
+import com.edit.widgetexample1.DeepLinkActivity.Companion.PATH_URI_TYPE
+import com.edit.widgetexample1.DeepLinkActivity.Companion.WIDGET_HOST
+import com.edit.widgetexample1.DeepLinkActivity.Companion.WIDGET_SCHEME
 import com.edit.widgetexample1.R
 import com.edit.widgetexample1.Util
 import com.edit.widgetexample1.model.UserInfo
@@ -15,22 +19,49 @@ import com.edit.widgetexample1.model.UserInfo
 class MyAppWidget1: AppWidgetProvider() {
 
     companion object {
-        const val ACTION_OPEN_DEEP_LINK = "com.edit.widgetexample1.ACTION_OPEN_DEEP_LINK"
+        const val ACTION_OPEN_DEEP_LINK_URI = "com.edit.widgetexample1.ACTION_OPEN_DEEP_LINK_URI"
+        const val ACTION_OPEN_DEEP_LINK_INTENT = "com.edit.widgetexample1.ACTION_OPEN_DEEP_LINK_INTENT"
     }
 
     override fun onReceive(context: Context?, intent: Intent?) {
         super.onReceive(context, intent)
 
-        Log.d("MYTAG", "${intent?.action}")
+        Log.d("MYTAG", "Broadcast action in widget: ${intent?.action}")
 
-        if (intent?.action == ACTION_OPEN_DEEP_LINK) {
+        if (intent?.action == ACTION_OPEN_DEEP_LINK_URI) {
             val randomId = Util.getRandomNumber(0, 50).toString()
             val randomNumber = Util.getRandomNumber(50, 100).toString()
             val userInfo = UserInfo(name = "Umm James", number = randomNumber)
 
-            val deepLinkUri = Uri.parse("myapp://widget")
+            val uriBuilder = Uri.parse("${WIDGET_SCHEME}://${WIDGET_HOST}").buildUpon()
+                .appendPath(PATH_URI_TYPE)
+                .appendQueryParameter("item_id", randomId)
+                .appendQueryParameter("item_boolean", (randomNumber.toInt() > 75).toString())
+                .appendQueryParameter("item_user_name", userInfo.name)
+                .appendQueryParameter("item_user_data", userInfo.number)
+            val deepLinkUri = uriBuilder.build()
+
             val activityIntent = Intent(Intent.ACTION_VIEW, deepLinkUri)
-            activityIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            // 새로운 Activity 시작
+//            activityIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            // 현재 Activity가 열려있으면 재사용
+            activityIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP
+
+            context?.startActivity(activityIntent)
+        } else if(intent?.action == ACTION_OPEN_DEEP_LINK_INTENT) {
+            val randomId = Util.getRandomNumber(0, 50).toString()
+            val randomNumber = Util.getRandomNumber(50, 100).toString()
+            val userInfo = UserInfo(name = "Umm James", number = randomNumber)
+
+            val uriBuilder = Uri.parse("${WIDGET_SCHEME}://${WIDGET_HOST}").buildUpon()
+                .appendPath(PATH_INTENT_TYPE)
+            val deepLinkUri = uriBuilder.build()
+
+            val activityIntent = Intent(Intent.ACTION_VIEW, deepLinkUri)
+            // 새로운 Activity 시작
+//            activityIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            // 현재 Activity가 열려있으면 재사용
+            activityIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP
 
             activityIntent.putExtra("item_id", randomId)
             activityIntent.putExtra("item_boolean", randomNumber.toInt() > 75)
@@ -70,7 +101,8 @@ class MyAppWidget1: AppWidgetProvider() {
     ) {
         val views = RemoteViews(context.packageName, R.layout.my_app_widget_1)
 
-        views.setOnClickPendingIntent(R.id.btnRandomNumber, deepLinkBroadcastPendingIntent(context))
+        views.setOnClickPendingIntent(R.id.btnDeepLinkUri, deepLinkUriBroadcastPendingIntent(context))
+        views.setOnClickPendingIntent(R.id.btnDeepLinkIntent, deepLinkIntentBroadcastPendingIntent(context))
 
         appWidgetManager.updateAppWidget(appWidgetId, views)
     }
@@ -81,9 +113,24 @@ class MyAppWidget1: AppWidgetProvider() {
      * @param context
      * @return
      */
-    private fun deepLinkBroadcastPendingIntent(context: Context): PendingIntent {
+    private fun deepLinkUriBroadcastPendingIntent(context: Context): PendingIntent {
         val intent = Intent(context, MyAppWidget1::class.java)
-        intent.action = ACTION_OPEN_DEEP_LINK
+        intent.action = ACTION_OPEN_DEEP_LINK_URI
+
+        val requestCode = System.currentTimeMillis().toInt()
+        val pendingIntent = PendingIntent.getBroadcast(
+            context,
+            requestCode,
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+
+        return pendingIntent
+    }
+
+    private fun deepLinkIntentBroadcastPendingIntent(context: Context): PendingIntent {
+        val intent = Intent(context, MyAppWidget1::class.java)
+        intent.action = ACTION_OPEN_DEEP_LINK_INTENT
 
         val requestCode = System.currentTimeMillis().toInt()
         val pendingIntent = PendingIntent.getBroadcast(

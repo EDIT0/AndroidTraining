@@ -11,10 +11,16 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/btnRandomNumber"
+            android:id="@+id/btnDeepLinkUri"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="랜덤 숫자" />
+            android:text="딥링크Uri" />
+
+        <Button
+            android:id="@+id/btnDeepLinkIntent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="딥링크인텐트" />
 
     </LinearLayout>
 </LinearLayout>
