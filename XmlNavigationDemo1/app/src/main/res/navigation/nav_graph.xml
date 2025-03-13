@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/oneFragment">
+
+    <fragment
+        android:id="@+id/oneFragment"
+        android:name="com.my.xmlnavigationdemo1.main.fragment.OneFragment"
+        android:label="fragment_one"
+        tools:layout="@layout/fragment_one">
+        <action
+            android:id="@+id/action_oneFragment_to_naverMapFragment"
+            app:destination="@id/naverMapFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/twoFragment"
+        android:name="com.my.xmlnavigationdemo1.main.fragment.TwoFragment"
+        android:label="fragment_two"
+        tools:layout="@layout/fragment_two" />
+    <fragment
+        android:id="@+id/naverMapFragment"
+        android:name="com.my.xmlnavigationdemo1.main.fragment.NaverMapFragment"
+        android:label="fragment_naver_map"
+        tools:layout="@layout/fragment_naver_map" >
+        <action
+            android:id="@+id/action_naverMapFragment_to_twoFragment"
+            app:destination="@id/twoFragment" />
+    </fragment>
+    <dialog
+        android:id="@+id/dialog1Fragment"
+        android:name="com.my.xmlnavigationdemo1.main.fragment.Dialog1Fragment"
+        android:label="fragment_dialog1"
+        tools:layout="@layout/fragment_dialog1" />
+
+</navigation>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/two"
+    app:startDestination="@id/BOneFragment">
+
+    <fragment
+        android:id="@+id/BOneFragment"
+        android:name="com.my.xmlnavigationdemo1.bottomnav.fragment.BOneFragment"
+        android:label="fragment_b_one"
+        tools:layout="@layout/fragment_b_one" >
+        <action
+            android:id="@+id/action_BOneFragment_to_BTwoFragment"
+            app:destination="@id/BTwoFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/BTwoFragment"
+        android:name="com.my.xmlnavigationdemo1.bottomnav.fragment.BTwoFragment"
+        android:label="fragment_b_two"
+        tools:layout="@layout/fragment_b_two" />
+
+</navigation>
