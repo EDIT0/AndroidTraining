@@ -50,7 +50,7 @@ class BottomNavActivity : AppCompatActivity() {
 
         // Setup the ActionBar with navController and 3 top level destinations
         appBarConfiguration = AppBarConfiguration(
-            setOf(R.id.one, R.id.two)
+            setOf(R.id.one, R.id.two, R.id.three)
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
 

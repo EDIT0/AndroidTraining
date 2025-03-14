@@ -6,5 +6,6 @@
 
     <include app:graph="@navigation/bottom_nav_one" />
     <include app:graph="@navigation/bottom_nav_two" />
+    <include app:graph="@navigation/bottom_nav_three" />
 
 </navigation>

@@ -45,39 +45,39 @@ class NaverMapFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-            binding.naverMapView.getMapAsync(OnMapReadyCallback { naverMap ->
-                naverMapVM.map = naverMap
+        binding.naverMapView.getMapAsync(OnMapReadyCallback { naverMap ->
+            naverMapVM.map = naverMap
 
-                if(naverMapVM.cameraPosition != null) {
-                    naverMapVM.map?.moveCamera(
-                        CameraUpdate.scrollTo(
-                            LatLng(
-                                naverMapVM.cameraPosition?.latitude?:0.0,
-                                naverMapVM.cameraPosition?.longitude?:0.0
-                            )
+            if(naverMapVM.cameraPosition != null) {
+                naverMapVM.map?.moveCamera(
+                    CameraUpdate.scrollTo(
+                        LatLng(
+                            naverMapVM.cameraPosition?.latitude?:0.0,
+                            naverMapVM.cameraPosition?.longitude?:0.0
                         )
                     )
-                }
-                if(naverMapVM.currentZoom != 0.0) {
-                    naverMapVM.map?.moveCamera(
-                        CameraUpdate.zoomTo(naverMapVM.currentZoom)
-                    )
-                }
+                )
+            }
+            if(naverMapVM.currentZoom != 0.0) {
+                naverMapVM.map?.moveCamera(
+                    CameraUpdate.zoomTo(naverMapVM.currentZoom)
+                )
+            }
 
-                naverMapVM.map?.locationSource = naverMapVM.locationSource
+            naverMapVM.map?.locationSource = naverMapVM.locationSource
 
-                naverMapVM.map?.addOnCameraChangeListener { i, b ->
-                    naverMapVM.cameraPosition = LatLng(
-                        naverMapVM.map?.cameraPosition?.target?.latitude?:0.0, naverMapVM.map?.cameraPosition?.target?.longitude?:0.0
-                    )
-                    naverMapVM.currentTilt = naverMapVM.map?.cameraPosition?.tilt?:0.0
-                    naverMapVM.currentZoom = naverMapVM.map?.cameraPosition?.zoom?:0.0
-                    naverMapVM.currentBearing = naverMapVM.map?.cameraPosition?.bearing?:0.0
+            naverMapVM.map?.addOnCameraChangeListener { i, b ->
+                naverMapVM.cameraPosition = LatLng(
+                    naverMapVM.map?.cameraPosition?.target?.latitude?:0.0, naverMapVM.map?.cameraPosition?.target?.longitude?:0.0
+                )
+                naverMapVM.currentTilt = naverMapVM.map?.cameraPosition?.tilt?:0.0
+                naverMapVM.currentZoom = naverMapVM.map?.cameraPosition?.zoom?:0.0
+                naverMapVM.currentBearing = naverMapVM.map?.cameraPosition?.bearing?:0.0
 
-                    Log.d("MYTAG ${javaClass.simpleName}", "지도 움직임: ${i} ${b}\n${naverMapVM.currentZoom}")
-                }
-            })
-            naverMapVM.locationSource = FusedLocationSource(this, 100)
+                Log.d("MYTAG ${javaClass.simpleName}", "지도 움직임: ${i} ${b}\n${naverMapVM.currentZoom}")
+            }
+        })
+        naverMapVM.locationSource = FusedLocationSource(this, 100)
 
         binding.btnDialog1Fragment.setOnClickListener {
             findNavController().navigate(R.id.dialog1Fragment)
