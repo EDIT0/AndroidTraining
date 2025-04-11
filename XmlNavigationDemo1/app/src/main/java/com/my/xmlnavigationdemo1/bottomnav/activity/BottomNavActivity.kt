@@ -21,7 +21,7 @@ class BottomNavActivity : AppCompatActivity() {
     private lateinit var binding: ActivityBottomNavBinding
 
     private lateinit var navController: NavController
-    private lateinit var appBarConfiguration: AppBarConfiguration
+//    private lateinit var appBarConfiguration: AppBarConfiguration
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,23 +36,22 @@ class BottomNavActivity : AppCompatActivity() {
 
         Log.i("MYTAG ${javaClass.simpleName}", "onCreate()")
 
-        val toolbar: Toolbar = binding.toolbar
-        setSupportActionBar(toolbar)
+//        val toolbar: Toolbar = binding.toolbar
+//        setSupportActionBar(toolbar)
 
-        val navHostFragment = supportFragmentManager.findFragmentById(
-            R.id.fcv
-        ) as NavHostFragment
+        val navHostFragment = supportFragmentManager.findFragmentById(R.id.fcv) as NavHostFragment
         navController = navHostFragment.navController
+        navController.setGraph(R.navigation.bottom_nav)
 
         // Setup the bottom navigation view with navController
         val bottomNavigationView = binding.bnv
         bottomNavigationView.setupWithNavController(navController)
 
         // Setup the ActionBar with navController and 3 top level destinations
-        appBarConfiguration = AppBarConfiguration(
-            setOf(R.id.one, R.id.two, R.id.three)
-        )
-        setupActionBarWithNavController(navController, appBarConfiguration)
+//        appBarConfiguration = AppBarConfiguration(
+//            setOf(R.id.one, R.id.two, R.id.three)
+//        )
+//        setupActionBarWithNavController(navController, appBarConfiguration)
 
 //        binding.bnv.setOnItemSelectedListener { menuItem ->
 //            when (menuItem.itemId) {
@@ -69,9 +68,9 @@ class BottomNavActivity : AppCompatActivity() {
 //        }
     }
 
-    override fun onSupportNavigateUp(): Boolean {
-        return navController.navigateUp(appBarConfiguration)
-    }
+//    override fun onSupportNavigateUp(): Boolean {
+//        return navController.navigateUp(appBarConfiguration)
+//    }
 
     /**
      * NavController에 네비게이션 그래프 설정

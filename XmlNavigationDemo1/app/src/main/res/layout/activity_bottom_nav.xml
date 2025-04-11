@@ -8,12 +8,12 @@
     android:orientation="vertical"
     tools:context=".bottomnav.activity.BottomNavActivity">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
+<!--    <androidx.appcompat.widget.Toolbar-->
+<!--        android:id="@+id/toolbar"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:visibility="gone"-->
+<!--        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />-->
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fcv"

@@ -1,5 +1,6 @@
 package com.my.xmlnavigationdemo1.bottomnav.fragment.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.NaverMap
@@ -14,4 +15,8 @@ class COneViewModel: ViewModel() {
     var currentTilt: Double = 0.0
     var currentBearing: Double = 0.0
 
+    override fun onCleared() {
+        super.onCleared()
+        Log.i("MYTAG ${javaClass.simpleName}", "onCleared()")
+    }
 }

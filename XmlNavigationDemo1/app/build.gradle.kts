@@ -46,18 +46,16 @@ dependencies {
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
 
-    val nav_version = "2.8.8"
     /* Navigation */
-    implementation("androidx.navigation:navigation-fragment-ktx:$nav_version")
-    implementation("androidx.navigation:navigation-ui-ktx:$nav_version")
-
-    val fragment_version = "1.8.6"
+    implementation(libs.androidx.navigation.fragment.ktx)
+    implementation(libs.androidx.navigation.ui.ktx)
+    
     // Kotlin
-    implementation("androidx.fragment:fragment-ktx:$fragment_version")
+    implementation(libs.androidx.fragment.ktx)
 
     /* Map */
-    implementation("com.google.android.gms:play-services-location:21.0.1")
-    implementation("com.naver.maps:map-sdk:3.20.0")
+    implementation(libs.play.services.location)
+    implementation(libs.map.sdk)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
