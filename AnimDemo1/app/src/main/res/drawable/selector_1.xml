@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector
+    android:constantSize="false"
+    android:dither="true"
+    android:variablePadding="false"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:drawable="@drawable/ic_launcher_background_grey"
+        android:state_selected="true" />
+    <item
+        android:drawable="@drawable/ripple"
+        android:state_pressed="true" />
+    <item
+        android:drawable="@drawable/ic_launcher_background"
+        android:state_selected="false" />
+</selector>
+
+
