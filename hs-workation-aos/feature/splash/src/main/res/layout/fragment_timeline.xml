@@ -6,7 +6,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="20dp"
-        tools:context=".view.fragment.component.TimelineFragment">
+        tools:context=".component.view.fragment.component.TimelineFragment">
 
         <androidx.compose.ui.platform.ComposeView
             android:id="@+id/cvTimeline"

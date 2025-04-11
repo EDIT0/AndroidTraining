@@ -1,7 +1,7 @@
 package com.hs.workation.data.apiservice
 
-import com.hs.workation.domain.model.res.ResTest1
-import com.hs.workation.domain.model.res.ResTest2
+import com.hs.workation.core.model.test.res.ResTest1
+import com.hs.workation.core.model.test.res.ResTest2
 import retrofit2.Response
 
 interface TestService {

@@ -1,9 +1,9 @@
 package com.hs.workation.data.datasource.remote
 
 import androidx.paging.PagingData
-import com.hs.workation.domain.model.req.ReqTest2
-import com.hs.workation.domain.model.res.ResTest1
-import com.hs.workation.domain.model.res.ResTest2
+import com.hs.workation.core.model.test.req.ReqTest2
+import com.hs.workation.core.model.test.res.ResTest1
+import com.hs.workation.core.model.test.res.ResTest2
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import retrofit2.Response

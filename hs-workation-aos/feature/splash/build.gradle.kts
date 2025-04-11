@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.jetbrains.kotlin.android)
+    alias(libs.plugins.compose.compiler)
 
     id("com.google.devtools.ksp")
     id("com.google.dagger.hilt.android")
@@ -8,7 +9,7 @@ plugins {
 
 android {
     namespace = "com.hs.workation.feature.splash"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         minSdk = 26
@@ -37,9 +38,6 @@ android {
         compose = true
         dataBinding = true
         buildConfig = true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.1"
     }
 }
 
@@ -70,34 +68,35 @@ dependencies {
     implementation(libs.androidx.material3)
 
     /* Firebase */
-    implementation(platform("com.google.firebase:firebase-bom:33.5.0"))
-    implementation("com.google.firebase:firebase-analytics")
-    implementation("com.google.firebase:firebase-config")
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.analytics)
+    implementation(libs.firebase.config)
 
     /* Hilt */
-    implementation("com.google.dagger:hilt-android:2.51.1")
-    ksp("com.google.dagger:hilt-android-compiler:2.51.1")
+    implementation(libs.hilt.android)
+    implementation(libs.firebase.config.ktx)
+    ksp(libs.hilt.android.compiler)
 
     /* Navigation */
-    implementation("androidx.navigation:navigation-fragment:2.8.2")
-    implementation("androidx.navigation:navigation-ui:2.8.2")
+    implementation(libs.androidx.navigation.fragment)
+    implementation(libs.androidx.navigation.ui)
 
     /* Gson */
-    implementation("com.google.code.gson:gson:2.11.0")
+    implementation(libs.gson)
 
     /* Paging3 */
-    implementation("androidx.paging:paging-runtime:3.3.2")
+    implementation(libs.androidx.paging.runtime)
 
     /* Pull Refresh */
-    implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
+    implementation(libs.androidx.swiperefreshlayout)
 
     /* calendar */
     implementation(libs.material.calendarview)
     implementation(libs.threetenabp)
 
     /* Map */
-    implementation("com.google.android.gms:play-services-location:21.0.1")
-    implementation("com.naver.maps:map-sdk:3.20.0")
+    implementation(libs.play.services.location)
+    implementation(libs.map.sdk)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

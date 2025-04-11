@@ -3,7 +3,7 @@
 
     <application>
         <activity
-            android:name=".view.activity.PermissionActivity"
+            android:name=".main.view.activity.PermissionActivity"
             android:exported="false" />
     </application>
 

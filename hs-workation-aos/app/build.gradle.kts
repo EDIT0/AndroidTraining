@@ -9,12 +9,12 @@ plugins {
 
 android {
     namespace = "com.hs.workation"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.hs.workation"
         minSdk = 26
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
 
@@ -22,7 +22,12 @@ android {
     }
 
     buildTypes {
+        debug {
+            resValue("string", "app_name", "횡성워케이션(DEV)")
+        }
         release {
+            resValue("string", "app_name", "횡성워케이션")
+
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
@@ -56,7 +61,12 @@ dependencies {
     implementation(project(":domain"))
     implementation(project(":feature:home"))
     implementation(project(":feature:login"))
+    implementation(project(":feature:main"))
+    implementation(project(":feature:mobility"))
+    implementation(project(":feature:my"))
     implementation(project(":feature:permission"))
+    implementation(project(":feature:reservation"))
+    implementation(project(":feature:space"))
     implementation(project(":feature:splash"))
 
     implementation(libs.androidx.core.ktx)
@@ -64,17 +74,17 @@ dependencies {
     implementation(libs.material)
 
     /* Firebase */
-    implementation(platform("com.google.firebase:firebase-bom:33.5.0"))
-    implementation("com.google.firebase:firebase-analytics")
-    implementation("com.google.firebase:firebase-config")
-    implementation("com.google.firebase:firebase-messaging")
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.analytics)
+    implementation(libs.firebase.config)
+    implementation(libs.firebase.messaging)
 
     /* Hilt */
-    implementation("com.google.dagger:hilt-android:2.51.1")
-    ksp("com.google.dagger:hilt-android-compiler:2.51.1")
+    implementation(libs.hilt.android)
+    ksp(libs.hilt.android.compiler)
     
     /* Map */
-    implementation("com.naver.maps:map-sdk:3.20.0")
+    implementation(libs.map.sdk)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

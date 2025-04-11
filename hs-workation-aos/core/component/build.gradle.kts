@@ -1,11 +1,12 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.jetbrains.kotlin.android)
+    alias(libs.plugins.compose.compiler)
 }
 
 android {
     namespace = "com.hs.workation.core.component"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         minSdk = 26
@@ -33,9 +34,6 @@ android {
     buildFeatures {
         compose = true
         viewBinding = true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.1"
     }
 }
 
@@ -71,10 +69,10 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
 
     /* Glide */
-    implementation ("com.github.bumptech.glide:glide:4.16.0")
+    implementation (libs.glide)
 
     /* Map */
-    implementation("com.naver.maps:map-sdk:3.20.0")
+    implementation(libs.map.sdk)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

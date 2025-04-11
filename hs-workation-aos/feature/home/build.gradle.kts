@@ -2,13 +2,15 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.jetbrains.kotlin.android)
 
+    alias(libs.plugins.compose.compiler)
+
     id("com.google.devtools.ksp")
     id("com.google.dagger.hilt.android")
 }
 
 android {
     namespace = "com.hs.workation.feature.home"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         minSdk = 26
@@ -37,9 +39,6 @@ android {
         compose = true
         dataBinding = true
         buildConfig = true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.1"
     }
 }
 
@@ -70,20 +69,20 @@ dependencies {
     implementation(libs.androidx.material3)
 
     /* Firebase */
-    implementation(platform("com.google.firebase:firebase-bom:33.5.0"))
-    implementation("com.google.firebase:firebase-analytics")
-    implementation("com.google.firebase:firebase-config")
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.analytics)
+    implementation(libs.firebase.config)
 
     /* Hilt */
-    implementation("com.google.dagger:hilt-android:2.51.1")
-    ksp("com.google.dagger:hilt-android-compiler:2.51.1")
+    implementation(libs.hilt.android)
+    ksp(libs.hilt.android.compiler)
 
     /* Navigation */
-    implementation("androidx.navigation:navigation-fragment:2.8.2")
-    implementation("androidx.navigation:navigation-ui:2.8.2")
+    implementation(libs.androidx.navigation.fragment)
+    implementation(libs.androidx.navigation.ui)
 
     /* Gson */
-    implementation("com.google.code.gson:gson:2.11.0")
+    implementation(libs.gson)
 
     /* calendar */
     implementation(libs.material.calendarview)

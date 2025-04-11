@@ -1,19 +1,16 @@
 package com.hs.workation.data.repository
 
-import android.util.Log
 import androidx.paging.PagingData
 import com.hs.workation.data.datasource.remote.TestRemoteDataSource
-import com.hs.workation.domain.model.base.RequestResult
-import com.hs.workation.domain.model.req.ReqTest2
-import com.hs.workation.domain.model.res.ResTest1
-import com.hs.workation.domain.model.res.ResTest2
+import com.hs.workation.core.model.base.RequestResult
+import com.hs.workation.core.model.test.req.ReqTest2
+import com.hs.workation.core.model.test.res.ResTest1
+import com.hs.workation.core.model.test.res.ResTest2
 import com.hs.workation.domain.repository.TestRepository
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class TestRepositoryImpl @Inject constructor(
@@ -33,7 +30,7 @@ class TestRepositoryImpl @Inject constructor(
                         emit(RequestResult.DataEmpty())
                     }
                 } else {
-                    emit(RequestResult.Error(code = "Test1ErrorCode", message = "Test1ErrorMessage"))
+                    emit(RequestResult.Error(code = 4000, message = "Test1ErrorMessage"))
                 }
             } catch (e: Exception) {
                 throw Exception(e)
@@ -60,7 +57,7 @@ class TestRepositoryImpl @Inject constructor(
                         emit(RequestResult.DataEmpty())
                     }
                 } else {
-                    emit(RequestResult.Error(code = "DeleteTest2QuestionErrorCode", message = "DeleteTest2QuestionErrorMessage"))
+                    emit(RequestResult.Error(code = 4000, message = "DeleteTest2QuestionErrorMessage"))
                 }
             } catch (e: Exception) {
                 throw Exception(e)

@@ -17,7 +17,7 @@ import com.hs.workation.R
 import com.hs.workation.core.common.constants.FCMConstants
 import com.hs.workation.core.model.fcm.CommonPayload
 import com.hs.workation.core.util.LogUtil
-import com.hs.workation.feature.splash.view.activity.SplashActivity
+import com.hs.workation.feature.splash.main.view.activity.SplashActivity
 
 class FCMService: FirebaseMessagingService() {
 

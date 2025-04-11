@@ -8,7 +8,7 @@ plugins {
 
 android {
     namespace = "com.hs.workation.domain"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         minSdk = 26
@@ -37,16 +37,21 @@ android {
 
 dependencies {
 
+    /* Module */
+    implementation(project(":core:common"))
+    implementation(project(":core:model"))
+    implementation(project(":core:util"))
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
 
     /* Hilt */
-    implementation("com.google.dagger:hilt-android:2.51.1")
-    ksp("com.google.dagger:hilt-android-compiler:2.51.1")
+    implementation(libs.hilt.android)
+    ksp(libs.hilt.android.compiler)
 
     /* Paging3 */
-    implementation("androidx.paging:paging-runtime:3.3.2")
+    implementation(libs.androidx.paging.runtime)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

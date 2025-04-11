@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/nav_bottom_main_home"
+        android:enabled="true"
+        android:icon="@drawable/ic_account_circle_24_000000"
+        android:title="@string/main_tab_home_title" />
+
+    <item
+        android:id="@+id/nav_bottom_main_space"
+        android:enabled="true"
+        android:icon="@drawable/ic_account_circle_24_000000"
+        android:title="@string/main_tab_space_title" />
+
+    <item
+        android:id="@+id/nav_bottom_main_reservation"
+        android:enabled="true"
+        android:icon="@drawable/ic_account_circle_24_000000"
+        android:title="@string/main_tab_reservation_title" />
+
+    <item
+        android:id="@+id/nav_bottom_main_mobility"
+        android:enabled="true"
+        android:icon="@drawable/ic_account_circle_24_000000"
+        android:title="@string/main_tab_mobility_title" />
+
+    <item
+        android:id="@+id/nav_bottom_main_my"
+        android:enabled="true"
+        android:icon="@drawable/ic_account_circle_24_000000"
+        android:title="@string/main_tab_my_title" />
+</menu>

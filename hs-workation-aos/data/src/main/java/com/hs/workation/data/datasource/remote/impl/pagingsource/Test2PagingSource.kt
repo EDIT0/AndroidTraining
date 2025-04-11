@@ -6,8 +6,8 @@ import androidx.annotation.RequiresExtension
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.hs.workation.data.apiservice.TestService
-import com.hs.workation.domain.model.req.ReqTest2
-import com.hs.workation.domain.model.res.ResTest2
+import com.hs.workation.core.model.test.req.ReqTest2
+import com.hs.workation.core.model.test.res.ResTest2
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.io.IOException

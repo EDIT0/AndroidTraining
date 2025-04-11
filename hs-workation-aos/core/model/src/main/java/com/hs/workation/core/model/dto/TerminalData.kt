@@ -1,0 +1,33 @@
+package com.hs.workation.core.model.dto
+
+data class TerminalData(
+    var id: String? = null,
+    var terminalId: String? = null,
+    var remainingFuel1: String? = null,
+    var remainingFuel2: String? = null,
+    var chargeStatusForEV: String? = null,
+    var flDoorLock: String? = null,
+    var frDoorLock: String? = null,
+    var rlDoorLock: String? = null,
+    var rrDoorLock: String? = null,
+    var lon: String? = null,
+    var totalDrivingDistance: String? = null,
+    var lat: String? = null,
+    var flDoorOpen: String? = null,
+    var frDoorOpen: String? = null,
+    var rlDoorOpen: String? = null,
+    var rrDoorOpen: String? = null,
+    var hdDoorOpen: String? = null,
+    var trDoorOpen: String? = null,
+    var speed: String? = null,
+    var tirePressureRL: String? = null,
+    var tirePressureFL: String? = null,
+    var tirePressureRR: String? = null,
+    var tirePressureFR: String? = null,
+    var status: String? = null,
+    var createdBy: String? = null,
+    var modifiedBy: String? = null,
+    var createdDate: String? = null,
+    var modifiedDate: String? = null,
+    var isDeleted: Boolean? = null
+)

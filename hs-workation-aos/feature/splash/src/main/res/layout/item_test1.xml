@@ -3,7 +3,7 @@
     <data>
         <variable
             name="resTest2Item"
-            type="com.hs.workation.domain.model.res.ResTest2.TestQuestion" />
+            type="com.hs.workation.core.model.test.res.ResTest2.TestQuestion" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"

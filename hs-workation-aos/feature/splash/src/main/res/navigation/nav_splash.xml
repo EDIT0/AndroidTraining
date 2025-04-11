@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/splashStartFragment"
-        android:name="com.hs.workation.feature.splash.view.fragment.SplashStartFragment"
+        android:name="com.hs.workation.feature.splash.main.view.fragment.SplashStartFragment"
         android:label="SplashStartFragment" >
         <action
             android:id="@+id/action_splashStartFragment_to_test1Fragment"
@@ -17,11 +17,11 @@
     </fragment>
     <fragment
         android:id="@+id/test1Fragment"
-        android:name="com.hs.workation.feature.splash.view.fragment.Test1Fragment"
+        android:name="com.hs.workation.feature.splash.test1.view.fragment.Test1Fragment"
         android:label="Test1Fragment" />
     <fragment
         android:id="@+id/componentFragment"
-        android:name="com.hs.workation.feature.splash.view.fragment.ComponentListFragment"
+        android:name="com.hs.workation.feature.splash.component.view.fragment.ComponentListFragment"
         android:label="ComponentFragment" >
         <action
             android:id="@+id/action_componentFragment_to_commonToastFragment"
@@ -77,84 +77,77 @@
         <action
             android:id="@+id/action_componentFragment_to_commonMapFragment"
             app:destination="@id/commonMapFragment" />
-        <action
-            android:id="@+id/action_componentFragment_to_commonInputFormViewFragment"
-            app:destination="@id/commonInputFormViewFragment" />
     </fragment>
     <fragment
         android:id="@+id/commonToastFragment"
-        android:name="com.hs.workation.feature.splash.view.fragment.component.CommonToastFragment"
+        android:name="com.hs.workation.feature.splash.component.view.fragment.component.CommonToastFragment"
         android:label="CommonToastFragment" />
     <fragment
         android:id="@+id/commonCalendarFragment"
-        android:name="com.hs.workation.feature.splash.view.fragment.component.CommonCalendarFragment"
+        android:name="com.hs.workation.feature.splash.component.view.fragment.component.CommonCalendarFragment"
         android:label="CommonCalendarFragment" />
     <fragment
         android:id="@+id/inputTextBoxFragment"
-        android:name="com.hs.workation.feature.splash.view.fragment.component.InputTextBoxFragment"
+        android:name="com.hs.workation.feature.splash.component.view.fragment.component.InputTextBoxFragment"
         android:label="InputTextBoxFragment" />
     <fragment
         android:id="@+id/activeButtonFragment"
-        android:name="com.hs.workation.feature.splash.view.fragment.component.ActiveButtonFragment"
+        android:name="com.hs.workation.feature.splash.component.view.fragment.component.ActiveButtonFragment"
         android:label="activeButtonFragment" />
     <fragment
         android:id="@+id/commonAgreementFragment"
-        android:name="com.hs.workation.feature.splash.view.fragment.component.CommonAgreementFragment"
+        android:name="com.hs.workation.feature.splash.component.view.fragment.component.CommonAgreementFragment"
         android:label="CommonAgreementFragment" />
     <fragment
         android:id="@+id/timelineFragment"
-        android:name="com.hs.workation.feature.splash.view.fragment.component.TimelineFragment"
+        android:name="com.hs.workation.feature.splash.component.view.fragment.component.TimelineFragment"
         android:label="timelineFragment" />
     <fragment
         android:id="@+id/radioButtonGroupFragment"
-        android:name="com.hs.workation.feature.splash.view.fragment.component.RadioButtonGroupFragment"
+        android:name="com.hs.workation.feature.splash.component.view.fragment.component.RadioButtonGroupFragment"
         android:label="radioButtonGroupFragment" />
     <fragment
         android:id="@+id/commonDropdownMenuFragment"
-        android:name="com.hs.workation.feature.splash.view.fragment.component.CommonDropdownMenuFragment"
+        android:name="com.hs.workation.feature.splash.component.view.fragment.component.CommonDropdownMenuFragment"
         android:label="CommonDropdownMenuFragment" />
     <fragment
         android:id="@+id/expandableTextFragment"
-        android:name="com.hs.workation.feature.splash.view.fragment.component.ExpandableTextFragment"
+        android:name="com.hs.workation.feature.splash.component.view.fragment.component.ExpandableTextFragment"
         android:label="expandableTextFragment" />
     <fragment
         android:id="@+id/passcodeFragment"
-        android:name="com.hs.workation.feature.splash.view.fragment.component.PasscodeFragment"
+        android:name="com.hs.workation.feature.splash.component.view.fragment.component.PasscodeFragment"
         android:label="PasscodeFragment" />
     <fragment
         android:id="@+id/imageCarouselFragment"
-        android:name="com.hs.workation.feature.splash.view.fragment.component.ImageCarouselFragment"
+        android:name="com.hs.workation.feature.splash.component.view.fragment.component.ImageCarouselFragment"
         android:label="imageCarouselFragment" />
     <fragment
         android:id="@+id/horizontalItemScrollFragment"
-        android:name="com.hs.workation.feature.splash.view.fragment.component.HorizontalItemScrollFragment"
+        android:name="com.hs.workation.feature.splash.component.view.fragment.component.HorizontalItemScrollFragment"
         android:label="HorizontalItemScrollFragment" />
     <fragment
         android:id="@+id/accordionListViewFragment"
-        android:name="com.hs.workation.feature.splash.view.fragment.component.AccordionListViewFragment"
+        android:name="com.hs.workation.feature.splash.component.view.fragment.component.AccordionListViewFragment"
         android:label="AccordionListViewFragment" />
     <fragment
         android:id="@+id/ratingStarViewFragment"
-        android:name="com.hs.workation.feature.splash.view.fragment.component.RatingStarViewFragment"
+        android:name="com.hs.workation.feature.splash.component.view.fragment.component.RatingStarViewFragment"
         android:label="RatingStarViewFragment" />
     <fragment
         android:id="@+id/numberIncreaseFragment"
-        android:name="com.hs.workation.feature.splash.view.fragment.component.NumberIncreaseFragment"
+        android:name="com.hs.workation.feature.splash.component.view.fragment.component.NumberIncreaseFragment"
         android:label="NumberIncreaseFragment" />
     <fragment
         android:id="@+id/selectBottomSheetFragment"
-        android:name="com.hs.workation.feature.splash.view.fragment.component.SelectBottomSheetFragment"
+        android:name="com.hs.workation.feature.splash.component.view.fragment.component.SelectBottomSheetFragment"
         android:label="SelectBottomSheetFragment" />
     <fragment
         android:id="@+id/dateTimePickerViewFragment"
-        android:name="com.hs.workation.feature.splash.view.fragment.component.DateTimePickerViewFragment"
+        android:name="com.hs.workation.feature.splash.component.view.fragment.component.DateTimePickerViewFragment"
         android:label="DateTimePickerViewFragment" />
     <fragment
         android:id="@+id/commonMapFragment"
-        android:name="com.hs.workation.feature.splash.view.fragment.component.CommonMapFragment"
+        android:name="com.hs.workation.feature.splash.component.view.fragment.component.CommonMapFragment"
         android:label="CommonMapFragment" />
-    <fragment
-        android:id="@+id/commonInputFormViewFragment"
-        android:name="com.hs.workation.feature.splash.view.fragment.component.CommonInputFormViewFragment"
-        android:label="CommonInputFormViewFragment" />
 </navigation>

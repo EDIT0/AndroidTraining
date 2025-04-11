@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.jetbrains.kotlin.android)
@@ -6,9 +8,16 @@ plugins {
     id("com.google.dagger.hilt.android")
 }
 
+val localProperties = Properties().apply {
+    val localPropertiesFile = rootProject.file("local.properties")
+    if (localPropertiesFile.exists()) {
+        load(localPropertiesFile.inputStream())
+    }
+}
+
 android {
     namespace = "com.hs.workation.core.di"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         minSdk = 26
@@ -18,7 +27,14 @@ android {
     }
 
     buildTypes {
+        debug {
+            buildConfigField("String", "AUTH_URL", "${localProperties["AUTH_URL_DEV"]}")
+            buildConfigField("String", "BASE_URL", "${localProperties["BASE_URL_DEV"]}")
+        }
         release {
+            buildConfigField("String", "AUTH_URL", "${localProperties["AUTH_URL"]}")
+            buildConfigField("String", "BASE_URL", "${localProperties["BASE_URL"]}")
+
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
@@ -33,10 +49,14 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+    buildFeatures {
+        buildConfig = true
+    }
 }
 
 dependencies {
     /* Module */
+    implementation(project(":core:common"))
     implementation(project(":core:util"))
     implementation(project(":domain"))
     implementation(project(":data"))
@@ -46,13 +66,16 @@ dependencies {
     implementation(libs.material)
 
     /* Hilt */
-    implementation("com.google.dagger:hilt-android:2.51.1")
-    ksp("com.google.dagger:hilt-android-compiler:2.51.1")
+    implementation(libs.hilt.android)
+    ksp(libs.hilt.android.compiler)
 
     /* Retrofit */
-    implementation("com.squareup.retrofit2:retrofit:2.11.0")
-    implementation("com.squareup.retrofit2:converter-gson:2.11.0")
-    implementation("com.google.code.gson:gson:2.11.0")
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
+    implementation(libs.gson)
+
+    /* Okhttp Interceptor */
+    implementation(libs.logging.interceptor)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

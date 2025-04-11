@@ -1,7 +1,7 @@
 package com.hs.workation.domain.usecase
 
-import com.hs.workation.domain.model.base.RequestResult
-import com.hs.workation.domain.model.res.ResTest2
+import com.hs.workation.core.model.base.RequestResult
+import com.hs.workation.core.model.test.res.ResTest2
 import com.hs.workation.domain.repository.TestRepository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject

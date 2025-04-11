@@ -1,8 +1,8 @@
 package com.hs.workation.data.apiservice.impl
 
 import com.hs.workation.data.apiservice.TestService
-import com.hs.workation.domain.model.res.ResTest1
-import com.hs.workation.domain.model.res.ResTest2
+import com.hs.workation.core.model.test.res.ResTest1
+import com.hs.workation.core.model.test.res.ResTest2
 import retrofit2.Response
 import javax.inject.Inject
 
@@ -10,12 +10,21 @@ class TestServiceImpl @Inject constructor(
 
 ): TestService {
     override suspend fun getTest1(): Response<ResTest1> {
-        return Response.success(ResTest1(name = "TestName", number = 1, avgScore = 79.123))
+        return Response.success(
+            ResTest1(
+                name = "TestName",
+                number = 1,
+                avgScore = 79.123
+            )
+        )
     }
 
     private var list = arrayListOf<ResTest2>(
         ResTest2(
-            testPageInfo = ResTest2.TestPageInfo(totalPage = 8, page = 1),
+            testPageInfo = ResTest2.TestPageInfo(
+                totalPage = 8,
+                page = 1
+            ),
             subjectName = "Subject 1",
             subjectNumber = 1,
             questions = List(20) { index ->
@@ -27,7 +36,10 @@ class TestServiceImpl @Inject constructor(
             }
         ),
         ResTest2(
-            testPageInfo = ResTest2.TestPageInfo(totalPage = 8, page = 2),
+            testPageInfo = ResTest2.TestPageInfo(
+                totalPage = 8,
+                page = 2
+            ),
             subjectName = "Subject 2",
             subjectNumber = 2,
             questions = List(20) { index ->
@@ -39,7 +51,10 @@ class TestServiceImpl @Inject constructor(
             }
         ),
         ResTest2(
-            testPageInfo = ResTest2.TestPageInfo(totalPage = 8, page = 3),
+            testPageInfo = ResTest2.TestPageInfo(
+                totalPage = 8,
+                page = 3
+            ),
             subjectName = "Subject 3",
             subjectNumber = 3,
             questions = List(20) { index ->
@@ -51,7 +66,10 @@ class TestServiceImpl @Inject constructor(
             }
         ),
         ResTest2(
-            testPageInfo = ResTest2.TestPageInfo(totalPage = 8, page = 4),
+            testPageInfo = ResTest2.TestPageInfo(
+                totalPage = 8,
+                page = 4
+            ),
             subjectName = "Subject 4",
             subjectNumber = 4,
             questions = List(20) { index ->
@@ -63,7 +81,10 @@ class TestServiceImpl @Inject constructor(
             }
         ),
         ResTest2(
-            testPageInfo = ResTest2.TestPageInfo(totalPage = 8, page = 5),
+            testPageInfo = ResTest2.TestPageInfo(
+                totalPage = 8,
+                page = 5
+            ),
             subjectName = "Subject 5",
             subjectNumber = 5,
             questions = List(20) { index ->
@@ -75,7 +96,10 @@ class TestServiceImpl @Inject constructor(
             }
         ),
         ResTest2(
-            testPageInfo = ResTest2.TestPageInfo(totalPage = 8, page = 6),
+            testPageInfo = ResTest2.TestPageInfo(
+                totalPage = 8,
+                page = 6
+            ),
             subjectName = "Subject 6",
             subjectNumber = 6,
             questions = List(20) { index ->
@@ -87,7 +111,10 @@ class TestServiceImpl @Inject constructor(
             }
         ),
         ResTest2(
-            testPageInfo = ResTest2.TestPageInfo(totalPage = 8, page = 7),
+            testPageInfo = ResTest2.TestPageInfo(
+                totalPage = 8,
+                page = 7
+            ),
             subjectName = "Subject 7",
             subjectNumber = 7,
             questions = List(20) { index ->
@@ -99,7 +126,10 @@ class TestServiceImpl @Inject constructor(
             }
         ),
         ResTest2(
-            testPageInfo = ResTest2.TestPageInfo(totalPage = 8, page = 8),
+            testPageInfo = ResTest2.TestPageInfo(
+                totalPage = 8,
+                page = 8
+            ),
             subjectName = "Subject 8",
             subjectNumber = 8,
             questions = List(20) { index ->

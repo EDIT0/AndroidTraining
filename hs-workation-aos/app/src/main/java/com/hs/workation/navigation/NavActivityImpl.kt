@@ -6,9 +6,9 @@ import android.os.Bundle
 import androidx.activity.result.ActivityResultLauncher
 import androidx.core.app.ActivityOptionsCompat
 import com.hs.workation.core.common.navigation.NavActivity
-import com.hs.workation.feature.home.view.activity.HomeActivity
-import com.hs.workation.feature.login.view.activity.LoginActivity
-import com.hs.workation.feature.permission.view.activity.PermissionActivity
+import com.hs.workation.feature.main.view.activity.HomeActivity
+import com.hs.workation.feature.login.main.view.activity.LoginActivity
+import com.hs.workation.feature.permission.main.view.activity.PermissionActivity
 
 /**
  * 각 모듈별 Activity 호출을 위한 클래스
@@ -48,7 +48,7 @@ class NavActivityImpl : NavActivity {
         options: ActivityOptionsCompat?,
         dataBundle: Bundle?
     ) {
-        val intent = Intent(context, HomeActivity::class.java)
+        val intent = Intent(context, com.hs.workation.feature.main.view.activity.HomeActivity::class.java)
         dataBundle?.let { intent.putExtras(dataBundle) }
         launcher.launch(intent, options)
     }

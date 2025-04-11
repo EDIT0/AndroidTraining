@@ -6,6 +6,6 @@
 
     <fragment
         android:id="@+id/permissionCheckFragment"
-        android:name="com.hs.workation.feature.permission.view.fragment.PermissionCheckFragment"
+        android:name="com.hs.workation.feature.permission.main.view.fragment.PermissionCheckFragment"
         android:label="PermissionCheckFragment" />
 </navigation>

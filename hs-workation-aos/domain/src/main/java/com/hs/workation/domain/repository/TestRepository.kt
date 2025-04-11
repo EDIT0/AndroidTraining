@@ -1,10 +1,10 @@
 package com.hs.workation.domain.repository
 
 import androidx.paging.PagingData
-import com.hs.workation.domain.model.base.RequestResult
-import com.hs.workation.domain.model.req.ReqTest2
-import com.hs.workation.domain.model.res.ResTest1
-import com.hs.workation.domain.model.res.ResTest2
+import com.hs.workation.core.model.base.RequestResult
+import com.hs.workation.core.model.test.req.ReqTest2
+import com.hs.workation.core.model.test.res.ResTest1
+import com.hs.workation.core.model.test.res.ResTest2
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 

@@ -13,5 +13,11 @@
     <!-- 권한 -->
     <string name="permission_request_essential_permission_message">필수 권한들을 허용해주세요.</string>
     <string name="permission_navigate_to_setting_page_message">[앱 설정] - [권한]으로 이동하여 권한을 허용해주세요.</string>
-    
+
+    <!-- 홈 탭 -->
+    <string name="main_tab_home_title">홈</string>
+    <string name="main_tab_space_title">공간</string>
+    <string name="main_tab_reservation_title">예약</string>
+    <string name="main_tab_mobility_title">모빌리티</string>
+    <string name="main_tab_my_title">마이</string>
 </resources>

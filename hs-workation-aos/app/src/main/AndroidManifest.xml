@@ -35,7 +35,7 @@
             android:value="@string/map_sdk_client_id" />
 
         <activity
-            android:name="com.hs.workation.feature.splash.view.activity.SplashActivity"
+            android:name="com.hs.workation.feature.splash.main.view.activity.SplashActivity"
             android:exported="true"
             android:theme="@style/Theme.SplashScreen">
             <intent-filter>

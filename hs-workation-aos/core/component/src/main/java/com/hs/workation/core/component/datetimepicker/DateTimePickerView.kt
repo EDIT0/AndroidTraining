@@ -78,7 +78,7 @@ class DateTimePickerView @JvmOverloads constructor(
         var allDates = ArrayList<String>()
         allDates = makeAllDate(this.monthArray, this.day28, this.day30, this.day31) // 모든 날짜 리스트에 추가 (윤년 02.29 제외)
 
-        val todayString = "${today.monthValue}.${today.dayOfMonth}" // MM.DD
+        val todayString = String.format("%02d", today.monthValue) + "." +String.format("%02d", today.dayOfMonth) // MM.DD
         this.dateList = sortDateByToday(allDates, todayString, thisYear = currentYear, nextYear = currentYear + 1)
 
         changeYearIndex = this.dateList.indexOf("01.01") // 01.01 인덱스 저장
