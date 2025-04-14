@@ -57,6 +57,9 @@ dependencies {
     implementation(libs.play.services.location)
     implementation(libs.map.sdk)
 
+    /* Glide */
+    implementation(libs.glide)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.Glide
 import com.my.xmlnavigationdemo1.R
 import com.my.xmlnavigationdemo1.databinding.FragmentNaverMapBinding
 import com.my.xmlnavigationdemo1.main.fragment.viewmodel.NaverMapViewModel
@@ -85,6 +86,10 @@ class NaverMapFragment : Fragment() {
         binding.btnNext.setOnClickListener {
             findNavController().navigate(R.id.action_naverMapFragment_to_twoFragment)
         }
+
+        Glide.with(binding.ivImage.context)
+            .load("https://picsum.photos/250/250")
+            .into(binding.ivImage)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
