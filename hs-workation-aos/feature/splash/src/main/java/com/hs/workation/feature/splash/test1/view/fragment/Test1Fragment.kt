@@ -12,6 +12,7 @@ import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.hs.workation.core.base.view.fragment.BaseDataBindingFragment
+import com.hs.workation.core.model.base.SideEffectEvent
 import com.hs.workation.core.util.LogUtil
 import com.hs.workation.core.model.test.req.ReqTest2
 import com.hs.workation.core.model.test.res.ResTest1
@@ -75,6 +76,7 @@ class Test1Fragment : BaseDataBindingFragment<FragmentTest1Binding>(R.layout.fra
 
         initRvAndListener()
 
+        viewClickListener()
     }
 
     private fun collector(test1VM: Test1ViewModel) {
@@ -144,7 +146,7 @@ class Test1Fragment : BaseDataBindingFragment<FragmentTest1Binding>(R.layout.fra
         viewLifecycleOwner.lifecycleScope.launch {
             test1VM.sideEffectEvent.collect {
                 when(it) {
-                    is Test1ViewModel.SideEffectEvent.NetworkError -> {
+                    is SideEffectEvent.NetworkError -> {
                         showToast(it.message)
                     }
                 }
@@ -225,6 +227,12 @@ class Test1Fragment : BaseDataBindingFragment<FragmentTest1Binding>(R.layout.fra
         viewLifecycleOwner.lifecycleScope.launch {
             delay(100L)
             test1VM.test1Adapter.submitData(this@Test1Fragment.lifecycle, questions)
+        }
+    }
+
+    private fun viewClickListener() {
+        binding.btnToTest2Fragment.setOnClickListener {
+            findNavController().navigate(R.id.action_test1Fragment_to_test2Fragment, args = null, navOptions = null, navigatorExtras = null)
         }
     }
 

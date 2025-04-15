@@ -14,6 +14,7 @@ import com.hs.workation.core.common.constants.RemoteConfigConstants.REMOTE_CONFI
 import com.hs.workation.core.util.NetworkManager
 import com.hs.workation.feature.splash.BuildConfig
 import com.hs.workation.core.common.R
+import com.hs.workation.core.model.base.SideEffectEvent
 import com.hs.workation.core.model.remoteconfig.AppVersion
 import com.hs.workation.core.model.remoteconfig.ServerStatus
 import com.hs.workation.core.util.LogUtil
@@ -123,9 +124,5 @@ class SplashStartViewModel @Inject constructor(
 
         _remoteConfigUiErrorEvent.close()
         _sideEffectEvent.close()
-    }
-
-    sealed class SideEffectEvent {
-        class NetworkError(val message: String): SideEffectEvent()
     }
 }

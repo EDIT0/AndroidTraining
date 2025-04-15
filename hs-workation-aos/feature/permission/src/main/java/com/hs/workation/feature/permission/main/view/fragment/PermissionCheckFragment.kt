@@ -11,6 +11,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.hs.workation.core.base.view.fragment.BaseDataBindingFragment
 import com.hs.workation.core.component.CommonDialog
+import com.hs.workation.core.model.base.SideEffectEvent
 import com.hs.workation.core.util.LogUtil
 import com.hs.workation.feature.permission.R
 import com.hs.workation.feature.permission.databinding.FragmentPermissionCheckBinding
@@ -72,7 +73,7 @@ class PermissionCheckFragment : BaseDataBindingFragment<FragmentPermissionCheckB
         viewLifecycleOwner.lifecycleScope.launch {
             permissionCheckViewModel.sideEffectEvent.collect {
                 when(it) {
-                    PermissionCheckViewModel.SideEffectEvent.NETWORK_ERROR -> {
+                    is SideEffectEvent.NetworkError -> {
                         showNetworkErrorDialog(
                             onClick = {
                                 if(it) {
@@ -95,6 +96,7 @@ class PermissionCheckFragment : BaseDataBindingFragment<FragmentPermissionCheckB
                     val animList: List<androidx.core.util.Pair<View, String>> = listOf()
                     val options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity, *animList.toTypedArray())
                     activity.navActivity.navigateToLoginActivity(requireContext(), activity.launchActivity, options = null, dataBundle = null)
+                    activity.finish()
                 } else if(it.isState == false && it.isRetryAvailable == true) {
                     val sb = StringBuilder()
                     for(rp in it.rejectedPermissions) {

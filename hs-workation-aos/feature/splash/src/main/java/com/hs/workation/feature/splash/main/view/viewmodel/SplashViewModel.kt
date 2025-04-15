@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import com.hs.workation.core.base.viewmodel.BaseAndroidViewModel
+import com.hs.workation.core.model.base.SideEffectEvent
 import com.hs.workation.core.util.NetworkManager
 import com.hs.workation.feature.splash.R
 import com.hs.workation.feature.splash.main.event.SplashViewModelEvent
@@ -31,18 +32,15 @@ class SplashViewModel @Inject constructor(
     val sideEffectEvent = _sideEffectEvent.receiveAsFlow()
 
     fun handleViewModelEvent(splashViewModelEvent: SplashViewModelEvent) {
-        when(splashViewModelEvent) {
+        when (splashViewModelEvent) {
             is SplashViewModelEvent.SettingNavigation -> {
-                val splashNavFragment = splashViewModelEvent.activity.supportFragmentManager.findFragmentById(R.id.navFragment) as NavHostFragment
+                val splashNavFragment =
+                    splashViewModelEvent.activity.supportFragmentManager.findFragmentById(R.id.navFragment) as NavHostFragment
                 _splashNavController = splashNavFragment.navController
                 _splashNavController?.setGraph(R.navigation.nav_splash)
                 _navSplash = NavSplash(_splashNavController!!)
             }
         }
-    }
-
-    enum class SideEffectEvent {
-        NETWORK_ERROR
     }
 
     override fun onCleared() {

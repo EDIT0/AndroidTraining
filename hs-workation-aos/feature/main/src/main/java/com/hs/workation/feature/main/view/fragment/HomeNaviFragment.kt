@@ -8,6 +8,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.ui.setupWithNavController
 import com.hs.workation.core.base.view.fragment.BaseDataBindingFragment
+import com.hs.workation.core.model.base.SideEffectEvent
 import com.hs.workation.feature.main.R
 import com.hs.workation.feature.main.databinding.FragmentHomeNaviBinding
 import com.hs.workation.feature.main.view.viewmodel.HomeNaviViewModel
@@ -53,7 +54,10 @@ class HomeNaviFragment : BaseDataBindingFragment<FragmentHomeNaviBinding>(R.layo
         viewLifecycleOwner.lifecycleScope.launch {
             homeNaviVM.sideEffectEvent.collect {
                 when(it) {
-                    HomeNaviViewModel.SideEffectEvent.COMPLETE_BOTTOM_NAVI_SETTING -> {
+                    is SideEffectEvent.NetworkError -> {
+                        showToast(it.message)
+                    }
+                    is HomeNaviViewModel.SideEffectVMEvent.CompleteBottomNaviSetting -> {
                         binding.bottomNaviView.setupWithNavController(homeNaviVM.bottomNavController!!)
                     }
                 }

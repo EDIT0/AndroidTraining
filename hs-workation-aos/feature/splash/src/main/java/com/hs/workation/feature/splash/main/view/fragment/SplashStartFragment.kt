@@ -21,6 +21,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.hs.workation.core.base.view.fragment.BaseDataBindingFragment
 import com.hs.workation.core.component.CommonDialog
+import com.hs.workation.core.model.base.SideEffectEvent
 import com.hs.workation.core.util.FCMToken
 import com.hs.workation.core.util.LogUtil
 import com.hs.workation.core.util.ViewSizeUtil
@@ -118,7 +119,7 @@ class SplashStartFragment : BaseDataBindingFragment<FragmentSplashStartBinding>(
         viewLifecycleOwner.lifecycleScope.launch {
             splashStartVM.sideEffectEvent.collect {
                 when(it) {
-                    is SplashStartViewModel.SideEffectEvent.NetworkError -> {
+                    is SideEffectEvent.NetworkError -> {
                         showNetworkErrorDialog(
                             onClick = {
                                 if(it) {

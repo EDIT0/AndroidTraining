@@ -9,6 +9,7 @@ import com.hs.workation.core.common.R
 import com.hs.workation.core.util.LogUtil
 import com.hs.workation.core.util.NetworkManager
 import com.hs.workation.core.model.base.RequestResult
+import com.hs.workation.core.model.base.SideEffectEvent
 import com.hs.workation.core.model.test.res.ResTest2
 import com.hs.workation.domain.usecase.DeleteTest2QuestionUseCase
 import com.hs.workation.domain.usecase.GetTest1UseCase
@@ -203,9 +204,5 @@ class Test1ViewModel @Inject constructor(
         super.onCleared()
 
         _sideEffectEvent.close()
-    }
-
-    sealed interface SideEffectEvent {
-        class NetworkError(val message: String): SideEffectEvent
     }
 }

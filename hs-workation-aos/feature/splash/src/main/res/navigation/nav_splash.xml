@@ -18,7 +18,11 @@
     <fragment
         android:id="@+id/test1Fragment"
         android:name="com.hs.workation.feature.splash.test1.view.fragment.Test1Fragment"
-        android:label="Test1Fragment" />
+        android:label="Test1Fragment" >
+        <action
+            android:id="@+id/action_test1Fragment_to_test2Fragment"
+            app:destination="@id/test2Fragment" />
+    </fragment>
     <fragment
         android:id="@+id/componentFragment"
         android:name="com.hs.workation.feature.splash.component.view.fragment.ComponentListFragment"
@@ -150,4 +154,8 @@
         android:id="@+id/commonMapFragment"
         android:name="com.hs.workation.feature.splash.component.view.fragment.component.CommonMapFragment"
         android:label="CommonMapFragment" />
+    <fragment
+        android:id="@+id/test2Fragment"
+        android:name="com.hs.workation.feature.splash.test2.view.Test2Fragment"
+        android:label="Test2Fragment" />
 </navigation>

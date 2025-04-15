@@ -6,6 +6,7 @@ import com.hs.workation.domain.usecase.DeleteTest2QuestionUseCase
 import com.hs.workation.domain.usecase.GetTest1UseCase
 import com.hs.workation.domain.usecase.GetTest2UseCase
 import com.hs.workation.domain.usecase.PostRequestLoginUseCase
+import com.hs.workation.domain.usecase.PostRequestLogoutUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -46,5 +47,13 @@ object UseCaseModule {
         authRepository: AuthRepository
     ): PostRequestLoginUseCase {
         return PostRequestLoginUseCase(authRepository)
+    }
+
+    @Singleton
+    @Provides
+    fun providesPostRequestLogoutUseCase(
+        authRepository: AuthRepository
+    ): PostRequestLogoutUseCase {
+        return PostRequestLogoutUseCase(authRepository)
     }
 }

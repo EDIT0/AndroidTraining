@@ -22,10 +22,28 @@
             android:id="@+id/btnLogin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="홈으로 이동"
+            android:text="로그인"
             app:layout_constraintEnd_toEndOf="@id/tvText"
             app:layout_constraintStart_toStartOf="@id/tvText"
             app:layout_constraintTop_toBottomOf="@id/tvText" />
+
+        <Button
+            android:id="@+id/btnLogout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="로그아웃"
+            app:layout_constraintEnd_toEndOf="@id/btnLogin"
+            app:layout_constraintStart_toStartOf="@id/btnLogin"
+            app:layout_constraintTop_toBottomOf="@id/btnLogin" />
+
+        <Button
+            android:id="@+id/btnToHome"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="홈으로 이동"
+            app:layout_constraintEnd_toEndOf="@id/btnLogout"
+            app:layout_constraintStart_toStartOf="@id/btnLogout"
+            app:layout_constraintTop_toBottomOf="@id/btnLogout" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

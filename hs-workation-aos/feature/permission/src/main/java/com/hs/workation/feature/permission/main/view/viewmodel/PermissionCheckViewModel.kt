@@ -3,6 +3,7 @@ package com.hs.workation.feature.permission.main.view.viewmodel
 import android.app.Application
 import androidx.lifecycle.viewModelScope
 import com.hs.workation.core.base.viewmodel.BaseAndroidViewModel
+import com.hs.workation.core.model.base.SideEffectEvent
 import com.hs.workation.core.util.NetworkManager
 import com.hs.workation.core.util.PermissionManager
 import com.hs.workation.feature.permission.main.event.PermissionCheckViewModelEvent
@@ -97,9 +98,5 @@ class PermissionCheckViewModel @Inject constructor(
 
         _permissionStateUiErrorEvent.close()
         _sideEffectEvent.close()
-    }
-
-    enum class SideEffectEvent {
-        NETWORK_ERROR
     }
 }

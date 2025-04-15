@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import com.hs.workation.core.base.viewmodel.BaseAndroidViewModel
+import com.hs.workation.core.model.base.SideEffectEvent
 import com.hs.workation.core.util.NetworkManager
 import com.hs.workation.feature.main.R
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -35,14 +36,14 @@ class HomeNaviViewModel @Inject constructor(
                 _bottomNavController?.setGraph(R.navigation.nav_bottom)
 
                 scope.launch {
-                    _sideEffectEvent.send(SideEffectEvent.COMPLETE_BOTTOM_NAVI_SETTING)
+                    _sideEffectEvent.send(SideEffectVMEvent.CompleteBottomNaviSetting())
                 }
             }
         }
     }
 
-    enum class SideEffectEvent {
-        COMPLETE_BOTTOM_NAVI_SETTING
+    sealed interface SideEffectVMEvent : SideEffectEvent {
+        class CompleteBottomNaviSetting(): SideEffectVMEvent
     }
 
     override fun onCleared() {

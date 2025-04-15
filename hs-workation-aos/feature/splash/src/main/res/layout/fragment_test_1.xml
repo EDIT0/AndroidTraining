@@ -17,40 +17,68 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/tvStudentInfo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginVertical="10dp"
-            android:textSize="18sp"
-            app:layout_constraintBottom_toTopOf="@id/tvSubjectInfo"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvClassName"
-            tools:text="학생 정보" />
-
-        <TextView
-            android:id="@+id/tvSubjectInfo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginVertical="10dp"
-            android:textSize="18sp"
+        <ScrollView
+            android:id="@+id/svTest1"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             app:layout_constraintBottom_toTopOf="@id/layoutSwipeRefresh"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvStudentInfo"
-            tools:text="과목 정보" />
+            app:layout_constraintTop_toBottomOf="@id/tvClassName">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/tvStudentInfo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="10dp"
+                    android:textSize="18sp"
+                    app:layout_constraintBottom_toTopOf="@id/tvSubjectInfo"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="학생 정보" />
+
+                <TextView
+                    android:id="@+id/tvSubjectInfo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="10dp"
+                    android:textSize="18sp"
+                    app:layout_constraintBottom_toTopOf="@id/tvContent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvStudentInfo"
+                    tools:text="과목 정보" />
+
+                <TextView
+                    android:id="@+id/tvContent"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n2\n3\n4\n5\n6"
+                    android:textSize="30dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvSubjectInfo" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </ScrollView>
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/layoutSwipeRefresh"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/btnToTest2Fragment"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvSubjectInfo" >
+            app:layout_constraintTop_toBottomOf="@id/svTest1">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvStudentHistory"
@@ -59,7 +87,15 @@
 
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-
+        <Button
+            android:id="@+id/btnToTest2Fragment"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="To Test2Fragment"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/layoutSwipeRefresh" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

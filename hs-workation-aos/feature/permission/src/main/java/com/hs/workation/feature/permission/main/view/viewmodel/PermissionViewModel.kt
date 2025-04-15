@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import com.hs.workation.core.base.viewmodel.BaseAndroidViewModel
+import com.hs.workation.core.model.base.SideEffectEvent
 import com.hs.workation.core.util.NetworkManager
 import com.hs.workation.feature.permission.R
 import com.hs.workation.feature.permission.main.event.PermissionViewModelEvent
@@ -39,9 +40,5 @@ class PermissionViewModel @Inject constructor(
                 _navPermission = NavPermission(_permissionNavController!!)
             }
         }
-    }
-
-    enum class SideEffectEvent {
-
     }
 }

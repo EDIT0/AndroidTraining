@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import com.hs.workation.core.base.viewmodel.BaseAndroidViewModel
+import com.hs.workation.core.model.base.SideEffectEvent
 import com.hs.workation.core.util.NetworkManager
 import com.hs.workation.feature.main.R
 import com.hs.workation.feature.main.event.HomeViewModelEvent
@@ -39,10 +40,6 @@ class HomeViewModel @Inject constructor(
                 _navHome = NavHome(_homeNavController!!)
             }
         }
-    }
-
-    enum class SideEffectEvent {
-
     }
 
     override fun onCleared() {
