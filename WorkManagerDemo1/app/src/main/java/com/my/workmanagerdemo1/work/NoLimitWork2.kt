@@ -34,7 +34,6 @@ class NoLimitWork2(
         createNotificationChannel()
 
         try {
-//            notificationManager.notify(1, createNotification())
             setForeground(createForegroundNotification())
 
             val message = inputData.getString("key1") ?: "No Message"

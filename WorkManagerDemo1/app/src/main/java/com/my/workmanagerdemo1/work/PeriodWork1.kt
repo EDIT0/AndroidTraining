@@ -32,13 +32,18 @@ class PeriodWork1(
         createNotificationChannel()
 
         try {
-//            notificationManager.notify(1, createNotification())
             setForeground(createForegroundNotification())
 
-            for(i in 0 until 100) {
-                Log.d("MYTAG", "${i}번")
+            for(i in 0 until 6) {
+                Log.d("MYTAG", "PeriodWork1 doWork() ${i}번")
                 delay(1000L)
                 count = i
+
+                // 호출한 코루틴 소비자에게 데이터 방출하기
+                val progressData = Data.Builder()
+                    .putInt("progress", count)
+                    .build()
+                setProgress(progressData)
             }
 
             val outPutData = Data.Builder()

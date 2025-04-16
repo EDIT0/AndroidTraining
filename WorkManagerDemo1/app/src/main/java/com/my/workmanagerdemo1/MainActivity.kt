@@ -10,6 +10,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.work.Constraints
 import androidx.work.Data
+import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.ExistingWorkPolicy
 import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequest
@@ -17,6 +18,9 @@ import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkInfo
 import androidx.work.WorkManager
 import com.my.workmanagerdemo1.databinding.ActivityMainBinding
+import com.my.workmanagerdemo1.util.NotificationUtil
+import com.my.workmanagerdemo1.util.SharedPreferencesUtil
+import com.my.workmanagerdemo1.util.SharedPreferencesUtil.KEY_PERCENTAGE
 import com.my.workmanagerdemo1.work.NoLimitWork1
 import com.my.workmanagerdemo1.work.OneTimeWork1
 import com.my.workmanagerdemo1.work.PeriodWork1
@@ -37,6 +41,8 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
+        SharedPreferencesUtil.init(applicationContext)
 
         binding.btnOneActivity.setOnClickListener {
             startActivity(Intent(this@MainActivity, OneActivity::class.java))
@@ -76,11 +82,44 @@ class MainActivity : AppCompatActivity() {
 
         val periodWork1 = PeriodicWorkRequestBuilder<PeriodWork1>(
             15, TimeUnit.MINUTES
-        ).build()
+        )
+            .build()
 
+        WorkManager.getInstance(applicationContext).enqueueUniquePeriodicWork("PeriodWork1", ExistingPeriodicWorkPolicy.CANCEL_AND_REENQUEUE, periodWork1)
+        lifecycleScope.launch {
+            WorkManager.getInstance(applicationContext).getWorkInfoByIdFlow(periodWork1.id)
+                .collect { workInfo ->
+                    workInfo?.let {
+                        val progress = workInfo.progress.getInt("progress", 0)
+                        Log.d("MYTAG", "PeriodWork1 ${progress}% ${workInfo}")
+                        when(workInfo.state) {
+                            WorkInfo.State.ENQUEUED -> {
+                                // 실행 대기 중 (조건 충족 시 실행됨) (아직 종료 X)
+                            }
+                            WorkInfo.State.RUNNING -> {
+                                // 현재 실행 중 (아직 종료 X)
+                            }
+                            WorkInfo.State.SUCCEEDED -> {
+                                // 정상적으로 완료됨 (종료됨)
+                            }
+                            WorkInfo.State.FAILED -> {
+                                // 작업이 실패하여 종료됨 (종료됨)
+                            }
+                            WorkInfo.State.BLOCKED -> {
+                                // 다른 Work가 끝나야 실행될 수 있는 상태 (아직 종료 X)
+                            }
+                            WorkInfo.State.CANCELLED -> {
+                                // 사용자가 취소했거나 시스템이 제거함 (종료됨)
+                            }
+                        }
+                    }
+                }
+        }
+
+        val percentage = SharedPreferencesUtil.getInt(KEY_PERCENTAGE, 0)
         val inputData = Data.Builder()
             .putString("key1", "${javaClass.simpleName}")
-            .putInt("key2", 42)
+            .putInt("key2", percentage)
             .build()
 
         /**
@@ -92,14 +131,16 @@ class MainActivity : AppCompatActivity() {
             .build()
 
 //        workManager.enqueueUniquePeriodicWork("ForegroundWork1", ExistingPeriodicWorkPolicy.CANCEL_AND_REENQUEUE, foregroundWork1)
-        WorkManager.getInstance(applicationContext).enqueueUniqueWork(NO_LIMIT_WORK_1, ExistingWorkPolicy.REPLACE, noLimitWork1)
+//        WorkManager.getInstance(applicationContext).enqueueUniqueWork(NO_LIMIT_WORK_1, ExistingWorkPolicy.REPLACE, noLimitWork1)
         lifecycleScope.launch {
             WorkManager.getInstance(applicationContext).getWorkInfoByIdFlow(noLimitWork1.id)
                 .collect { workInfo ->
                     workInfo?.let {
                         val progress = workInfo.progress.getInt("progress", 0)
-                        Log.d("MYTAG", "${progress}% ${workInfo}")
+                        Log.d("MYTAG", "NoLimitWork1 ${progress}% ${workInfo}")
                         binding.btnDeleteMain.setText("${progress}% DeleteMain")
+//                        NotificationUtil.createNotificationChannel(applicationContext)
+//                        NotificationUtil.makeNoti(context = applicationContext, percentage = progress)
                         when(workInfo.state) {
                             WorkInfo.State.ENQUEUED -> {
                                 // 실행 대기 중 (조건 충족 시 실행됨) (아직 종료 X)
@@ -110,6 +151,7 @@ class MainActivity : AppCompatActivity() {
                             WorkInfo.State.SUCCEEDED -> {
                                 // 정상적으로 완료됨 (종료됨)
                                 binding.btnDeleteMain.setText("100% DeleteMain")
+                                SharedPreferencesUtil.remove(KEY_PERCENTAGE)
                             }
                             WorkInfo.State.FAILED -> {
                                 // 작업이 실패하여 종료됨 (종료됨)
@@ -127,4 +169,5 @@ class MainActivity : AppCompatActivity() {
                 }
         }
     }
+
 }
