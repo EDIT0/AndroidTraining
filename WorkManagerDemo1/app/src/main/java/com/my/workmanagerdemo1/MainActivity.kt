@@ -3,6 +3,7 @@ package com.my.workmanagerdemo1
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -10,17 +11,16 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.work.Constraints
 import androidx.work.Data
-import androidx.work.ExistingPeriodicWorkPolicy
-import androidx.work.ExistingWorkPolicy
 import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequest
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkInfo
 import androidx.work.WorkManager
 import com.my.workmanagerdemo1.databinding.ActivityMainBinding
-import com.my.workmanagerdemo1.util.NotificationUtil
 import com.my.workmanagerdemo1.util.SharedPreferencesUtil
 import com.my.workmanagerdemo1.util.SharedPreferencesUtil.KEY_PERCENTAGE
+import com.my.workmanagerdemo1.util.getSharedViewModel
+import com.my.workmanagerdemo1.work.ForegroundService1
 import com.my.workmanagerdemo1.work.NoLimitWork1
 import com.my.workmanagerdemo1.work.OneTimeWork1
 import com.my.workmanagerdemo1.work.PeriodWork1
@@ -30,6 +30,11 @@ import java.util.concurrent.TimeUnit
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+
+    private var serviceIntent: Intent? = null
+    private lateinit var sharedVM: SharedViewModel
+
+    private val scope = lifecycleScope
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,7 +47,37 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                Log.d("MYTAG", "handleOnBackPressed")
+                finish()
+            }
+        })
+
+        // Shared Preferences 초기화
         SharedPreferencesUtil.init(applicationContext)
+
+        // ViewModel 초기화
+        sharedVM = getSharedViewModel()
+
+        scope.launch {
+            sharedVM.commonSharedFlow.collect {
+                Log.i("MYTAG", "${this@MainActivity.javaClass.simpleName} ${it}")
+            }
+        }
+
+        // 포그라운드 서비스 시작
+        if(serviceIntent == null) {
+            serviceIntent = Intent(this, ForegroundService1::class.java)
+        }
+        startForegroundService(serviceIntent)
+
+        binding.btnSharedVMCheck.setOnClickListener {
+            Log.i("MYTAG", "현재 data1: ${sharedVM.data1} data2: ${sharedVM.data2}")
+            scope.launch {
+                sharedVM.commonSharedFlow.emit("클릭했다")
+            }
+        }
 
         binding.btnOneActivity.setOnClickListener {
             startActivity(Intent(this@MainActivity, OneActivity::class.java))
@@ -64,8 +99,6 @@ class MainActivity : AppCompatActivity() {
             WorkManager.getInstance(applicationContext).cancelUniqueWork(NO_LIMIT_WORK_2)
         }
 
-
-
 //        val intent = Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS)
 //        intent.data = Uri.parse("package:" + packageName)
 //        startActivity(intent)
@@ -85,7 +118,7 @@ class MainActivity : AppCompatActivity() {
         )
             .build()
 
-        WorkManager.getInstance(applicationContext).enqueueUniquePeriodicWork("PeriodWork1", ExistingPeriodicWorkPolicy.CANCEL_AND_REENQUEUE, periodWork1)
+//        WorkManager.getInstance(applicationContext).enqueueUniquePeriodicWork("PeriodWork1", ExistingPeriodicWorkPolicy.CANCEL_AND_REENQUEUE, periodWork1)
         lifecycleScope.launch {
             WorkManager.getInstance(applicationContext).getWorkInfoByIdFlow(periodWork1.id)
                 .collect { workInfo ->
@@ -170,4 +203,22 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        Log.d("MYTAG", "${javaClass.simpleName} onResume()")
+    }
+
+    override fun onStop() {
+        super.onStop()
+        Log.d("MYTAG", "${javaClass.simpleName} onStop()")
+    }
+
+    override fun onDestroy() {
+        Log.d("MYTAG", "${javaClass.simpleName} onDestroy()")
+        serviceIntent?.let {
+            stopService(it)
+        }
+
+        super.onDestroy()
+    }
 }
