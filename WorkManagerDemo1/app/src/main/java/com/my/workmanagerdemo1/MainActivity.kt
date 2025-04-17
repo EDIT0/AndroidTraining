@@ -47,6 +47,8 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
+        Log.d("MYTAG", "${javaClass.simpleName} onCreate()")
+
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 Log.d("MYTAG", "handleOnBackPressed")
@@ -201,6 +203,11 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
         }
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        Log.d("MYTAG", "${javaClass.simpleName} onNewIntent()")
     }
 
     override fun onResume() {

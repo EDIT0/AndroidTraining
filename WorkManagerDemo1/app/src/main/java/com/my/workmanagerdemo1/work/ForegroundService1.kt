@@ -3,6 +3,7 @@ package com.my.workmanagerdemo1.work
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.os.Build
@@ -11,6 +12,7 @@ import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.lifecycleScope
+import com.my.workmanagerdemo1.MainActivity
 import com.my.workmanagerdemo1.R
 import com.my.workmanagerdemo1.SharedViewModel
 import com.my.workmanagerdemo1.util.getSharedViewModel
@@ -89,7 +91,9 @@ class ForegroundService1: LifecycleService() {
     }
 
     private fun createNotification(): Notification {
+        val intent = Intent(this, MainActivity::class.java)
         return NotificationCompat.Builder(this, "work_channel")
+            .setContentIntent(PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE))
             .setContentTitle("ForegroundService1")
             .setContentText("작업 시작")
             .setSmallIcon(R.drawable.ic_launcher_background)
