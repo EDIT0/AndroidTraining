@@ -10,9 +10,9 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.my.localstoragedemo1.FileListAdapter
+import com.my.localstoragedemo1.MainActivity.Companion.BASE_IMAGE_PATH
+import com.my.localstoragedemo1.MainActivity.Companion.BASE_TEXT_PATH
 import com.my.localstoragedemo1.R
-import com.my.localstoragedemo1.internal.InternalStorageUtil.BASE_IMAGE_PATH
-import com.my.localstoragedemo1.internal.InternalStorageUtil.BASE_TEXT_PATH
 import com.my.localstoragedemo1.internal.InternalStorageUtil.saveImage
 import com.my.localstoragedemo1.databinding.ActivityInternalStorageBinding
 import kotlin.random.Random
@@ -119,27 +119,12 @@ class InternalStorageActivity : AppCompatActivity() {
         uri?.let {
             // 이미지 URI를 사용해 처리
             Log.d("MYTAG", "(한장) 원본 URI: $it")
-            Log.d("MYTAG", "(한장) 원본 절대경로(복사해서 사용할 것이기 때문에 필요없음): ${
-                InternalStorageUtil.getAbsolutePath(
-                    applicationContext,
-                    "images",
-                    it
-                )
-            }")
+            Log.d("MYTAG", "(한장) 원본 절대경로(복사해서 사용할 것이기 때문에 필요없음): ${InternalStorageUtil.getAbsolutePath(applicationContext, "images", it)}")
             val bitmap = InternalStorageUtil.getBitmapFromUri(this@InternalStorageActivity, it) ?:return@let
-            val newUri = saveImage(applicationContext, BASE_IMAGE_PATH, InternalStorageUtil.getFileNameFromUri(
-                applicationContext,
-                it
-            ) ?:"", bitmap)
+            val newUri = saveImage(applicationContext, BASE_IMAGE_PATH, InternalStorageUtil.getFileNameFromUri(applicationContext, it) ?:"", bitmap)
             Log.d("MYTAG", "(한장) 새로운 URI ${newUri}")
             newUri?.let {
-                Log.d("MYTAG", "(한장) 새로운 절대경로: ${
-                    InternalStorageUtil.getAbsolutePath(
-                        applicationContext,
-                        BASE_IMAGE_PATH,
-                        it
-                    )
-                }")
+                Log.d("MYTAG", "(한장) 새로운 절대경로: ${InternalStorageUtil.getAbsolutePath(applicationContext, BASE_IMAGE_PATH, it)}")
             }
         }
     }
@@ -156,28 +141,13 @@ class InternalStorageActivity : AppCompatActivity() {
             uriList.forEach { uri ->
                 // 여러 이미지 URI를 사용해 처리
                 Log.d("MYTAG", "(여러장) 원본 URI: $uri")
-                Log.d("MYTAG", "(여러장) 원본 절대경로(복사해서 사용할 것이기 때문에 필요없음): ${
-                    InternalStorageUtil.getAbsolutePath(
-                        applicationContext,
-                        "images",
-                        uri
-                    )
-                }")
+                Log.d("MYTAG", "(여러장) 원본 절대경로(복사해서 사용할 것이기 때문에 필요없음): ${InternalStorageUtil.getAbsolutePath(applicationContext, "images", uri)}")
                 val bitmap = InternalStorageUtil.getBitmapFromUri(this@InternalStorageActivity, uri)
                     ?: return@forEach
-                val newUri = saveImage(applicationContext, BASE_IMAGE_PATH, InternalStorageUtil.getFileNameFromUri(
-                    applicationContext,
-                    uri
-                ) ?: "", bitmap)
+                val newUri = saveImage(applicationContext, BASE_IMAGE_PATH, InternalStorageUtil.getFileNameFromUri(applicationContext, uri) ?: "", bitmap)
                 Log.d("MYTAG", "(여러장) 새로운 URI ${newUri}")
                 newUri?.let {
-                    Log.d("MYTAG", "(여러장) 새로운 절대경로: ${
-                        InternalStorageUtil.getAbsolutePath(
-                            applicationContext,
-                            BASE_IMAGE_PATH,
-                            it
-                        )
-                    }")
+                    Log.d("MYTAG", "(여러장) 새로운 절대경로: ${InternalStorageUtil.getAbsolutePath(applicationContext, BASE_IMAGE_PATH, it)}")
                 }
             }
         }

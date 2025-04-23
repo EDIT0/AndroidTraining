@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".external.ExternalStorageActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btnApp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="앱 전용" />
+
+        <Button
+            android:id="@+id/btnCommon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="공용" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tvSelectedFileName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="선택된 파일명: -" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvFileList"
+        android:layout_width="match_parent"
+        android:layout_height="200dp" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/btnGetImageList"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="이미지 폴더 리스트 불러오기" />
+
+            <Button
+                android:id="@+id/btnGetTextList"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="텍스트 폴더 리스트 불러오기" />
+
+            <Button
+                android:id="@+id/btnLoadImage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="이미지 한장 가져오기" />
+
+            <Button
+                android:id="@+id/btnLoadImages"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="이미지 여러장 가져오기" />
+
+            <Button
+                android:id="@+id/btnSaveText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="텍스트 저장" />
+
+            <Button
+                android:id="@+id/btnLoadText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="텍스트 가져오기" />
+
+            <Button
+                android:id="@+id/btnDeleteFile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="파일삭제" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>
