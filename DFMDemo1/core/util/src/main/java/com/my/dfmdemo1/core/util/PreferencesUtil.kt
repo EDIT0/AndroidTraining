@@ -9,6 +9,7 @@ object PreferencesUtil {
     private const val MODE = Context.MODE_PRIVATE
 
     const val KEY_COUNTRY = "KEY_COUNTRY"
+    const val KEY_LANGUAGE = "KEY_LANGUAGE"
 
     private fun getPreferences(context: Context): SharedPreferences {
         return context.getSharedPreferences(PREF_NAME, MODE)

@@ -1,5 +1,6 @@
 package com.my.dfmdemo1
 
+import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -14,8 +15,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.my.dfmdemo1.core.navigation.CountryRepository
 import com.my.dfmdemo1.resource.ui.theme.DFMDemo1Theme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     private lateinit var navController: NavHostController
@@ -35,6 +39,16 @@ class MainActivity : ComponentActivity() {
                     }
                 }
             }
+        }
+    }
+
+    override fun attachBaseContext(newBase: Context?) {
+        if(newBase != null) {
+            val newContext = CountryRepository.languageSetting(newBase)
+
+            super.attachBaseContext(newContext)
+        } else {
+            super.attachBaseContext(newBase)
         }
     }
 }

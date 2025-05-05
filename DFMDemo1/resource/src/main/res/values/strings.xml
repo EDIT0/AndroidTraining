@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">DFMDemo1EN</string>
+    <string name="welcome">Welcome</string>
+    <string name="bye">Bye</string>
+</resources>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">DFMDemo1JA</string>
+    <string name="welcome">歓迎致します</string>
+    <string name="bye">バイバイ</string>
+</resources>

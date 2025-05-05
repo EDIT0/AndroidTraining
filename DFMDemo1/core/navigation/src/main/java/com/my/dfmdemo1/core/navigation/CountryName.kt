@@ -6,3 +6,10 @@ enum class CountryName {
     Jp,
     Cn
 }
+
+enum class Language {
+    Common,
+    Kr,
+    Jp,
+    Cn
+}

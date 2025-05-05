@@ -6,4 +6,7 @@ plugins {
     alias(libs.plugins.android.library) apply false
 
     alias(libs.plugins.compose.compiler) apply false
+
+    id("com.google.devtools.ksp") version "2.1.0-1.0.29" apply false
+    id("com.google.dagger.hilt.android") version "2.55" apply false
 }

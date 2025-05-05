@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">DFMDemo1CN</string>
+    <string name="welcome">欢迎光临。</string>
+    <string name="bye">你好。</string>
+</resources>

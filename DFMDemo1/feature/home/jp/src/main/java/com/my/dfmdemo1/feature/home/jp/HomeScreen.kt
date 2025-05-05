@@ -8,6 +8,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
 import com.my.dfmdemo1.core.navigation.ScreenName
 import com.my.dfmdemo1.resource.ui.theme.purple500
@@ -23,7 +24,7 @@ fun HomeScreen(
             .background(color = purple500())
     ) {
         Column {
-            Text("Home-Jp")
+            Text("Home-Jp ${LocalContext.current.getString(com.my.dfmdemo1.resource.R.string.welcome)}")
 
             Button(
                 onClick = {
