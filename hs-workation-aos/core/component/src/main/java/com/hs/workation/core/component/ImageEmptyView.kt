@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import com.hs.workation.core.resource.R
 
 @Composable
 fun ImageEmptyView() {
@@ -20,7 +21,7 @@ fun ImageEmptyView() {
             .fillMaxWidth()
             .fillMaxHeight()
             .background(
-                colorResource(com.hs.workation.core.common.R.color.grey_300)
+                colorResource(com.hs.workation.core.resource.R.color.grey_300)
             ),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally

@@ -19,13 +19,13 @@ fun ImageLoadingView() {
             .fillMaxWidth()
             .fillMaxHeight()
             .background(
-                colorResource(com.hs.workation.core.common.R.color.grey_300)
+                colorResource(com.hs.workation.core.resource.R.color.grey_300)
             ),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         CircularProgressIndicator(
-            color = colorResource(com.hs.workation.core.common.R.color.grey_900)
+            color = colorResource(com.hs.workation.core.resource.R.color.grey_900)
         )
     }
 }

@@ -60,8 +60,8 @@ fun AccordionListView(
     isShowListDivider: Boolean,
     cornerRadius: Int = 10,
     elevation: Int = 2,
-    borderColor: Int = com.hs.workation.core.common.R.color.grey_500,
-    backgroundColor: Int = com.hs.workation.core.common.R.color.white,
+    borderColor: Int = com.hs.workation.core.resource.R.color.grey_500,
+    backgroundColor: Int = com.hs.workation.core.resource.R.color.white,
     titleTextSize: Int,
     listTitleTextSize: Int,
     titleTextColor: Int,
@@ -139,7 +139,7 @@ fun AccordionListView(
                                 modifier = Modifier
                                     .weight(1f)
                                     .height(0.5.dp)
-                                    .background(color = colorResource(id = com.hs.workation.core.common.R.color.grey_500))
+                                    .background(color = colorResource(id = com.hs.workation.core.resource.R.color.grey_500))
                             )
                             Spacer(
                                 modifier = Modifier
@@ -183,7 +183,7 @@ fun AccordionListView(
                                     modifier = Modifier
                                         .weight(1f)
                                         .height(0.5.dp)
-                                        .background(color = colorResource(id = com.hs.workation.core.common.R.color.grey_400))
+                                        .background(color = colorResource(id = com.hs.workation.core.resource.R.color.grey_400))
                                 )
                                 Spacer(
                                     modifier = Modifier
@@ -213,8 +213,8 @@ private fun AccordionListViewPreview() {
         isShowListDivider = true,
         titleTextSize = 10,
         listTitleTextSize = 10,
-        titleTextColor = com.hs.workation.core.common.R.color.grey_600,
-        listTitleTextColor = com.hs.workation.core.common.R.color.grey_600,
-        iconColor = com.hs.workation.core.common.R.color.grey_600
+        titleTextColor = com.hs.workation.core.resource.R.color.grey_600,
+        listTitleTextColor = com.hs.workation.core.resource.R.color.grey_600,
+        iconColor = com.hs.workation.core.resource.R.color.grey_600
     )
 }

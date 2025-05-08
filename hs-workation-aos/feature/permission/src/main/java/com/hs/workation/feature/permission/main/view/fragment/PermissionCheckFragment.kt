@@ -104,9 +104,9 @@ class PermissionCheckFragment : BaseDataBindingFragment<FragmentPermissionCheckB
                     }
                     CommonDialog(context = requireContext())
                         .setDialogCancelable(false)
-                        .setTitle(getString(com.hs.workation.core.common.R.string.common_alert))
-                        .setContents(getString(com.hs.workation.core.common.R.string.permission_request_essential_permission_message) + "${sb}")
-                        .setPositiveText(getString(com.hs.workation.core.common.R.string.common_confirm))
+                        .setTitle(getString(com.hs.workation.core.resource.R.string.common_alert))
+                        .setContents(getString(com.hs.workation.core.resource.R.string.permission_request_essential_permission_message) + "${sb}")
+                        .setPositiveText(getString(com.hs.workation.core.resource.R.string.common_confirm))
                         .setTransparentBackground()
                         .setClickResultListener(object : CommonDialog.ClickResultCallback {
                             override fun clickResult(agree: Boolean) {
@@ -118,9 +118,9 @@ class PermissionCheckFragment : BaseDataBindingFragment<FragmentPermissionCheckB
                 } else {
                     CommonDialog(context = requireContext())
                         .setDialogCancelable(false)
-                        .setTitle(getString(com.hs.workation.core.common.R.string.common_alert))
-                        .setContents(getString(com.hs.workation.core.common.R.string.permission_navigate_to_setting_page_message))
-                        .setPositiveText(getString(com.hs.workation.core.common.R.string.common_confirm))
+                        .setTitle(getString(com.hs.workation.core.resource.R.string.common_alert))
+                        .setContents(getString(com.hs.workation.core.resource.R.string.permission_navigate_to_setting_page_message))
+                        .setPositiveText(getString(com.hs.workation.core.resource.R.string.common_confirm))
                         .setTransparentBackground()
                         .setClickResultListener(object : CommonDialog.ClickResultCallback {
                             override fun clickResult(agree: Boolean) {

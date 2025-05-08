@@ -30,10 +30,12 @@ android {
         debug {
             buildConfigField("String", "AUTH_URL", "${localProperties["AUTH_URL_DEV"]}")
             buildConfigField("String", "BASE_URL", "${localProperties["BASE_URL_DEV"]}")
+            buildConfigField("String", "BASE_PATH", "${localProperties["BASE_PATH"]}")
         }
         release {
             buildConfigField("String", "AUTH_URL", "${localProperties["AUTH_URL"]}")
             buildConfigField("String", "BASE_URL", "${localProperties["BASE_URL"]}")
+            buildConfigField("String", "BASE_PATH", "${localProperties["BASE_PATH"]}")
 
             isMinifyEnabled = false
             proguardFiles(
@@ -57,6 +59,7 @@ android {
 dependencies {
     /* Module */
     implementation(project(":core:common"))
+    implementation(project(":core:resource"))
     implementation(project(":core:util"))
     implementation(project(":domain"))
     implementation(project(":data"))

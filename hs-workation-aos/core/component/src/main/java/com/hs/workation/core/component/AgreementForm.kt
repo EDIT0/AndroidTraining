@@ -51,9 +51,9 @@ fun AgreementForm(
     // 전체 선택 상태 저장
     var agreeAll by remember { mutableStateOf(checkBoxItems.all { it.isChecked.value }) }
 
-    val checkedColor = colorResource(com.hs.workation.core.common.R.color.grey_900)
-    val uncheckedColor = colorResource(com.hs.workation.core.common.R.color.grey_400)
-    val transparentColor = colorResource(com.hs.workation.core.common.R.color.transparent)
+    val checkedColor = colorResource(com.hs.workation.core.resource.R.color.grey_900)
+    val uncheckedColor = colorResource(com.hs.workation.core.resource.R.color.grey_400)
+    val transparentColor = colorResource(com.hs.workation.core.resource.R.color.transparent)
 
     Column(modifier) {
         /** 타이틀 영역 */
@@ -111,13 +111,13 @@ fun AgreementForm(
             },
             isEnable = agreeAllRequired,
             title = "Button Title",
-            titleColor = Pair(com.hs.workation.core.common.R.color.grey_600, com.hs.workation.core.common.R.color.blue_500),
+            titleColor = Pair(com.hs.workation.core.resource.R.color.grey_600, com.hs.workation.core.resource.R.color.blue_500),
             titleSize = 16f,
             elevation = 5,
             cornerRadius = 20f,
-            backgroundColor = Pair(com.hs.workation.core.common.R.color.grey_400, com.hs.workation.core.common.R.color.white),
+            backgroundColor = Pair(com.hs.workation.core.resource.R.color.grey_400, com.hs.workation.core.resource.R.color.white),
             borderStroke = 0.5f,
-            borderStrokeColor = Pair(com.hs.workation.core.common.R.color.grey_500, com.hs.workation.core.common.R.color.teal_200)
+            borderStrokeColor = Pair(com.hs.workation.core.resource.R.color.grey_500, com.hs.workation.core.resource.R.color.teal_200)
         )
     }
 }
@@ -184,7 +184,7 @@ fun AgreementTitle(text: String) {
  */
 @Composable
 fun AgreementDetails(text: String) {
-    val borderColor = colorResource(com.hs.workation.core.common.R.color.grey_400)
+    val borderColor = colorResource(com.hs.workation.core.resource.R.color.grey_400)
 
     Row(Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -193,7 +193,7 @@ fun AgreementDetails(text: String) {
         Text(
             text = text,
             fontSize = 14.sp,
-            color = colorResource(com.hs.workation.core.common.R.color.grey_700),
+            color = colorResource(com.hs.workation.core.resource.R.color.grey_700),
             modifier = Modifier.weight(.8f)
         )
 

@@ -35,6 +35,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.hs.workation.core.model.mock.SpaceInfo
 import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.glide.GlideImage
+import com.hs.workation.core.resource.R
 
 /**
  * 이미지 상세 모달
@@ -105,8 +106,8 @@ fun ImageModal(
                         val width = if (pagerState.currentPage == iteration) 14.dp else 4.dp
 
                         val color =
-                            if (pagerState.currentPage == iteration) colorResource(com.hs.workation.core.common.R.color.white)
-                            else colorResource(com.hs.workation.core.common.R.color.whiteAlpha60)
+                            if (pagerState.currentPage == iteration) colorResource(com.hs.workation.core.resource.R.color.white)
+                            else colorResource(com.hs.workation.core.resource.R.color.whiteAlpha60)
 
                         Box(
                             modifier = Modifier
@@ -124,7 +125,7 @@ fun ImageModal(
         // 닫기 버튼
         IconButton(
             onClick = { dismiss() },
-            colors = IconButtonDefaults.iconButtonColors(containerColor = colorResource(com.hs.workation.core.common.R.color.grey_900))
+            colors = IconButtonDefaults.iconButtonColors(containerColor = colorResource(com.hs.workation.core.resource.R.color.grey_900))
         ) {
             Icon(
                 imageVector = Icons.Default.Close,

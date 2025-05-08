@@ -60,11 +60,11 @@ class DateTimePickerViewFragment : BaseDataBindingFragment<FragmentDateTimePicke
                 },
                 isEnable = isEnabled.value,
                 title = "선택하기",
-                titleColor = Pair(com.hs.workation.core.common.R.color.white, com.hs.workation.core.common.R.color.white),
+                titleColor = Pair(com.hs.workation.core.resource.R.color.white, com.hs.workation.core.resource.R.color.white),
                 titleSize = 16f,
                 cornerRadius = 10f,
-                backgroundColor = Pair(com.hs.workation.core.common.R.color.grey_500, com.hs.workation.core.common.R.color.light_blue_300),
-                borderStrokeColor = Pair(com.hs.workation.core.common.R.color.transparent, com.hs.workation.core.common.R.color.transparent)
+                backgroundColor = Pair(com.hs.workation.core.resource.R.color.grey_500, com.hs.workation.core.resource.R.color.light_blue_300),
+                borderStrokeColor = Pair(com.hs.workation.core.resource.R.color.transparent, com.hs.workation.core.resource.R.color.transparent)
             )
         }
     }

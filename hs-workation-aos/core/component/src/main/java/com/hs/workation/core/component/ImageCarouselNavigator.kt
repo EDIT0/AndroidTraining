@@ -27,6 +27,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.glide.GlideImage
 import kotlinx.coroutines.launch
+import com.hs.workation.core.resource.R
 
 /**
  * 이미지 뷰 페이저

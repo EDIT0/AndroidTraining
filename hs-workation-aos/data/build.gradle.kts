@@ -1,9 +1,18 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.jetbrains.kotlin.android)
 
     id("com.google.devtools.ksp")
     id("com.google.dagger.hilt.android")
+}
+
+val localProperties = Properties().apply {
+    val localPropertiesFile = rootProject.file("local.properties")
+    if (localPropertiesFile.exists()) {
+        load(localPropertiesFile.inputStream())
+    }
 }
 
 android {
@@ -18,7 +27,16 @@ android {
     }
 
     buildTypes {
+        debug {
+            buildConfigField("String", "AUTH_URL", "${localProperties["AUTH_URL_DEV"]}")
+            buildConfigField("String", "BASE_URL", "${localProperties["BASE_URL_DEV"]}")
+            buildConfigField("String", "BASE_PATH", "${localProperties["BASE_PATH"]}")
+        }
         release {
+            buildConfigField("String", "AUTH_URL", "${localProperties["AUTH_URL"]}")
+            buildConfigField("String", "BASE_URL", "${localProperties["BASE_URL"]}")
+            buildConfigField("String", "BASE_PATH", "${localProperties["BASE_PATH"]}")
+
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
@@ -32,6 +50,9 @@ android {
     }
     kotlinOptions {
         jvmTarget = "1.8"
+    }
+    buildFeatures {
+        buildConfig = true
     }
 }
 

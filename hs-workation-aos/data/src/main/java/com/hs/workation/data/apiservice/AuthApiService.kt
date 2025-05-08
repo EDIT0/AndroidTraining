@@ -1,8 +1,8 @@
 package com.hs.workation.data.apiservice
 
-import com.hs.workation.core.model.dto.IdAndPassword
-import com.hs.workation.core.model.dto.Jwt
-import com.hs.workation.core.model.dto.ServiceResult
+import com.hs.workation.core.model.dto.req.ReqLogin
+import com.hs.workation.core.model.dto.res.ResLogin
+import com.hs.workation.core.model.dto.res.ResLogout
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.Header
@@ -13,13 +13,13 @@ interface AuthApiService {
     /**
      * 로그인
      *
-     * @param idAndPassword 아이디, 패스워드 객체
+     * @param reqLogin 아이디, 패스워드 객체
      * @return
      */
     @POST("login")
     suspend fun postRequestLogin(
-        @Body idAndPassword: IdAndPassword
-    ): Response<Jwt>
+        @Body reqLogin: ReqLogin
+    ): Response<ResLogin>
 
     /**
      * 로그아웃
@@ -30,5 +30,5 @@ interface AuthApiService {
     @POST("logout")
     suspend fun postRequestLogout(
         @Header("Authorization") token: String
-    ): Response<ServiceResult>
+    ): Response<ResLogout>
 }

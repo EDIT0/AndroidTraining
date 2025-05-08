@@ -55,9 +55,9 @@ class AccordionListViewFragment : BaseDataBindingFragment<FragmentAccordionListV
                         isShowListDivider = false,
                         titleTextSize = 30,
                         listTitleTextSize = 15,
-                        titleTextColor = com.hs.workation.core.common.R.color.grey_600,
-                        listTitleTextColor = com.hs.workation.core.common.R.color.grey_600,
-                        iconColor = com.hs.workation.core.common.R.color.grey_600
+                        titleTextColor = com.hs.workation.core.resource.R.color.grey_600,
+                        listTitleTextColor = com.hs.workation.core.resource.R.color.grey_600,
+                        iconColor = com.hs.workation.core.resource.R.color.grey_600
                     )
                     Spacer(modifier = Modifier.width(30.dp))
                 }
@@ -100,13 +100,13 @@ class AccordionListViewFragment : BaseDataBindingFragment<FragmentAccordionListV
                     ),
                     isShowTitleAndListDivider = false,
                     isShowListDivider = true,
-                    borderColor = com.hs.workation.core.common.R.color.purple_200,
-                    backgroundColor = com.hs.workation.core.base.R.color.teal_200,
+                    borderColor = com.hs.workation.core.resource.R.color.purple_200,
+                    backgroundColor = com.hs.workation.core.resource.R.color.teal_200,
                     titleTextSize = 20,
                     listTitleTextSize = 18,
-                    titleTextColor = com.hs.workation.core.common.R.color.teal_600,
-                    listTitleTextColor = com.hs.workation.core.common.R.color.orange_600,
-                    iconColor = com.hs.workation.core.common.R.color.blue_A700
+                    titleTextColor = com.hs.workation.core.resource.R.color.teal_600,
+                    listTitleTextColor = com.hs.workation.core.resource.R.color.orange_600,
+                    iconColor = com.hs.workation.core.resource.R.color.blue_A700
                 )
             }
 

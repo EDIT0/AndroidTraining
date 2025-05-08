@@ -24,7 +24,7 @@ object CommonToast {
             val background = GradientDrawable()
             background.shape = GradientDrawable.RECTANGLE
             background.cornerRadius = 20f
-            background.setColor(ContextCompat.getColor(view.context, com.hs.workation.core.common.R.color.blackAlpha60))
+            background.setColor(ContextCompat.getColor(view.context, com.hs.workation.core.resource.R.color.blackAlpha60))
             it.view.background = background
 
             val snackBarTextView = it.view.findViewById<TextView>(com.google.android.material.R.id.snackbar_text)
@@ -32,7 +32,7 @@ object CommonToast {
             snackBarTextView.gravity = Gravity.CENTER
             snackBarTextView.textAlignment = View.TEXT_ALIGNMENT_CENTER
             snackBarTextView.textSize = 16f
-            snackBarTextView.setTextColor(ContextCompat.getColor(view.context, com.hs.workation.core.common.R.color.white))
+            snackBarTextView.setTextColor(ContextCompat.getColor(view.context, com.hs.workation.core.resource.R.color.white))
 
             it.show()
         }

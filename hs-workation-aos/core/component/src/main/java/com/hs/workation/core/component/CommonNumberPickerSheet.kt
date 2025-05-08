@@ -15,6 +15,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.hs.workation.core.component.databinding.NumberPickerBottomSheetBinding
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import com.hs.workation.core.resource.R
 
 /**
  * 숫자 선택 바텀 시트

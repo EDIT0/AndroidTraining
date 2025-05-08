@@ -68,13 +68,13 @@ class ActiveButtonFragment : BaseDataBindingFragment<FragmentActiveButtonBinding
                     },
                     isEnable = isActive.value,
                     title = "Button Title",
-                    titleColor = Pair(com.hs.workation.core.common.R.color.grey_600, com.hs.workation.core.common.R.color.blue_500),
+                    titleColor = Pair(com.hs.workation.core.resource.R.color.grey_600, com.hs.workation.core.resource.R.color.blue_500),
                     titleSize = 16f,
                     elevation = 5,
                     cornerRadius = 20f,
-                    backgroundColor = Pair(com.hs.workation.core.common.R.color.grey_400, com.hs.workation.core.common.R.color.white),
+                    backgroundColor = Pair(com.hs.workation.core.resource.R.color.grey_400, com.hs.workation.core.resource.R.color.white),
                     borderStroke = 0.5f,
-                    borderStrokeColor = Pair(com.hs.workation.core.common.R.color.grey_500, com.hs.workation.core.common.R.color.teal_200)
+                    borderStrokeColor = Pair(com.hs.workation.core.resource.R.color.grey_500, com.hs.workation.core.resource.R.color.teal_200)
                 )
             }
         }

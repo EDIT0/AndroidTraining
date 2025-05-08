@@ -62,10 +62,10 @@ class CommonDropdownMenuFragment : BaseDataBindingFragment<FragmentCommonDropdow
 
                         },
                         title = "Title",
-                        titleColor = Pair(com.hs.workation.core.base.R.color.white, com.hs.workation.core.base.R.color.black),
+                        titleColor = Pair(com.hs.workation.core.resource.R.color.white, com.hs.workation.core.resource.R.color.black),
                         titleSize = 30f,
-                        backgroundColor = Pair(com.hs.workation.core.base.R.color.black, com.hs.workation.core.common.R.color.white),
-                        borderStrokeColor = Pair(com.hs.workation.core.base.R.color.black, com.hs.workation.core.base.R.color.white)
+                        backgroundColor = Pair(com.hs.workation.core.resource.R.color.black, com.hs.workation.core.resource.R.color.white),
+                        borderStrokeColor = Pair(com.hs.workation.core.resource.R.color.black, com.hs.workation.core.resource.R.color.white)
                     )
 
                     CommonDropdown(
@@ -83,11 +83,11 @@ class CommonDropdownMenuFragment : BaseDataBindingFragment<FragmentCommonDropdow
                             DropdownMenuItem("기타")
                         ),
                         cornerRadius = 8,
-                        titleBackgroundColor = com.hs.workation.core.common.R.color.white,
-                        optionMenuBackgroundColor = com.hs.workation.core.common.R.color.white,
-                        borderColor = com.hs.workation.core.common.R.color.grey_500,
-                        titleTextColor = com.hs.workation.core.common.R.color.grey_600,
-                        optionMenuTextColor = com.hs.workation.core.common.R.color.grey_700
+                        titleBackgroundColor = com.hs.workation.core.resource.R.color.white,
+                        optionMenuBackgroundColor = com.hs.workation.core.resource.R.color.white,
+                        borderColor = com.hs.workation.core.resource.R.color.grey_500,
+                        titleTextColor = com.hs.workation.core.resource.R.color.grey_600,
+                        optionMenuTextColor = com.hs.workation.core.resource.R.color.grey_700
                     )
                 }
                 
@@ -110,11 +110,11 @@ class CommonDropdownMenuFragment : BaseDataBindingFragment<FragmentCommonDropdow
                             DropdownMenuItem("기타")
                         ),
                         cornerRadius = 8,
-                        titleBackgroundColor = com.hs.workation.core.common.R.color.white,
-                        optionMenuBackgroundColor = com.hs.workation.core.common.R.color.white,
-                        borderColor = com.hs.workation.core.common.R.color.grey_500,
-                        titleTextColor = com.hs.workation.core.common.R.color.grey_600,
-                        optionMenuTextColor = com.hs.workation.core.common.R.color.grey_700
+                        titleBackgroundColor = com.hs.workation.core.resource.R.color.white,
+                        optionMenuBackgroundColor = com.hs.workation.core.resource.R.color.white,
+                        borderColor = com.hs.workation.core.resource.R.color.grey_500,
+                        titleTextColor = com.hs.workation.core.resource.R.color.grey_600,
+                        optionMenuTextColor = com.hs.workation.core.resource.R.color.grey_700
                     )
                     Spacer(modifier = Modifier.width(10.dp))
                 }
@@ -135,12 +135,12 @@ class CommonDropdownMenuFragment : BaseDataBindingFragment<FragmentCommonDropdow
                             DropdownMenuItem("기타")
                         ),
                         cornerRadius = 8,
-                        titleBackgroundColor = com.hs.workation.core.common.R.color.white,
-                        optionMenuBackgroundColor = com.hs.workation.core.common.R.color.white,
-                        borderColor = com.hs.workation.core.common.R.color.blue_500,
-                        titleTextColor = com.hs.workation.core.common.R.color.cyan_600,
-                        optionMenuTextColor = com.hs.workation.core.common.R.color.yellow_700,
-                        arrowIconColor = com.hs.workation.core.common.R.color.red_700
+                        titleBackgroundColor = com.hs.workation.core.resource.R.color.white,
+                        optionMenuBackgroundColor = com.hs.workation.core.resource.R.color.white,
+                        borderColor = com.hs.workation.core.resource.R.color.blue_500,
+                        titleTextColor = com.hs.workation.core.resource.R.color.cyan_600,
+                        optionMenuTextColor = com.hs.workation.core.resource.R.color.yellow_700,
+                        arrowIconColor = com.hs.workation.core.resource.R.color.red_700
                     )
 
                     Text(text = "Test, Test, Test")

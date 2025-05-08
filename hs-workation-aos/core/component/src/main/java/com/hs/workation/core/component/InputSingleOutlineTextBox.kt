@@ -36,6 +36,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.hs.workation.core.resource.R
 
 /**
  * 싱글 아웃라인 텍스트 입력기
@@ -324,7 +325,7 @@ private fun InputSingleOutlineTextBoxPreview() {
         isPassword = true,
         keyboardInputType = KeyboardInputType.PASSWORD,
         cornerRadius = 20,
-        backgroundColor = Pair<Int, Int>(com.hs.workation.core.common.R.color.grey_600, com.hs.workation.core.common.R.color.teal_200),
-        borderColor = Pair<Int, Int>(com.hs.workation.core.common.R.color.grey_600, com.hs.workation.core.common.R.color.teal_200)
+        backgroundColor = Pair<Int, Int>(com.hs.workation.core.resource.R.color.grey_600, com.hs.workation.core.resource.R.color.teal_200),
+        borderColor = Pair<Int, Int>(com.hs.workation.core.resource.R.color.grey_600, com.hs.workation.core.resource.R.color.teal_200)
     )
 }

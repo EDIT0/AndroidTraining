@@ -80,17 +80,17 @@ class InputTextBoxFragment : BaseDataBindingFragment<FragmentInputTextBoxBinding
                     suffix = null,
                     supportingTextComposable = {
                         if(currentText.isNotEmpty()) {
-                            Text(text = "O", color = colorResource(id = com.hs.workation.core.common.R.color.blue_500))
+                            Text(text = "O", color = colorResource(id = com.hs.workation.core.resource.R.color.blue_500))
                         } else {
-                            Text(text = "X", color = colorResource(id = com.hs.workation.core.common.R.color.red_700))
+                            Text(text = "X", color = colorResource(id = com.hs.workation.core.resource.R.color.red_700))
                         }
                     },
                     visualTransformationType = VisualTransformationType.NORMAL,
                     isPassword = true,
                     keyboardInputType = KeyboardInputType.PASSWORD,
                     cornerRadius = 20,
-                    backgroundColor = Pair<Int, Int>(com.hs.workation.core.common.R.color.grey_600, com.hs.workation.core.common.R.color.blue_500),
-                    borderColor = Pair<Int, Int>(com.hs.workation.core.common.R.color.grey_600, com.hs.workation.core.common.R.color.teal_200)
+                    backgroundColor = Pair<Int, Int>(com.hs.workation.core.resource.R.color.grey_600, com.hs.workation.core.resource.R.color.blue_500),
+                    borderColor = Pair<Int, Int>(com.hs.workation.core.resource.R.color.grey_600, com.hs.workation.core.resource.R.color.teal_200)
                 )
 
                 InputSingleLineTextBox(
@@ -114,17 +114,17 @@ class InputTextBoxFragment : BaseDataBindingFragment<FragmentInputTextBoxBinding
                     suffix = null,
                     supportingTextComposable = {
                         if(currentText.isNotEmpty()) {
-                            Text(text = "O", color = colorResource(id = com.hs.workation.core.common.R.color.blue_500))
+                            Text(text = "O", color = colorResource(id = com.hs.workation.core.resource.R.color.blue_500))
                         } else {
-                            Text(text = "X", color = colorResource(id = com.hs.workation.core.common.R.color.red_700))
+                            Text(text = "X", color = colorResource(id = com.hs.workation.core.resource.R.color.red_700))
                         }
                     },
                     visualTransformationType = VisualTransformationType.CAR_LICENCE,
                     isPassword = false,
                     keyboardInputType = KeyboardInputType.PASSWORD,
                     cornerRadius = 0,
-                    backgroundColor = Pair<Int, Int>(com.hs.workation.core.common.R.color.transparent, com.hs.workation.core.common.R.color.transparent),
-                    underlineColor = Pair<Int, Int>(com.hs.workation.core.common.R.color.transparent, com.hs.workation.core.common.R.color.teal_200)
+                    backgroundColor = Pair<Int, Int>(com.hs.workation.core.resource.R.color.transparent, com.hs.workation.core.resource.R.color.transparent),
+                    underlineColor = Pair<Int, Int>(com.hs.workation.core.resource.R.color.transparent, com.hs.workation.core.resource.R.color.teal_200)
                 )
 
                 InputMultiLineTextBox(
@@ -149,8 +149,8 @@ class InputTextBoxFragment : BaseDataBindingFragment<FragmentInputTextBoxBinding
                     maxLines = 5,
                     minLines = 3,
                     cornerRadius = 5,
-                    backgroundColor = Pair<Int, Int>(com.hs.workation.core.common.R.color.blue_500, com.hs.workation.core.common.R.color.yellow_200),
-                    underlineColor = Pair<Int, Int>(com.hs.workation.core.common.R.color.transparent, com.hs.workation.core.common.R.color.transparent)
+                    backgroundColor = Pair<Int, Int>(com.hs.workation.core.resource.R.color.blue_500, com.hs.workation.core.resource.R.color.yellow_200),
+                    underlineColor = Pair<Int, Int>(com.hs.workation.core.resource.R.color.transparent, com.hs.workation.core.resource.R.color.transparent)
                 )
 
                 InputMultiOutlineTextBox(
@@ -182,8 +182,8 @@ class InputTextBoxFragment : BaseDataBindingFragment<FragmentInputTextBoxBinding
                     maxLines = 6,
                     minLines = 3,
                     cornerRadius = 0,
-                    backgroundColor = Pair<Int, Int>(com.hs.workation.core.common.R.color.transparent, com.hs.workation.core.common.R.color.transparent),
-                    borderColor = Pair<Int, Int>(com.hs.workation.core.common.R.color.yellow_200, com.hs.workation.core.common.R.color.blue_500)
+                    backgroundColor = Pair<Int, Int>(com.hs.workation.core.resource.R.color.transparent, com.hs.workation.core.resource.R.color.transparent),
+                    borderColor = Pair<Int, Int>(com.hs.workation.core.resource.R.color.yellow_200, com.hs.workation.core.resource.R.color.blue_500)
                 )
             }
         }

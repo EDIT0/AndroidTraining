@@ -52,7 +52,7 @@ class RadioButtonGroupFragment : BaseDataBindingFragment<FragmentRadioButtonGrou
 
         binding.cvIconButtonGroup.setContent {
             // mockup data
-            val icon = painterResource(com.hs.workation.core.component.R.drawable.ic_visibility_on)
+            val icon = painterResource(com.hs.workation.core.resource.R.drawable.ic_visibility_on)
             val list = listOf(
                 Pair("오픈데스크", icon),
                 Pair("미팅룸 A", icon),

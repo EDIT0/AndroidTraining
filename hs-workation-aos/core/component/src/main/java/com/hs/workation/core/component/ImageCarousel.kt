@@ -35,6 +35,7 @@ import com.hs.workation.core.model.mock.SpaceInfo
 import com.hs.workation.core.util.NumberFormatter.currencyFormatter
 import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.glide.GlideImage
+import com.hs.workation.core.resource.R
 
 /**
  * 이미지 뷰 페이저
@@ -92,7 +93,7 @@ fun ImageCarousel(
             Modifier
                 .padding(14.dp)
                 .background(
-                    colorResource(com.hs.workation.core.common.R.color.whiteAlpha60),
+                    colorResource(com.hs.workation.core.resource.R.color.whiteAlpha60),
                     ShapeDefaults.Large
                 )
                 .padding(14.dp)
@@ -112,7 +113,7 @@ fun ImageCarousel(
                     horizontalAlignment = Alignment.End
                 ) {
                     Text("${data.pricePerUnit.currencyFormatter()}원", fontSize = 18.sp)
-                    Text("/ ${data.unit}", fontSize = 12.sp, color = colorResource(com.hs.workation.core.common.R.color.grey_600))
+                    Text("/ ${data.unit}", fontSize = 12.sp, color = colorResource(com.hs.workation.core.resource.R.color.grey_600))
                 }
             }
 
@@ -129,8 +130,8 @@ fun ImageCarousel(
                     repeat(data.thumbnails.size) { iteration ->
                         val width = if (pagerState.currentPage == iteration) 14.dp else 4.dp
 
-                        val color = if (pagerState.currentPage == iteration) colorResource(com.hs.workation.core.common.R.color.white)
-                            else colorResource(com.hs.workation.core.common.R.color.whiteAlpha60)
+                        val color = if (pagerState.currentPage == iteration) colorResource(com.hs.workation.core.resource.R.color.white)
+                            else colorResource(com.hs.workation.core.resource.R.color.whiteAlpha60)
 
                         Box(modifier = Modifier
                             .padding(horizontal = 1.5.dp)

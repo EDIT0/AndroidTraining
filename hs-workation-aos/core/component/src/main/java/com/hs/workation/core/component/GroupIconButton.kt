@@ -25,6 +25,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.hs.workation.core.resource.R
 
 /**
  * 다중 선택 버튼 그룹
@@ -97,9 +98,9 @@ fun GroupIconButton(
 @Composable
 private fun getColors(isActivate: Boolean): Pair<Color, Color> {
     val activeContainerColor = Color.Transparent
-    val activeContentColor = colorResource(com.hs.workation.core.common.R.color.grey_600)
+    val activeContentColor = colorResource(com.hs.workation.core.resource.R.color.grey_600)
     val containerColor = Color.Transparent
-    val contentColor = colorResource(com.hs.workation.core.common.R.color.grey_400)
+    val contentColor = colorResource(com.hs.workation.core.resource.R.color.grey_400)
 
     return if (isActivate) {
         Pair(activeContainerColor, activeContentColor)

@@ -3,11 +3,11 @@ package com.hs.workation.feature.login.main.view.viewmodel
 import android.app.Application
 import androidx.lifecycle.viewModelScope
 import com.hs.workation.core.base.viewmodel.BaseAndroidViewModel
-import com.hs.workation.core.common.R
+import com.hs.workation.core.resource.R
 import com.hs.workation.core.common.constants.NetworkConstants
 import com.hs.workation.core.model.base.RequestResult
 import com.hs.workation.core.model.base.SideEffectEvent
-import com.hs.workation.core.model.dto.IdAndPassword
+import com.hs.workation.core.model.dto.req.ReqLogin
 import com.hs.workation.core.util.LogUtil
 import com.hs.workation.core.util.NetworkManager
 import com.hs.workation.domain.usecase.PostRequestLoginUseCase
@@ -15,9 +15,7 @@ import com.hs.workation.domain.usecase.PostRequestLogoutUseCase
 import com.hs.workation.feature.login.main.event.LoginHomeViewModelEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.onCompletion
@@ -70,7 +68,7 @@ class LoginHomeViewModel @Inject constructor(
                 return@launch
             }
 
-            postRequestLoginUseCase.invoke(IdAndPassword("01096355104", "password"))
+            postRequestLoginUseCase.invoke(ReqLogin("01096355104", "password"))
                 .onStart {
                 }
                 .onCompletion {

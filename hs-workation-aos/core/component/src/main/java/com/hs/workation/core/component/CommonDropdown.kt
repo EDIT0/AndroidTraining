@@ -66,9 +66,9 @@ fun CommonDropdown(
     optionMenuBackgroundColor: Int,
     borderColor:Int,
     titleTextSize: Int = 16,
-    titleTextColor: Int = com.hs.workation.core.common.R.color.black,
+    titleTextColor: Int = com.hs.workation.core.resource.R.color.black,
     optionMenuTextSize: Int = 16,
-    optionMenuTextColor: Int = com.hs.workation.core.common.R.color.black,
+    optionMenuTextColor: Int = com.hs.workation.core.resource.R.color.black,
     arrowIconColor: Int? = null
 ) {
     // 드롭박스메뉴 아이템 열림/닫힘
@@ -126,7 +126,7 @@ fun CommonDropdown(
                     Icons.Default.KeyboardArrowDown
                 },
                 tint = if(arrowIconColor == null) {
-                    colorResource(id = com.hs.workation.core.common.R.color.grey_500)
+                    colorResource(id = com.hs.workation.core.resource.R.color.grey_500)
                 } else {
                     colorResource(id = arrowIconColor)
                 },
@@ -198,8 +198,8 @@ private fun CommonDropdownPreview() {
         initTitle = "Init Title",
         optionMenuList = listOf(DropdownMenuItem(menu = "Option 1"), DropdownMenuItem(menu = "Option 2"), DropdownMenuItem(menu = "Option 3")),
         cornerRadius = 8,
-        titleBackgroundColor = com.hs.workation.core.common.R.color.grey_400,
-        optionMenuBackgroundColor = com.hs.workation.core.common.R.color.yellow_200,
-        borderColor = com.hs.workation.core.common.R.color.grey_700,
+        titleBackgroundColor = com.hs.workation.core.resource.R.color.grey_400,
+        optionMenuBackgroundColor = com.hs.workation.core.resource.R.color.yellow_200,
+        borderColor = com.hs.workation.core.resource.R.color.grey_700,
     )
 }

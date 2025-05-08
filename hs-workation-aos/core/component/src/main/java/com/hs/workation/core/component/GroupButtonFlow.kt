@@ -94,10 +94,10 @@ fun GroupButtonFlow(
  */
 @Composable
 private fun getColors(isActivate: Boolean): Pair<Color, Color> {
-    val activeContainerColor = colorResource(com.hs.workation.core.common.R.color.grey_900)
+    val activeContainerColor = colorResource(com.hs.workation.core.resource.R.color.grey_900)
     val activeContentColor = Color.White
     val containerColor = Color.Transparent
-    val contentColor = colorResource(com.hs.workation.core.common.R.color.grey_400)
+    val contentColor = colorResource(com.hs.workation.core.resource.R.color.grey_400)
 
     return if (isActivate) {
         Pair(activeContainerColor, activeContentColor)

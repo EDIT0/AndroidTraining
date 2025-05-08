@@ -24,6 +24,7 @@ import com.naver.maps.map.overlay.MultipartPathOverlay
 import com.naver.maps.map.overlay.OverlayImage
 import com.naver.maps.map.overlay.PathOverlay
 import com.naver.maps.map.util.MarkerIcons
+import com.hs.workation.core.resource.R
 
 object CommonMap {
     /**

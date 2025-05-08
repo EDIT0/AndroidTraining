@@ -190,9 +190,9 @@ class SplashStartFragment : BaseDataBindingFragment<FragmentSplashStartBinding>(
     private fun maintenanceDialog(message: String) {
         CommonDialog(context = requireContext())
             .setDialogCancelable(false)
-            .setTitle(getString(com.hs.workation.core.common.R.string.common_running_maintenance))
+            .setTitle(getString(com.hs.workation.core.resource.R.string.common_running_maintenance))
             .setContents(message)
-            .setPositiveText(getString(com.hs.workation.core.common.R.string.common_confirm))
+            .setPositiveText(getString(com.hs.workation.core.resource.R.string.common_confirm))
             .setTransparentBackground()
             .setClickResultListener(object : CommonDialog.ClickResultCallback {
                 override fun clickResult(agree: Boolean) {
@@ -213,8 +213,8 @@ class SplashStartFragment : BaseDataBindingFragment<FragmentSplashStartBinding>(
     private fun canNotStartAppDialog() {
         CommonDialog(context = requireContext())
             .setDialogCancelable(false)
-            .setContents(getString(com.hs.workation.core.common.R.string.common_can_not_start_app))
-            .setPositiveText(getString(com.hs.workation.core.common.R.string.common_confirm))
+            .setContents(getString(com.hs.workation.core.resource.R.string.common_can_not_start_app))
+            .setPositiveText(getString(com.hs.workation.core.resource.R.string.common_confirm))
             .setTransparentBackground()
             .setClickResultListener(object : CommonDialog.ClickResultCallback {
                 override fun clickResult(agree: Boolean) {

@@ -2,9 +2,9 @@ package com.hs.workation.data.repository
 
 import com.hs.workation.core.common.constants.NetworkConstants
 import com.hs.workation.core.model.base.RequestResult
-import com.hs.workation.core.model.dto.IdAndPassword
-import com.hs.workation.core.model.dto.Jwt
-import com.hs.workation.core.model.dto.ServiceResult
+import com.hs.workation.core.model.dto.req.ReqLogin
+import com.hs.workation.core.model.dto.res.ResLogin
+import com.hs.workation.core.model.dto.res.ResLogout
 import com.hs.workation.data.datasource.remote.AuthRemoteDataSource
 import com.hs.workation.domain.repository.AuthRepository
 import kotlinx.coroutines.flow.Flow
@@ -16,10 +16,10 @@ class AuthRepositoryImpl @Inject constructor(
     private val authRemoteDataSource: AuthRemoteDataSource
 ): AuthRepository {
     override suspend fun postRequestLogin(
-        idAndPassword: IdAndPassword
-    ): Flow<RequestResult<Jwt>> {
-        return flow<RequestResult<Jwt>> {
-            val response = authRemoteDataSource.postRequestLogin(idAndPassword)
+        reqLogin: ReqLogin
+    ): Flow<RequestResult<ResLogin>> {
+        return flow<RequestResult<ResLogin>> {
+            val response = authRemoteDataSource.postRequestLogin(reqLogin)
 
             val body = response.body()
 
@@ -56,8 +56,8 @@ class AuthRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun postRequestLogout(token: String): Flow<RequestResult<ServiceResult>> {
-        return flow<RequestResult<ServiceResult>> {
+    override suspend fun postRequestLogout(token: String): Flow<RequestResult<ResLogout>> {
+        return flow<RequestResult<ResLogout>> {
             val response = authRemoteDataSource.postRequestLogout(token)
 
             val body = response.body()

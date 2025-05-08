@@ -7,7 +7,7 @@ import android.graphics.Paint
 import android.util.AttributeSet
 import android.view.View
 import androidx.core.content.ContextCompat
-import com.hs.workation.core.common.R
+import com.hs.workation.core.resource.R
 
 /**
  * Passcode 인디케이터
@@ -31,14 +31,14 @@ class PasscodeIndicatorView @JvmOverloads constructor(
 
     // 채워지지 않은 원 Paint
     private val emptyCirclePaint = Paint().apply {
-        color = ContextCompat.getColor(context, com.hs.workation.core.common.R.color.grey_500)
+        color = ContextCompat.getColor(context, com.hs.workation.core.resource.R.color.grey_500)
         style = Paint.Style.FILL
         isAntiAlias = true
     }
 
     // 채워진 원 Paint
     private val filledCirclePaint = Paint().apply {
-        color = ContextCompat.getColor(context, com.hs.workation.core.common.R.color.grey_900)
+        color = ContextCompat.getColor(context, com.hs.workation.core.resource.R.color.grey_900)
         style = Paint.Style.FILL
         isAntiAlias = true
     }

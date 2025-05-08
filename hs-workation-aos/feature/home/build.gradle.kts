@@ -50,6 +50,7 @@ dependencies {
     implementation(project(":core:component"))
     implementation(project(":core:di"))
     implementation(project(":core:model"))
+    implementation(project(":core:resource"))
     implementation(project(":core:util"))
     implementation(project(":domain"))
 

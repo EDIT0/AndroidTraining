@@ -28,6 +28,7 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import org.threeten.bp.format.DateTimeFormatter
 import java.util.Locale
+import com.hs.workation.core.resource.R
 
 /**
  * 캘린더 바텀 시트
@@ -89,7 +90,7 @@ class CommonSingleCalendarSheet(
             text = "날짜를 선택하세요"
             isEnabled = false
 
-            setBackgroundColor(resources.getColor(com.hs.workation.core.common.R.color.grey_400, null))
+            setBackgroundColor(resources.getColor(com.hs.workation.core.resource.R.color.grey_400, null))
 
             setOnClickListener {
                 resultCallback(text.toString())
@@ -149,7 +150,7 @@ class CommonSingleCalendarSheet(
                     with(binding.btnBook) {
                         text = date.date.format(formatter)
                         isEnabled = true
-                        setBackgroundColor(resources.getColor(com.hs.workation.core.common.R.color.grey_900, null))
+                        setBackgroundColor(resources.getColor(com.hs.workation.core.resource.R.color.grey_900, null))
                     }
                 }
             }

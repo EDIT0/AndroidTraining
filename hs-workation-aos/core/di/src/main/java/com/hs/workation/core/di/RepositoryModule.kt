@@ -1,10 +1,13 @@
 package com.hs.workation.core.di
 
 import com.hs.workation.data.datasource.remote.AuthRemoteDataSource
+import com.hs.workation.data.datasource.remote.BaseRemoteDataSource
 import com.hs.workation.data.datasource.remote.TestRemoteDataSource
 import com.hs.workation.data.repository.AuthRepositoryImpl
+import com.hs.workation.data.repository.BaseRepositoryImpl
 import com.hs.workation.data.repository.TestRepositoryImpl
 import com.hs.workation.domain.repository.AuthRepository
+import com.hs.workation.domain.repository.BaseRepository
 import com.hs.workation.domain.repository.TestRepository
 import dagger.Module
 import dagger.Provides
@@ -30,5 +33,13 @@ object RepositoryModule {
         authRemoteDataSource: AuthRemoteDataSource
     ): AuthRepository {
         return AuthRepositoryImpl(authRemoteDataSource)
+    }
+
+    @Singleton
+    @Provides
+    fun providesBaseRepository(
+        baseRemoteDataSource: BaseRemoteDataSource
+    ): BaseRepository {
+        return BaseRepositoryImpl(baseRemoteDataSource)
     }
 }

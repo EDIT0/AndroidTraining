@@ -122,7 +122,7 @@ class CommonMapFragment : BaseDataBindingFragment<FragmentCommonMapBinding>(R.la
                 naverMap = naverMap,
                 pos = COORDS.first(),
                 zoom = 13.0,
-                markerIcon = OverlayImage.fromResource(com.hs.workation.core.component.R.drawable.ic_pin_start),
+                markerIcon = OverlayImage.fromResource(com.hs.workation.core.resource.R.drawable.ic_pin_start),
                 onClick = {
                     naverMap.move(COORDS.first(), cameraZoom = 16.0, duration = 300)
                 }
@@ -131,7 +131,7 @@ class CommonMapFragment : BaseDataBindingFragment<FragmentCommonMapBinding>(R.la
                 naverMap = naverMap,
                 pos = COORDS.last(),
                 zoom = 13.0,
-                markerIcon = OverlayImage.fromResource(com.hs.workation.core.component.R.drawable.ic_pin_end),
+                markerIcon = OverlayImage.fromResource(com.hs.workation.core.resource.R.drawable.ic_pin_end),
                 onClick = {
                     naverMap.move(COORDS.last(), cameraZoom = 16.0, duration = 300)
                 }

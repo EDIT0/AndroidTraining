@@ -31,6 +31,7 @@ import com.prolificinteractive.materialcalendarview.CalendarDay
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView
 import org.threeten.bp.format.DateTimeFormatter
 import java.util.Locale
+import com.hs.workation.core.resource.R
 
 /**
  * 캘린더 바텀 시트
@@ -109,7 +110,7 @@ class CommonRangeCalendarSheet(
                 isEnabled = false
 
                 setBackgroundColor(
-                    resources.getColor(com.hs.workation.core.common.R.color.grey_400, null)
+                    resources.getColor(com.hs.workation.core.resource.R.color.grey_400, null)
                 )
 
                 setOnClickListener {
@@ -128,7 +129,7 @@ class CommonRangeCalendarSheet(
             isEnabled = true
 
             setBackgroundColor(
-                resources.getColor(com.hs.workation.core.common.R.color.grey_900, null)
+                resources.getColor(com.hs.workation.core.resource.R.color.grey_900, null)
             )
 
             setOnClickListener {

@@ -272,7 +272,7 @@ private fun InputMultiOutlineTextBoxPreview() {
         maxLines = 6,
         minLines = 3,
         cornerRadius = 20,
-        backgroundColor = Pair<Int, Int>(com.hs.workation.core.common.R.color.grey_600, com.hs.workation.core.common.R.color.teal_200),
-        borderColor = Pair<Int, Int>(com.hs.workation.core.common.R.color.grey_600, com.hs.workation.core.common.R.color.teal_200)
+        backgroundColor = Pair<Int, Int>(com.hs.workation.core.resource.R.color.grey_600, com.hs.workation.core.resource.R.color.teal_200),
+        borderColor = Pair<Int, Int>(com.hs.workation.core.resource.R.color.grey_600, com.hs.workation.core.resource.R.color.teal_200)
     )
 }

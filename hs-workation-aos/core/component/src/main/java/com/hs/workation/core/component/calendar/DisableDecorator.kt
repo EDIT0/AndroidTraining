@@ -4,7 +4,7 @@ import android.content.Context
 import android.graphics.drawable.Drawable
 import android.text.style.ForegroundColorSpan
 import androidx.core.content.ContextCompat
-import com.hs.workation.core.component.R
+import com.hs.workation.core.resource.R
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import com.prolificinteractive.materialcalendarview.DayViewFacade
 
@@ -29,7 +29,7 @@ class DisableDecorator(
 
     override fun decorate(view: DayViewFacade?) {
         view?.let { v ->
-            v.addSpan(ForegroundColorSpan(ContextCompat.getColor(context, com.hs.workation.core.common.R.color.blue_grey_200)))
+            v.addSpan(ForegroundColorSpan(ContextCompat.getColor(context, com.hs.workation.core.resource.R.color.blue_grey_200)))
             v.addSpan(lineThrough)
             v.setDaysDisabled(true)
 

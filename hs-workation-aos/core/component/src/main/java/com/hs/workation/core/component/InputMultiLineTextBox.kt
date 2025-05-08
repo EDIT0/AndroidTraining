@@ -273,7 +273,7 @@ private fun InputMultiLineTextBoxPreview() {
         maxLines = 5,
         minLines = 3,
         cornerRadius = 5,
-        backgroundColor = Pair<Int, Int>(com.hs.workation.core.common.R.color.grey_600, com.hs.workation.core.common.R.color.teal_200),
-        underlineColor = Pair<Int, Int>(com.hs.workation.core.common.R.color.transparent, com.hs.workation.core.common.R.color.transparent)
+        backgroundColor = Pair<Int, Int>(com.hs.workation.core.resource.R.color.grey_600, com.hs.workation.core.resource.R.color.teal_200),
+        underlineColor = Pair<Int, Int>(com.hs.workation.core.resource.R.color.transparent, com.hs.workation.core.resource.R.color.transparent)
     )
 }

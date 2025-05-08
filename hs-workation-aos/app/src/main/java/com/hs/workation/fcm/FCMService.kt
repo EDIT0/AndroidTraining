@@ -13,7 +13,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
-import com.hs.workation.R
+import com.hs.workation.core.resource.R
 import com.hs.workation.core.common.constants.FCMConstants
 import com.hs.workation.core.model.fcm.CommonPayload
 import com.hs.workation.core.util.LogUtil

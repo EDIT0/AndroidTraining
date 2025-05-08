@@ -42,6 +42,7 @@ dependencies {
     /* Module */
     implementation(project(":core:common"))
     implementation(project(":core:model"))
+    implementation(project(":core:resource"))
     implementation(project(":core:util"))
 
     implementation(libs.androidx.core.ktx)

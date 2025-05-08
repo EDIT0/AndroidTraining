@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import androidx.paging.map
 import com.hs.workation.core.base.viewmodel.BaseAndroidViewModel
-import com.hs.workation.core.common.R
+import com.hs.workation.core.resource.R
 import com.hs.workation.core.util.LogUtil
 import com.hs.workation.core.util.NetworkManager
 import com.hs.workation.core.model.base.RequestResult

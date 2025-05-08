@@ -16,6 +16,7 @@ import com.hs.workation.core.model.mock.HorizontalItemScrollAdapterViewHolderTyp
 import com.hs.workation.core.model.mock.HorizontalScrollItem
 import com.hs.workation.core.model.mock.SeeMoreItem
 import com.hs.workation.core.util.ViewSizeUtil
+import com.hs.workation.core.resource.R
 
 class HorizontalItemScrollViewAdapter(
     private val onItemClick: (HorizontalScrollItem) -> Unit,
@@ -76,7 +77,7 @@ class HorizontalItemScrollViewAdapter(
                 Glide.with(binding.ivImage.context)
                     .load(item.imageUrl)
                     .centerCrop()
-                    .placeholder(com.hs.workation.core.component.R.drawable.ic_rounded_arrow_circle_right_grey_24)
+                    .placeholder(R.drawable.ic_rounded_arrow_circle_right_grey_24)
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .override(imageWidth, imageHeight)
                     .into(binding.ivImage)

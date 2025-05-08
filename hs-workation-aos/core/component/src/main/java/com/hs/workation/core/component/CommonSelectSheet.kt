@@ -28,6 +28,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.hs.workation.core.component.databinding.SelectBottomSheetBinding
+import com.hs.workation.core.resource.R
 
 /**
  * 선택 목록 바텀 시트

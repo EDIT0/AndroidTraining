@@ -13,7 +13,7 @@ import com.hs.workation.core.common.constants.RemoteConfigConstants.REMOTE_CONFI
 import com.hs.workation.core.common.constants.RemoteConfigConstants.REMOTE_CONFIG_FAIL
 import com.hs.workation.core.util.NetworkManager
 import com.hs.workation.feature.splash.BuildConfig
-import com.hs.workation.core.common.R
+import com.hs.workation.core.resource.R
 import com.hs.workation.core.model.base.SideEffectEvent
 import com.hs.workation.core.model.remoteconfig.AppVersion
 import com.hs.workation.core.model.remoteconfig.ServerStatus

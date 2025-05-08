@@ -83,9 +83,9 @@ fun GroupRadioButton(
  */
 @Composable
 private fun getColors(isActivate: Boolean): Pair<Color, Color> {
-    val activeContainerColor = colorResource(com.hs.workation.core.common.R.color.grey_900)
+    val activeContainerColor = colorResource(com.hs.workation.core.resource.R.color.grey_900)
     val activeContentColor = Color.White
-    val containerColor = colorResource(com.hs.workation.core.common.R.color.grey_400)
+    val containerColor = colorResource(com.hs.workation.core.resource.R.color.grey_400)
     val contentColor = Color.White
 
     return if (isActivate) {

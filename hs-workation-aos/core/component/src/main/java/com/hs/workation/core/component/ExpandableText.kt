@@ -86,7 +86,7 @@ fun ExpandableText(
                 maxLines = if (expanded) Int.MAX_VALUE else maxLines,
                 overflow = TextOverflow.Ellipsis,
                 onTextLayout = { textLayoutState.value = it },
-                color = colorResource(com.hs.workation.core.common.R.color.grey_600)
+                color = colorResource(com.hs.workation.core.resource.R.color.grey_600)
             )
 
             if (!expanded) {
@@ -109,7 +109,7 @@ fun ExpandableText(
                             cutText = null
                         }
                         .alpha(if (seeMoreOffset != null) 1f else 0f),
-                    color = colorResource(com.hs.workation.core.common.R.color.grey_900)
+                    color = colorResource(com.hs.workation.core.resource.R.color.grey_900)
                 )
             }
         }
@@ -120,7 +120,7 @@ fun ExpandableText(
                     expanded = !expanded
                 },
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = colorResource(com.hs.workation.core.common.R.color.grey_900)
+                    containerColor = colorResource(com.hs.workation.core.resource.R.color.grey_900)
                 ),
                 modifier = Modifier.padding(top = 5.dp).height(24.dp),
                 contentPadding = PaddingValues(0.dp, 0.dp)

@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <dimen name="overlay_pattern_interval">20dp</dimen>
-    <dimen name="path_overlay_width">10dp</dimen>
-    <dimen name="marker_size_width">45dp</dimen>
-    <dimen name="marker_size_height">64dp</dimen>
-    <dimen name="fit_bounds_padding">70dp</dimen>
-</resources>

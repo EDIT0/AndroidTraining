@@ -48,7 +48,7 @@ fun AgreementFoldableForm(
     Surface(
         shape = ShapeDefaults.Medium,
         color = Color.White,
-        border = BorderStroke(1.dp, colorResource(com.hs.workation.core.common.R.color.grey_400)),
+        border = BorderStroke(1.dp, colorResource(com.hs.workation.core.resource.R.color.grey_400)),
         modifier = Modifier.animateContentSize().padding(vertical = 5.dp)
     ) {
         Column(modifier = Modifier.padding(14.dp, 12.dp)) {
@@ -75,7 +75,7 @@ fun AgreementFoldableForm(
             AnimatedVisibility(visible = isExpanded) {
                 Column {
                     Text("$serviceName 제공을 위한 ${serviceName}의 약관에 동의가 필요합니다.",
-                        color = colorResource(com.hs.workation.core.common.R.color.grey_600),
+                        color = colorResource(com.hs.workation.core.resource.R.color.grey_600),
                         modifier = Modifier.padding(horizontal = 24.dp)
                     )
 

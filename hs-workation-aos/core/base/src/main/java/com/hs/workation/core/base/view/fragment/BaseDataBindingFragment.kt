@@ -10,7 +10,7 @@ import androidx.core.view.WindowInsetsControllerCompat
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
-import com.hs.workation.core.common.R
+import com.hs.workation.core.resource.R
 import com.hs.workation.core.component.CommonDialog
 import com.hs.workation.core.component.CommonToast
 import com.hs.workation.core.util.statusBarHeight

@@ -23,7 +23,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.hs.workation.core.common.R
+import com.hs.workation.core.resource.R
 import com.hs.workation.core.util.OnSingleClickListener.onSingleClick
 
 /**
