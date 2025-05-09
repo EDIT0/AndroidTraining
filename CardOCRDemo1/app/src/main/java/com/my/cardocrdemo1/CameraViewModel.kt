@@ -68,6 +68,7 @@ class CameraViewModel(val app: Application) : AndroidViewModel(app) {
         try {
             val preview = buildPreview(view as PreviewView)
             val cameraSelector = buildCameraSelector()
+            cameraProvider.unbindAll()
 
             cameraProvider.bindToLifecycle(
                 lifecycleOwner,
