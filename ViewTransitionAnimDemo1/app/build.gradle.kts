@@ -49,6 +49,8 @@ dependencies {
     /* Navigation */
     implementation("androidx.navigation:navigation-fragment:2.8.2")
     implementation("androidx.navigation:navigation-ui:2.8.2")
+    implementation(libs.androidx.navigation.fragment.ktx)
+    implementation(libs.androidx.navigation.ui.ktx)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
