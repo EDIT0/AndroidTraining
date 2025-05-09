@@ -24,7 +24,7 @@ fun HomeScreen(
             .background(color = white())
     ) {
         Column {
-            Text("Home-Common ${LocalContext.current.getString(com.my.dfmdemo1.resource.R.string.welcome)}")
+            Text("Home-UI(Common)\nLanguage: ${LocalContext.current.getString(com.my.dfmdemo1.resource.R.string.welcome)}")
 
             Button(
                 onClick = {

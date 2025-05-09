@@ -12,8 +12,6 @@ object CountryRepository {
             PreferencesUtil.KEY_COUNTRY,
             CountryName.Common.name
         )
-
-        languageSetting(context)
     }
 
     fun languageSetting(context: Context): Context {
@@ -26,13 +24,13 @@ object CountryRepository {
         // en, ko, ja, zh
         var languageCode = ""
         when(language) {
-            Language.Kr.name -> {
+            Language.Ko.name -> {
                 languageCode = "ko"
             }
-            Language.Jp.name -> {
+            Language.Ja.name -> {
                 languageCode = "ja"
             }
-            Language.Cn.name -> {
+            Language.Zh.name -> {
                 languageCode = "zh"
             }
             else -> {

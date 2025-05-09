@@ -31,12 +31,12 @@ fun RootNavHost(
             route = ScreenName.IntroScreen.name
         ) {
             when(CountryRepository.country) {
-                CountryName.Kr.name -> {
+                CountryName.Ko.name -> {
                     IntroScreen(
                         navController = navHostController
                     )
                 }
-                CountryName.Common.name, CountryName.Jp.name, CountryName.Cn.name -> {
+                CountryName.Common.name, CountryName.Ja.name, CountryName.Zh.name -> {
                     com.my.dfmdemo1.feature.intro.common.IntroScreen(
                         navController = navHostController
                     )
@@ -53,17 +53,17 @@ fun RootNavHost(
                         navController = navHostController
                     )
                 }
-                CountryName.Kr.name -> {
+                CountryName.Ko.name -> {
                     com.my.dfmdemo1.feature.home.kr.HomeScreen(
                         navController = navHostController
                     )
                 }
-                CountryName.Jp.name -> {
+                CountryName.Ja.name -> {
                     com.my.dfmdemo1.feature.home.jp.HomeScreen(
                         navController = navHostController
                     )
                 }
-                CountryName.Cn.name-> {
+                CountryName.Zh.name-> {
                     com.my.dfmdemo1.feature.home.cn.HomeScreen(
                         navController = navHostController
                     )
@@ -75,7 +75,7 @@ fun RootNavHost(
             route = ScreenName.SettingScreen.name
         ) {
             when(CountryRepository.country) {
-                CountryName.Common.name, CountryName.Kr.name, CountryName.Jp.name, CountryName.Cn.name -> {
+                CountryName.Common.name, CountryName.Ko.name, CountryName.Ja.name, CountryName.Zh.name -> {
                     SettingScreen(
                         navController = navHostController
                     )

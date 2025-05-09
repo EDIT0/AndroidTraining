@@ -29,12 +29,12 @@ fun SettingScreen(
     }
 
     Column {
-        Text("Setting-Common")
+        Text("Setting-UI(Common)\n${localContext.getString(com.my.dfmdemo1.resource.R.string.welcome)}\nLanguage: ${localContext.getString(com.my.dfmdemo1.resource.R.string.app_name)}")
 
         Button(
             onClick = {
-                PreferencesUtil.putString(localContext, PreferencesUtil.KEY_COUNTRY, CountryName.Kr.name)
-                CountryRepository.country = CountryName.Kr.name
+                PreferencesUtil.putString(localContext, PreferencesUtil.KEY_COUNTRY, CountryName.Ko.name)
+                CountryRepository.country = CountryName.Ko.name
 //                navController.navigate(route = ScreenName.IntroScreen.name) {
 //                    popUpTo(navController.graph.startDestinationId) {
 //                        inclusive = true
@@ -54,8 +54,8 @@ fun SettingScreen(
 
         Button(
             onClick = {
-                PreferencesUtil.putString(localContext, PreferencesUtil.KEY_COUNTRY, CountryName.Jp.name)
-                CountryRepository.country = CountryName.Jp.name
+                PreferencesUtil.putString(localContext, PreferencesUtil.KEY_COUNTRY, CountryName.Ja.name)
+                CountryRepository.country = CountryName.Ja.name
 //                navController.navigate(route = ScreenName.IntroScreen.name) {
 //                    popUpTo(navController.graph.startDestinationId) {
 //                        inclusive = true
@@ -75,8 +75,8 @@ fun SettingScreen(
 
         Button(
             onClick = {
-                PreferencesUtil.putString(localContext, PreferencesUtil.KEY_COUNTRY, CountryName.Cn.name)
-                CountryRepository.country = CountryName.Cn.name
+                PreferencesUtil.putString(localContext, PreferencesUtil.KEY_COUNTRY, CountryName.Zh.name)
+                CountryRepository.country = CountryName.Zh.name
 //                navController.navigate(route = ScreenName.IntroScreen.name) {
 //                    popUpTo(navController.graph.startDestinationId) {
 //                        inclusive = true
@@ -117,8 +117,8 @@ fun SettingScreen(
 
         Button(
             onClick = {
-                PreferencesUtil.putString(localContext, PreferencesUtil.KEY_LANGUAGE, Language.Kr.name)
-                CountryRepository.language = Language.Kr.name
+                PreferencesUtil.putString(localContext, PreferencesUtil.KEY_LANGUAGE, Language.Ko.name)
+                CountryRepository.language = Language.Ko.name
 //                navController.navigate(route = ScreenName.IntroScreen.name) {
 //                    popUpTo(navController.graph.startDestinationId) {
 //                        inclusive = true
@@ -138,8 +138,8 @@ fun SettingScreen(
 
         Button(
             onClick = {
-                PreferencesUtil.putString(localContext, PreferencesUtil.KEY_LANGUAGE, Language.Jp.name)
-                CountryRepository.language = Language.Jp.name
+                PreferencesUtil.putString(localContext, PreferencesUtil.KEY_LANGUAGE, Language.Ja.name)
+                CountryRepository.language = Language.Ja.name
 //                navController.navigate(route = ScreenName.IntroScreen.name) {
 //                    popUpTo(navController.graph.startDestinationId) {
 //                        inclusive = true
@@ -159,8 +159,8 @@ fun SettingScreen(
 
         Button(
             onClick = {
-                PreferencesUtil.putString(localContext, PreferencesUtil.KEY_LANGUAGE, Language.Cn.name)
-                CountryRepository.language = Language.Cn.name
+                PreferencesUtil.putString(localContext, PreferencesUtil.KEY_LANGUAGE, Language.Zh.name)
+                CountryRepository.language = Language.Zh.name
 //                navController.navigate(route = ScreenName.IntroScreen.name) {
 //                    popUpTo(navController.graph.startDestinationId) {
 //                        inclusive = true

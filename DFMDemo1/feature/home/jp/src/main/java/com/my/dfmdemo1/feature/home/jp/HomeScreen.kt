@@ -9,6 +9,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.my.dfmdemo1.core.navigation.ScreenName
 import com.my.dfmdemo1.resource.ui.theme.purple500
@@ -24,7 +26,10 @@ fun HomeScreen(
             .background(color = purple500())
     ) {
         Column {
-            Text("Home-Jp ${LocalContext.current.getString(com.my.dfmdemo1.resource.R.string.welcome)}")
+            Text(
+                text = "Home-UI(Jp)\nLanguage: ${LocalContext.current.getString(com.my.dfmdemo1.resource.R.string.welcome)}",
+                style = TextStyle(fontSize = 50.sp)
+            )
 
             Button(
                 onClick = {
