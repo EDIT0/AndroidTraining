@@ -18,6 +18,7 @@ import com.theartofdev.edmodo.cropper.CropImage
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileNotFoundException
@@ -117,7 +118,8 @@ object Utility {
     // 1장
     fun multipartBody(file: File, fileName: String) : MultipartBody.Part {
 //        var requestBody : RequestBody = RequestBody.create(MediaType.parse("image/jpg"),file)
-        var requestBody : RequestBody = RequestBody.create("image/jpg".toMediaTypeOrNull(),file)
+//        var requestBody : RequestBody = RequestBody.create("image/jpg".toMediaTypeOrNull(),file)
+        var requestBody : RequestBody = file.asRequestBody("image/jpg".toMediaTypeOrNull())
         var body : MultipartBody.Part = MultipartBody.Part.createFormData("uploaded_file", fileName, requestBody)
         return body
     }
