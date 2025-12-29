@@ -21,6 +21,11 @@ class COneFragment : Fragment() {
 
     private val cOneVM: COneViewModel by viewModels()
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        Log.i("MYTAG ${javaClass.simpleName}", "onCreate()")
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
